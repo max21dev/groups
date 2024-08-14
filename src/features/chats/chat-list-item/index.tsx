@@ -33,6 +33,8 @@ export const ChatListItem = ({
     setReplyTo,
     categorizedMessageContent,
     firstReplyImageUrl,
+    replyAuthorProfile,
+    reply
   } = useChatListItem({ itemIndex, messages, message });
 
   if (!message) return null;
@@ -74,13 +76,20 @@ export const ChatListItem = ({
                   {firstReplyImageUrl && (
                     <img
                       src={loader(firstReplyImageUrl, { w: 50 })}
-                      className=""
-                      alt={firstReplyImageUrl}
+                      alt="Reply Message Image"
                     />
                   )}
-                  <p>
-                    {ellipsis(messages?.find((e) => e.id === message?.replyTo)?.content || '', 80)}
-                  </p>
+                  <div>
+                    <div className="text-sm font-semibold opacity-40">
+                      {replyAuthorProfile?.name ? replyAuthorProfile.name : reply?.authorPublicKey?.slice(0, 5) + '...'}
+                    </div>
+                    <div>
+                      {ellipsis(
+                        reply?.content || '',
+                        50,
+                      )}
+                    </div>
+                  </div>
                 </div>
               )}
 

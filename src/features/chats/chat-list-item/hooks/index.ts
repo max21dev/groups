@@ -31,14 +31,17 @@ export const useChatListItem = ({
     messages[itemIndex].authorPublicKey === messages[itemIndex + 1].authorPublicKey;
   const firstMessageAuthor =
     itemIndex === 0 || messages[itemIndex - 1].authorPublicKey !== message?.authorPublicKey;
-  const replyContent = messages.find((e) => e.id === message?.replyTo)?.content || '';
-
   const categorizedMessageContent = useMemo(
     () => categorizeMessageContent(message?.content || ''),
     [message?.content],
   );
 
-  const firstReplyImageUrl = useMemo(() => fetchFirstContentImage(replyContent), [replyContent]);
+  const reply = messages.find((e) => e.id === message?.replyTo);
+  const { profile: replyAuthorProfile } = useProfile({ pubkey: reply?.authorPublicKey });
+  const firstReplyImageUrl = useMemo(
+    () => fetchFirstContentImage(reply?.content || ''),
+    [reply?.content],
+  );
 
   function deleteMessage(eventId: string, groupId: string) {
     if (!activeUser) {
@@ -66,5 +69,7 @@ export const useChatListItem = ({
     setReplyTo,
     categorizedMessageContent,
     firstReplyImageUrl,
+    replyAuthorProfile,
+    reply,
   };
 };
