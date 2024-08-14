@@ -19,3 +19,12 @@ export const categorizeMessageContent = (content: string): CategorizedMessageCon
     }
   });
 };
+
+export const fetchFirstContentImage = (content: string): string | null => {
+  if (content === '') return null;
+
+  const imageRegex = /https?:\/\/[^\s]+?\.(jpg|jpeg|png|gif|bmp|svg|webp)\b/gi;
+  const matches = content.match(imageRegex);
+
+  return matches && matches.length > 0 ? matches[0] : null;
+};

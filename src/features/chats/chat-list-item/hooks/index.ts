@@ -5,7 +5,7 @@ import { useActiveGroup, useGroupAdmin, useLoginParam, useProfile } from '@/shar
 import { useStore } from '@/shared/store';
 
 import { ChatListItemProps } from '../types';
-import { categorizeMessageContent } from '../utils';
+import { categorizeMessageContent, fetchFirstContentImage } from '../utils';
 
 export const useChatListItem = ({
   message,
@@ -31,11 +31,14 @@ export const useChatListItem = ({
     messages[itemIndex].authorPublicKey === messages[itemIndex + 1].authorPublicKey;
   const firstMessageAuthor =
     itemIndex === 0 || messages[itemIndex - 1].authorPublicKey !== message?.authorPublicKey;
+  const replyContent = messages.find((e) => e.id === message?.replyTo)?.content || '';
 
   const categorizedMessageContent = useMemo(
     () => categorizeMessageContent(message?.content || ''),
     [message?.content],
   );
+
+  const firstReplyImageUrl = useMemo(() => fetchFirstContentImage(replyContent), [replyContent]);
 
   function deleteMessage(eventId: string, groupId: string) {
     if (!activeUser) {
@@ -62,5 +65,6 @@ export const useChatListItem = ({
     canDeleteEvent,
     setReplyTo,
     categorizedMessageContent,
+    firstReplyImageUrl,
   };
 };

@@ -32,6 +32,7 @@ export const ChatListItem = ({
     canDeleteEvent,
     setReplyTo,
     categorizedMessageContent,
+    firstReplyImageUrl,
   } = useChatListItem({ itemIndex, messages, message });
 
   if (!message) return null;
@@ -70,6 +71,13 @@ export const ChatListItem = ({
                   className="text-sm bg-white bg-opacity-30 text-white cursor-pointer border-l-4 rounded-lg p-1 flex items-start"
                   onClick={() => scrollToMessage(message.replyTo || '')}
                 >
+                  {firstReplyImageUrl && (
+                    <img
+                      src={loader(firstReplyImageUrl, { w: 50 })}
+                      className=""
+                      alt={firstReplyImageUrl}
+                    />
+                  )}
                   <p>
                     {ellipsis(messages?.find((e) => e.id === message?.replyTo)?.content || '', 80)}
                   </p>
@@ -107,7 +115,7 @@ export const ChatListItem = ({
                           href={part.content}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-blue-500 underline"
+                          className="text-blue-500 underline break-all"
                         >
                           {part.content}
                         </a>
