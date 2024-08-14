@@ -1,0 +1,52 @@
+import { ChatBottomBar, ChatList, ChatTopBar } from '@/features/chats';
+import { GroupsList } from '@/features/groups';
+import { RelayGroupsCount, RelaySelectDropdown } from '@/features/relays';
+import { ActiveUserInfo } from '@/features/users';
+
+import { Sidebar } from '@/shared/components/sidebar';
+
+import { cn } from '@/shared/utils/cn';
+
+import { useHomePage } from './hooks';
+
+export function HomePage() {
+  const { isCollapsed, activeGroupId } = useHomePage();
+
+  return (
+    <>
+      <div className="flex w-full h-full">
+        <Sidebar>
+          <div className="flex flex-col h-full p-2">
+            <div className="flex flex-col h-full gap-4 overflow-y-hidden hover:overflow-y-auto">
+              <RelaySelectDropdown />
+
+              {!isCollapsed && <RelayGroupsCount />}
+
+              <nav className={cn('grid grid-cols-1 gap-4', isCollapsed && 'justify-center')}>
+                <GroupsList />
+              </nav>
+            </div>
+
+            <div className="mt-auto w-full pt-2">
+              <ActiveUserInfo />
+            </div>
+          </div>
+        </Sidebar>
+
+        <div className="w-full">
+          <div className="flex flex-col justify-between w-full h-full">
+            {!activeGroupId ? (
+              <div className="flex justify-center items-center h-full">Please select a Group</div>
+            ) : (
+              <>
+                <ChatTopBar />
+                <ChatList />
+                <ChatBottomBar />
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
