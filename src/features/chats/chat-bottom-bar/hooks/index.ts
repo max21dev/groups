@@ -69,11 +69,11 @@ export const useChatBottomBar = () => {
     }
 
     const event = createNewEvent();
-    event.kind = replyTo ? 12 : 11;
+    event.kind = 9;
     event.content = message;
     event.tags = [
       ['h', activeGroupId],
-      ...(replyTo?.id ? [['e', replyTo.id, '', 'reaction']] : []),
+      ...(replyTo?.id ? [['e', replyTo.id, '', 'reply']] : []),
     ];
     event.publish();
   };
