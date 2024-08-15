@@ -8,6 +8,7 @@ export const useGroupMembers = (groupId: string | undefined) => {
       () => ({
         filters: !groupId ? [] : [{ kinds: [39002 as NDKKind], '#d': [groupId], limit: 1 }],
         enabled: !!groupId,
+        opts: { groupable: false },
       }),
       [groupId],
     ),

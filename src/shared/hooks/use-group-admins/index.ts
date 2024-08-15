@@ -10,6 +10,7 @@ export const useGroupAdmins = (groupId: string | undefined) => {
       () => ({
         filters: !groupId ? [] : [{ kinds: [39001 as NDKKind], '#d': [groupId], limit: 1 }],
         enabled: !!groupId,
+        opts: { groupable: false },
       }),
       [groupId],
     ),
