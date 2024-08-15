@@ -11,7 +11,7 @@ import {
 import { useStore } from '@/shared/store';
 import { GroupMessage, LimitFilter } from '@/shared/types';
 
-const limitFilter: LimitFilter = { limit: 100 };
+const limitFilter: LimitFilter = { limit: 200 };
 
 export const useChatBottomBar = () => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -71,10 +71,7 @@ export const useChatBottomBar = () => {
     const event = createNewEvent();
     event.kind = 9;
     event.content = message;
-    event.tags = [
-      ['h', activeGroupId],
-      ...(replyTo?.id ? [['e', replyTo.id, '', 'reply']] : []),
-    ];
+    event.tags = [['h', activeGroupId], ...(replyTo?.id ? [['e', replyTo.id, '', 'reply']] : [])];
     event.publish();
   };
 

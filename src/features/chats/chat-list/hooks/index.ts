@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useActiveGroup, useGroupMessages } from '@/shared/hooks';
 import { LimitFilter } from '@/shared/types';
 
-const limitFilter: LimitFilter = { limit: 100 };
+const limitFilter: LimitFilter = { limit: 200 };
 
 export const useChatList = () => {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
