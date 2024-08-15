@@ -36,7 +36,7 @@ export const ChatTopBar = () => {
                 <Info size={20} />
               </Button>
             </SheetTrigger>
-            <SheetContent className="w-full lg:max-w-screen-md">
+            <SheetContent className="w-full lg:max-w-screen-md overflow-y-auto">
               {isGroupDetailsOpen && activeGroupId && (
                 <div className="grid gap-4 py-4">
                   <GroupDetails groupId={activeGroupId} />
