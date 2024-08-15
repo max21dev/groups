@@ -3,7 +3,14 @@ import { Info, Loader2 } from 'lucide-react';
 import { GroupAvatar, GroupDetails } from '@/features/groups';
 
 import { Button } from '@/shared/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/shared/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/shared/components/ui/sheet';
 
 import { useChatTopBar } from './hooks';
 
@@ -33,10 +40,14 @@ export const ChatTopBar = () => {
           <Sheet onOpenChange={() => toggleGroupDetails()}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
-                <Info size={20} />
+                <Info size={25} />
               </Button>
             </SheetTrigger>
             <SheetContent className="w-full lg:max-w-screen-md overflow-y-auto">
+              <SheetHeader>
+                <SheetTitle/>
+                <SheetDescription/>
+              </SheetHeader>
               {isGroupDetailsOpen && activeGroupId && (
                 <div className="grid gap-4 py-4">
                   <GroupDetails groupId={activeGroupId} />

@@ -22,6 +22,7 @@ import {
 import { Input } from '@/shared/components/ui/input';
 
 import { useRelaySelectDropDown } from './hooks';
+import { DialogDescription } from '@radix-ui/react-dialog';
 
 export const RelaySelectDropdown = () => {
   const {
@@ -96,6 +97,7 @@ export const RelaySelectDropdown = () => {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Add New Relay URL</DialogTitle>
+                <DialogDescription>Please enter the URL of the new relay where you'd like to view the groups.</DialogDescription>
               </DialogHeader>
               <Input
                 value={relayInput}
