@@ -64,7 +64,7 @@ export const ChatListItem = ({
             >
               {firstMessageAuthor && (
                 <div className="text-sm font-semibold opacity-40">
-                  {profile?.name ? profile.name : message.authorPublicKey.slice(0, 5) + '...'}
+                  {profile?.displayName ? profile.displayName : message.authorPublicKey.slice(0, 5) + '...'}
                 </div>
               )}
 
@@ -81,7 +81,7 @@ export const ChatListItem = ({
                   )}
                   <div>
                     <div className="text-sm font-semibold opacity-40">
-                      {replyAuthorProfile?.name ? replyAuthorProfile.name : reply?.authorPublicKey?.slice(0, 5) + '...'}
+                      {replyAuthorProfile?.displayName ? replyAuthorProfile.displayName : reply?.authorPublicKey?.slice(0, 5) + '...'}
                     </div>
                     <div>
                       {ellipsis(
