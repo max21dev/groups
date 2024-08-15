@@ -5,7 +5,7 @@ import { LimitFilter } from '@/shared/types';
 const limitFilter: LimitFilter = { limit: 100 };
 
 export const useGroupsListItem = ({ groupId }: { groupId: string | undefined }) => {
-  const { setActiveGroupId } = useActiveGroup();
+  const { setActiveGroupId, activeGroupId } = useActiveGroup();
   const { group } = useGroup(groupId);
   const messages = useGroupMessages(groupId, limitFilter);
 
@@ -16,5 +16,6 @@ export const useGroupsListItem = ({ groupId }: { groupId: string | undefined }) 
     group,
     messages,
     isCollapsed,
+    activeGroupId,
   };
 };

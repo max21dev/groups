@@ -8,7 +8,9 @@ import { useGroupsListItem } from './hooks';
 import { displayTime } from './utils';
 
 export const GroupsListItem = ({ groupId }: { groupId: string | undefined }) => {
-  const { group, isCollapsed, messages, setActiveGroupId } = useGroupsListItem({ groupId });
+  const { group, isCollapsed, messages, setActiveGroupId, activeGroupId } = useGroupsListItem({
+    groupId,
+  });
 
   if (!group) return null;
 
@@ -19,6 +21,7 @@ export const GroupsListItem = ({ groupId }: { groupId: string | undefined }) => 
       className={cn(
         'gap-4 items-center px-2 py-8 cursor-pointer overflow-hidden',
         isCollapsed ? 'justify-center' : 'justify-start',
+        activeGroupId === groupId && 'bg-accent',
       )}
       onClick={() => setActiveGroupId(groupId)}
     >
