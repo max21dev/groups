@@ -11,8 +11,8 @@ export const ChatTopBar = () => {
   const { group, isGroupDetailsOpen, status, toggleGroupDetails, activeGroupId } = useChatTopBar();
 
   return (
-    <>
-      <div className="w-full h-20 flex p-4 justify-between items-center border-b">
+    <div className="w-full border-b">
+      <div className="flex justify-between items-center px-4 py-2">
         <div className="flex items-center gap-2">
           {status == 'loading' && <Loader2 className="w-6 h-6 animate-spin" />}
           {status == 'success' && (
@@ -29,7 +29,7 @@ export const ChatTopBar = () => {
             </>
           )}
         </div>
-        <div className="items-end">
+        <div className="flex items-center gap-2">
           <Sheet onOpenChange={() => toggleGroupDetails()}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
@@ -46,6 +46,8 @@ export const ChatTopBar = () => {
           </Sheet>
         </div>
       </div>
-    </>
+
+      {/* <div className="p-2 border-t"></div> */}
+    </div>
   );
 };
