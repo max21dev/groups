@@ -20,7 +20,7 @@ export function ChatList() {
     <div className="w-full overflow-y-auto overflow-x-hidden h-full flex flex-col">
       <div
         ref={messagesContainerRef}
-        className="w-full overflow-y-auto overflow-x-hidden h-full flex flex-col bg-gray-100 "
+        className="w-full overflow-y-auto overflow-x-hidden h-full flex flex-col bg-gray-100 dark:bg-gray-950"
       >
         <AnimatePresence>
           {processedMessages.map((message, i, arr) => (

@@ -10,7 +10,7 @@ export function ActiveUserInfo() {
   return (
     <>
       {activeUser ? (
-        <div className="flex p-2 justify-center rounded-full bg-blue-50 truncate">
+        <div className="flex p-2 justify-center rounded-full bg-blue-50 dark:bg-gray-800  truncate">
           <UserAvatar pubkey={activeUser?.pubkey} />
 
           {!isCollapsed && (

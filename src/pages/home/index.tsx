@@ -8,6 +8,7 @@ import { Sidebar } from '@/shared/components/sidebar';
 import { cn } from '@/shared/utils/cn';
 
 import { useHomePage } from './hooks';
+import { ModeToggle } from '@/shared/components/mode-toggle';
 
 export function HomePage() {
   const { isCollapsed, activeGroupId } = useHomePage();
@@ -16,9 +17,12 @@ export function HomePage() {
     <>
       <div className="flex w-full h-full">
         <Sidebar>
-          <div className="flex flex-col h-full p-2">
+          <div className="flex flex-col h-full p-2 dark:bg-gray-950">
             <div className="flex flex-col h-full gap-4 overflow-y-hidden hover:overflow-y-auto">
-              <RelaySelectDropdown />
+              <div className="flex gap-1">
+                {!isCollapsed && <ModeToggle />}
+                <RelaySelectDropdown />
+              </div>
 
               {!isCollapsed && <RelayGroupsCount />}
 

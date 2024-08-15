@@ -59,7 +59,7 @@ export const ChatListItem = ({
             <div
               className={cn(
                 'p-2 mt-1 rounded-lg max-w-xl whitespace-pre-wrap',
-                sameAsCurrentUser ? 'bg-blue-400 text-white mr-2' : 'bg-gray-400 text-white',
+                sameAsCurrentUser ? 'bg-blue-400 dark:bg-blue-900 text-white mr-2' : 'bg-gray-400 dark:bg-gray-900  text-white',
               )}
             >
               {firstMessageAuthor && (
