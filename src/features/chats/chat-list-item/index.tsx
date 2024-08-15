@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { format } from 'date-fns';
 import { Trash2, Undo } from 'lucide-react';
 
@@ -9,7 +10,6 @@ import {
 } from '@/shared/components/ui/context-menu.tsx';
 
 import { UserAvatar } from '@/features/users/user-avatar';
-
 import { cn, ellipsis, loader } from '@/shared/utils';
 
 import { useChatListItem } from './hooks';
@@ -34,8 +34,10 @@ export const ChatListItem = ({
     categorizedMessageContent,
     firstReplyImageUrl,
     replyAuthorProfile,
-    reply
+    reply,
   } = useChatListItem({ itemIndex, messages, message });
+
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   if (!message) return null;
 
@@ -59,12 +61,16 @@ export const ChatListItem = ({
             <div
               className={cn(
                 'p-2 mt-1 rounded-lg max-w-xl whitespace-pre-wrap',
-                sameAsCurrentUser ? 'bg-blue-400 dark:bg-blue-900 text-white mr-2' : 'bg-gray-400 dark:bg-gray-900  text-white',
+                sameAsCurrentUser
+                  ? 'bg-blue-400 dark:bg-blue-900 text-white mr-2'
+                  : 'bg-gray-400 dark:bg-gray-900  text-white',
               )}
             >
               {firstMessageAuthor && (
                 <div className="text-sm font-semibold opacity-40">
-                  {profile?.displayName ? profile.displayName : message.authorPublicKey.slice(0, 5) + '...'}
+                  {profile?.displayName
+                    ? profile.displayName
+                    : message.authorPublicKey.slice(0, 5) + '...'}
                 </div>
               )}
 
@@ -74,21 +80,15 @@ export const ChatListItem = ({
                   onClick={() => scrollToMessage(message.replyTo || '')}
                 >
                   {firstReplyImageUrl && (
-                    <img
-                      src={loader(firstReplyImageUrl, { w: 50 })}
-                      alt="Reply Message Image"
-                    />
+                    <img src={loader(firstReplyImageUrl, { w: 50 })} alt="Reply Message Image" />
                   )}
                   <div>
                     <div className="text-sm font-semibold opacity-40">
-                      {replyAuthorProfile?.displayName ? replyAuthorProfile.displayName : reply?.authorPublicKey?.slice(0, 5) + '...'}
+                      {replyAuthorProfile?.displayName
+                        ? replyAuthorProfile.displayName
+                        : reply?.authorPublicKey?.slice(0, 5) + '...'}
                     </div>
-                    <div>
-                      {ellipsis(
-                        reply?.content || '',
-                        50,
-                      )}
-                    </div>
+                    <div>{ellipsis(reply?.content || '', 50)}</div>
                   </div>
                 </div>
               )}
@@ -113,8 +113,9 @@ export const ChatListItem = ({
                           key={i}
                           src={loader(part.content, { w: 200 })}
                           alt="message"
-                          className="max-w-full h-40 rounded-lg mt-2"
+                          className="max-w-full h-40 rounded-lg mt-2 cursor-pointer"
                           max-width="200"
+                          onClick={() => setSelectedImage(part.content)}
                         />
                       );
                     } else if (part.category == 'url') {
@@ -158,6 +159,16 @@ export const ChatListItem = ({
           </ContextMenuContent>
         </ContextMenu>
       </div>
+
+      {/* Image Overlay */}
+      {selectedImage && (
+        <div
+          className="fixed max-w-full p-20 inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75"
+          onClick={() => setSelectedImage(null)}
+        >
+          <img src={selectedImage} alt="Enlarged message" className="h-auto rounded-lg" />
+        </div>
+      )}
     </div>
   );
 };
