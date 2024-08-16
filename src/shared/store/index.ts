@@ -1,4 +1,4 @@
-import NDK from '@nostr-dev-kit/ndk';
+import NDK, { NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -8,12 +8,14 @@ type AppState = {
   sidebarWidth: number;
   isCollapsed: boolean;
   hasCustomSidebarWidth: boolean;
+  zapTarget: NDKEvent | NDKUser | undefined;
 };
 
 type AppActions = {
   setSidebarWidth: (sidebarWidth: number) => void;
   setIsCollapsed: (isCollapsed: boolean) => void;
   setHasCustomSidebarWidth: (hasCustomSidebarWidth: boolean) => void;
+  setZapTarget: (zapTarget: NDKEvent | NDKUser | undefined) => void;
 };
 
 type GlobalNDKState = {
@@ -67,11 +69,15 @@ export const useStore = create<
 
       hasCustomSidebarWidth: false,
 
+      zapTarget: undefined,
+
       setSidebarWidth: (sidebarWidth) => set({ sidebarWidth }),
 
       setIsCollapsed: (isCollapsed) => set({ isCollapsed }),
 
       setHasCustomSidebarWidth: (hasCustomSidebarWidth) => set({ hasCustomSidebarWidth }),
+
+      setZapTarget: (zapTarget) => set({ zapTarget }),
 
       // Global NDK State
 

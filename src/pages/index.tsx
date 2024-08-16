@@ -1,5 +1,7 @@
 import { Outlet, createBrowserRouter } from 'react-router-dom';
 
+import { ZapModal } from '@/shared/components/zap-modal';
+
 import { UserLoginModal } from '@/features/users';
 
 const Layout = () => {
@@ -7,6 +9,7 @@ const Layout = () => {
     <>
       <Outlet />
       <UserLoginModal />
+      <ZapModal />
     </>
   );
 };

@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { format } from 'date-fns';
-import { Trash2, Undo } from 'lucide-react';
+import { Trash2, Undo, Zap } from 'lucide-react';
+import { useState } from 'react';
 
 import {
   ContextMenu,
@@ -35,6 +35,7 @@ export const ChatListItem = ({
     firstReplyImageUrl,
     replyAuthorProfile,
     reply,
+    setZapTarget,
   } = useChatListItem({ itemIndex, messages, message });
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -155,6 +156,10 @@ export const ChatListItem = ({
             <ContextMenuItem onClick={() => setReplyTo(message)}>
               <Undo className="h-4 w-4 mr-3" />
               Reply
+            </ContextMenuItem>
+            <ContextMenuItem onClick={() => setZapTarget(message.event)}>
+              <Zap className="h-4 w-4 mr-3 text-orange-500" />
+              <span className="text-orange-500">Zap</span>
             </ContextMenuItem>
           </ContextMenuContent>
         </ContextMenu>

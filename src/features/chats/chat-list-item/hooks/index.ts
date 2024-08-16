@@ -16,6 +16,7 @@ export const useChatListItem = ({
   const { createNewEvent } = useNewEvent();
 
   const setReplyTo = useStore((state) => state.setReplyTo);
+  const setZapTarget = useStore((state) => state.setZapTarget);
 
   const { activeUser } = useActiveUser();
   const { activeGroupId } = useActiveGroup();
@@ -71,5 +72,6 @@ export const useChatListItem = ({
     firstReplyImageUrl,
     replyAuthorProfile,
     reply,
+    setZapTarget,
   };
 };
