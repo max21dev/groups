@@ -1,4 +1,5 @@
 export { useActiveGroup } from './use-active-group';
+export { useGlobalNdk } from './use-global-ndk';
 export { useGroup } from './use-group';
 export { useGroupAdmin } from './use-group-admin';
 export { useGroupAdmins } from './use-group-admins';

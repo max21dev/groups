@@ -4,13 +4,15 @@ import { useAutoLogin, useNostrHooks } from 'nostr-hooks';
 import { useEffect, useMemo } from 'react';
 import { RouterProvider } from 'react-router-dom';
 
-import './index.css';
-
 import { router } from '@/pages';
 
 import { ThemeProvider } from '@/shared/components/theme-provider';
 import { Toaster } from '@/shared/components/ui/toaster';
+
+import { useGlobalNdk } from '@/shared/hooks';
 import { useStore } from '@/shared/store';
+
+import './index.css';
 
 export const App = () => {
   const relays = useStore((state) => state.relays);
@@ -29,13 +31,17 @@ export const App = () => {
 
   useNostrHooks(ndk);
 
-  const globalNDK = useStore((state) => state.globalNDK);
+  const { globalNdk, setGlobalSigner } = useGlobalNdk();
 
   useEffect(() => {
-    globalNDK.connect();
-  }, [globalNDK]);
+    globalNdk.connect();
+  }, [globalNdk]);
 
   useAutoLogin();
+
+  useEffect(() => {
+    setGlobalSigner(ndk.signer);
+  }, [ndk.signer, setGlobalSigner]);
 
   return (
     <>
