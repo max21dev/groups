@@ -1,9 +1,14 @@
+import { NDKEvent, NDKTag } from '@nostr-dev-kit/ndk';
 import { useState } from 'react';
 
 import { useToast } from '@/shared/components/ui/use-toast';
 
-import { useGlobalNdk, useLoginParam, useProfile } from '@/shared/hooks';
-import { useStore } from '@/shared/store';
+import {
+  useGlobalProfile,
+  useLoginModalState,
+  useZapModalState,
+  useGlobalNdk,
+} from '@/shared/hooks';
 
 import { ZAP_AMOUNTS } from '../config';
 import { payInvoiceByWebln } from '../utils';
@@ -13,15 +18,14 @@ export const useZapModal = () => {
   const [comment, setComment] = useState('');
   const [processing, setProcessing] = useState(false);
 
-  const zapTarget = useStore((state) => state.zapTarget);
-  const setZapTarget = useStore((state) => state.setZapTarget);
-
   const { toast } = useToast();
 
   const { globalNdk } = useGlobalNdk();
-  const { openLoginModal } = useLoginParam();
 
-  const { profile } = useProfile({ pubkey: zapTarget?.pubkey });
+  const { openLoginModal } = useLoginModalState();
+  const { zapTarget, setZapTarget, isZapModalOpen, setIsZapModalOpen } = useZapModalState();
+
+  const { profile } = useGlobalProfile({ pubkey: zapTarget?.pubkey });
 
   const process = () => {
     if (!zapTarget) return;
@@ -35,14 +39,18 @@ export const useZapModal = () => {
       return;
     }
 
-    const u = globalNdk.getUser({ pubkey: zapTarget.pubkey });
-    u.zap(selectedAmount.amount * 1000, comment).then((invoice) => {
+    const extraTags: NDKTag[] | undefined =
+      zapTarget instanceof NDKEvent ? [['e', zapTarget.id]] : undefined;
+
+    const ndkUser = globalNdk.getUser({ pubkey: zapTarget.pubkey });
+    ndkUser.zap(selectedAmount.amount * 1000, comment, extraTags).then((invoice) => {
       if (typeof invoice === 'string') {
         payInvoiceByWebln(invoice)
           .then((res) => {
             if (res) {
               toast({ title: 'Successful ⚡️⚡️⚡️' });
               setZapTarget(undefined);
+              setIsZapModalOpen(false);
             } else {
               toast({ title: 'Failed', variant: 'destructive' });
             }
@@ -62,8 +70,8 @@ export const useZapModal = () => {
     setComment,
     processing,
     process,
-    zapTarget,
-    setZapTarget,
+    isZapModalOpen,
+    setIsZapModalOpen,
     displayName: profile?.displayName,
     image: profile?.image,
   };

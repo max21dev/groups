@@ -5,14 +5,14 @@ import { useState } from 'react';
 
 import { useToast } from '@/shared/components/ui/use-toast';
 
-import { useLoginParam } from '@/shared/hooks';
+import { useLoginModalState } from '@/shared/hooks';
 
 export const useLoginModal = () => {
   const [nip46Input, setNip46Input] = useState('');
   const [nsecInput, setNsecInput] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { isLoginModalOpen, closeLoginModal, openLoginModal } = useLoginParam();
+  const { isLoginModalOpen, closeLoginModal, setIsLoginModalOpen } = useLoginModalState();
 
   const { loginWithExtention, loginWithRemoteSigner, loginWithSecretKey } = useLogin();
 
@@ -86,7 +86,6 @@ export const useLoginModal = () => {
     handleSecretKeySigner,
     handleSecretKeyGenerate,
     isLoginModalOpen,
-    closeLoginModal,
-    openLoginModal,
+    setIsLoginModalOpen,
   };
 };

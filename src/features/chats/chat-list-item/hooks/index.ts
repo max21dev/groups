@@ -1,7 +1,13 @@
 import { useActiveUser, useNewEvent } from 'nostr-hooks';
 import { useMemo } from 'react';
 
-import { useActiveGroup, useGroupAdmin, useLoginParam, useProfile } from '@/shared/hooks';
+import {
+  useActiveGroup,
+  useGlobalProfile,
+  useGroupAdmin,
+  useLoginModalState,
+  useZapModalState,
+} from '@/shared/hooks';
 import { useStore } from '@/shared/store';
 
 import { ChatListItemProps } from '../types';
@@ -12,17 +18,17 @@ export const useChatListItem = ({
   itemIndex,
   messages,
 }: Pick<ChatListItemProps, 'message' | 'itemIndex' | 'messages'>) => {
-  const { openLoginModal } = useLoginParam();
-  const { createNewEvent } = useNewEvent();
-
   const setReplyTo = useStore((state) => state.setReplyTo);
-  const setZapTarget = useStore((state) => state.setZapTarget);
 
+  const { openLoginModal } = useLoginModalState();
+  const { setZapTarget, openZapModal } = useZapModalState();
+
+  const { createNewEvent } = useNewEvent();
   const { activeUser } = useActiveUser();
   const { activeGroupId } = useActiveGroup();
   const { canDeleteEvent } = useGroupAdmin(activeGroupId, activeUser?.pubkey);
 
-  const { profile } = useProfile({ pubkey: message?.authorPublicKey });
+  const { profile } = useGlobalProfile({ pubkey: message?.authorPublicKey });
 
   const sameAsCurrentUser = message?.authorPublicKey === activeUser?.pubkey;
 
@@ -38,7 +44,7 @@ export const useChatListItem = ({
   );
 
   const reply = messages.find((e) => e.id === message?.replyTo);
-  const { profile: replyAuthorProfile } = useProfile({ pubkey: reply?.authorPublicKey });
+  const { profile: replyAuthorProfile } = useGlobalProfile({ pubkey: reply?.authorPublicKey });
   const firstReplyImageUrl = useMemo(
     () => fetchFirstContentImage(reply?.content || ''),
     [reply?.content],
@@ -73,5 +79,6 @@ export const useChatListItem = ({
     replyAuthorProfile,
     reply,
     setZapTarget,
+    openZapModal,
   };
 };

@@ -25,14 +25,12 @@ export const ZapModal = () => {
     setSelectedAmount,
     processing,
     process,
-    zapTarget,
-    setZapTarget,
+    isZapModalOpen,
+    setIsZapModalOpen,
   } = useZapModal();
 
   return (
-    <Dialog open={!!zapTarget} onOpenChange={(open) => !open && setZapTarget(undefined)}>
-      {/* <DialogTrigger asChild>{children}</DialogTrigger> */}
-
+    <Dialog open={isZapModalOpen} onOpenChange={(open) => setIsZapModalOpen(open)}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="flex gap-4 items-center">

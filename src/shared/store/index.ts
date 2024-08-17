@@ -6,16 +6,30 @@ import { GroupMessage } from '../types';
 
 type AppState = {
   sidebarWidth: number;
+
   isCollapsed: boolean;
+
   hasCustomSidebarWidth: boolean;
+
+  isLoginModalOpen: boolean;
+
+  isZapModalOpen: boolean;
+
   zapTarget: NDKEvent | NDKUser | undefined;
 };
 
 type AppActions = {
   setSidebarWidth: (sidebarWidth: number) => void;
+
   setIsCollapsed: (isCollapsed: boolean) => void;
+
   setHasCustomSidebarWidth: (hasCustomSidebarWidth: boolean) => void;
-  setZapTarget: (zapTarget: NDKEvent | NDKUser | undefined) => void;
+
+  setIsLoginModalOpen: (isOpen: boolean) => void;
+
+  setIsZapModalOpen: (isOpen: boolean) => void;
+
+  setZapTarget: (target: NDKEvent | NDKUser | undefined) => void;
 };
 
 type GlobalNDKState = {
@@ -69,6 +83,10 @@ export const useStore = create<
 
       hasCustomSidebarWidth: false,
 
+      isLoginModalOpen: false,
+
+      isZapModalOpen: false,
+
       zapTarget: undefined,
 
       setSidebarWidth: (sidebarWidth) => set({ sidebarWidth }),
@@ -77,7 +95,11 @@ export const useStore = create<
 
       setHasCustomSidebarWidth: (hasCustomSidebarWidth) => set({ hasCustomSidebarWidth }),
 
-      setZapTarget: (zapTarget) => set({ zapTarget }),
+      setIsLoginModalOpen: (isOpen) => set({ isLoginModalOpen: isOpen }),
+
+      setIsZapModalOpen: (isOpen) => set({ isZapModalOpen: isOpen }),
+
+      setZapTarget: (target) => set({ zapTarget: target }),
 
       // Global NDK State
 

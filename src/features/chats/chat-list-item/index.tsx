@@ -36,6 +36,7 @@ export const ChatListItem = ({
     replyAuthorProfile,
     reply,
     setZapTarget,
+    openZapModal,
   } = useChatListItem({ itemIndex, messages, message });
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -157,7 +158,12 @@ export const ChatListItem = ({
               <Undo className="h-4 w-4 mr-3" />
               Reply
             </ContextMenuItem>
-            <ContextMenuItem onClick={() => setZapTarget(message.event)}>
+            <ContextMenuItem
+              onClick={() => {
+                setZapTarget(message.event);
+                openZapModal();
+              }}
+            >
               <Zap className="h-4 w-4 mr-3 text-orange-500" />
               <span className="text-orange-500">Zap</span>
             </ContextMenuItem>

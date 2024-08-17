@@ -1,7 +1,7 @@
-import { useProfile } from '@/shared/hooks';
+import { useGlobalProfile } from '@/shared/hooks';
 
 export const useUserAvatar = ({ pubkey }: { pubkey: string }) => {
-  const { profile } = useProfile({ pubkey });
+  const { profile } = useGlobalProfile({ pubkey });
 
   return { profile };
 };

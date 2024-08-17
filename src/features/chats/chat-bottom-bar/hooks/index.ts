@@ -6,7 +6,7 @@ import {
   useGroupAdmins,
   useGroupMembers,
   useGroupMessages,
-  useLoginParam,
+  useLoginModalState,
 } from '@/shared/hooks';
 import { useStore } from '@/shared/store';
 import { GroupMessage, LimitFilter } from '@/shared/types';
@@ -28,7 +28,7 @@ export const useChatBottomBar = () => {
   const { activeUser } = useActiveUser();
   const messages = useGroupMessages(activeGroupId, limitFilter);
 
-  const { openLoginModal } = useLoginParam();
+  const { openLoginModal } = useLoginModalState();
   const { createNewEvent } = useNewEvent();
 
   const handleThumbsUp = () => {

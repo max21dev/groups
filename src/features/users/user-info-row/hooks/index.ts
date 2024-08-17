@@ -1,7 +1,7 @@
-import { useProfile } from '@/shared/hooks';
+import { useGlobalProfile } from '@/shared/hooks';
 
 export const useUserInfoRow = ({ pubkey }: { pubkey: string }) => {
-  const { profile } = useProfile({ pubkey: pubkey });
+  const { profile } = useGlobalProfile({ pubkey });
 
   return { profile };
 };
