@@ -1,3 +1,4 @@
+import { DialogDescription } from '@radix-ui/react-dialog';
 import { Globe, TrashIcon } from 'lucide-react';
 
 import { Alert } from '@/shared/components/ui/alert';
@@ -21,8 +22,8 @@ import {
 } from '@/shared/components/ui/dropdown-menu';
 import { Input } from '@/shared/components/ui/input';
 
+import { MANDATORY_RELAYS } from './config';
 import { useRelaySelectDropDown } from './hooks';
-import { DialogDescription } from '@radix-ui/react-dialog';
 
 export const RelaySelectDropdown = () => {
   const {
@@ -71,7 +72,7 @@ export const RelaySelectDropdown = () => {
                 className="flex justify-between items-center"
               >
                 <span>{relay}</span>
-                {relay !== 'wss://groups.fiatjaf.com' && (
+                {!MANDATORY_RELAYS.includes(relay) && (
                   <Button
                     className="z-10"
                     variant="ghost"
@@ -97,7 +98,9 @@ export const RelaySelectDropdown = () => {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Add New Relay URL</DialogTitle>
-                <DialogDescription>Please enter the URL of the new relay where you'd like to view the groups.</DialogDescription>
+                <DialogDescription>
+                  Please enter the URL of the new relay where you'd like to view the groups.
+                </DialogDescription>
               </DialogHeader>
               <Input
                 value={relayInput}

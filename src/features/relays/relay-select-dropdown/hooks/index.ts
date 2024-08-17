@@ -4,11 +4,7 @@ import { useToast } from '@/shared/components/ui/use-toast';
 
 import { useStore } from '@/shared/store';
 
-const validateURL = (url: string) => {
-  const urlPattern = /^(wss?|ws):\/\/[^\s$.?#].[^\s]*$/i;
-
-  return urlPattern.test(url);
-};
+import { validateURL } from '../utils';
 
 export const useRelaySelectDropDown = () => {
   const [relayInput, setRelayInput] = useState('');

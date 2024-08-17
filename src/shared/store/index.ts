@@ -127,7 +127,7 @@ export const useStore = create<
 
       // Relay State
 
-      relays: ['wss://groups.fiatjaf.com'],
+      relays: ['wss://groups.fiatjaf.com', 'wss://relay.groups.nip29.com'],
 
       activeRelayIndex: 0,
 
