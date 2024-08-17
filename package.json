@@ -1,7 +1,7 @@
 {
   "name": "groups",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -52,7 +52,7 @@
     "framer-motion": "^11.3.21",
     "lucide-react": "^0.417.0",
     "next-themes": "^0.2.1",
-    "nostr-hooks": "^2.9.1",
+    "nostr-hooks": "^2.9.4",
     "nostr-tools": "^2.7.0",
     "re-resizable": "^6.9.17",
     "react": "^18.2.0",
