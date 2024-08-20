@@ -12,6 +12,7 @@ import { useStore } from '@/shared/store';
 
 import { ChatListItemProps } from '../types';
 import { categorizeMessageContent, fetchFirstContentImage } from '../utils';
+import { useMessageReactions } from '@/shared/hooks/use-message-reactions';
 
 export const useChatListItem = ({
   message,
@@ -27,6 +28,7 @@ export const useChatListItem = ({
   const { activeUser } = useActiveUser();
   const { activeGroupId } = useActiveGroup();
   const { canDeleteEvent } = useGroupAdmin(activeGroupId, activeUser?.pubkey);
+  const { reactions } = useMessageReactions(activeGroupId,message)
 
   const { profile } = useGlobalProfile({ pubkey: message?.authorPublicKey });
 
@@ -98,6 +100,7 @@ export const useChatListItem = ({
     setZapTarget,
     openZapModal,
     activeUser,
-    likeMessage
+    likeMessage,
+    reactions
   };
 };
