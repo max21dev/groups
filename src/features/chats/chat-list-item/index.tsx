@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { Trash2, Undo, Zap } from 'lucide-react';
+import { ThumbsDown, ThumbsUp, Trash2, Undo, Zap } from 'lucide-react';
 import { useState } from 'react';
 
 import {
@@ -37,6 +37,8 @@ export const ChatListItem = ({
     reply,
     setZapTarget,
     openZapModal,
+    activeUser,
+    likeMessage,
   } = useChatListItem({ itemIndex, messages, message });
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -142,32 +144,42 @@ export const ChatListItem = ({
               </div>
             </div>
           </ContextMenuTrigger>
-          <ContextMenuContent>
-            {canDeleteEvent && (
+          {activeUser && (
+            <ContextMenuContent>
+              {canDeleteEvent && (
+                <ContextMenuItem
+                  onClick={() => {
+                    deleteMessage(message.id, message.groupId);
+                    setDeletedMessages((prev) => [...(prev || []), message.id]);
+                  }}
+                >
+                  <Trash2 className="h-4 w-4 mr-3" />
+                  Delete
+                </ContextMenuItem>
+              )}
+              <ContextMenuItem onClick={() => setReplyTo(message)}>
+                <Undo className="h-4 w-4 mr-3" />
+                Reply
+              </ContextMenuItem>
+              <ContextMenuItem onClick={() => likeMessage(message.id, message.groupId, true)}>
+                <ThumbsUp className="h-4 w-4 mr-3" />
+                Like
+              </ContextMenuItem>
+              <ContextMenuItem onClick={() => likeMessage(message.id, message.groupId, false)}>
+                <ThumbsDown className="h-4 w-4 mr-3" />
+                Dislike
+              </ContextMenuItem>
               <ContextMenuItem
                 onClick={() => {
-                  deleteMessage(message.id, message.groupId);
-                  setDeletedMessages((prev) => [...(prev || []), message.id]);
+                  setZapTarget(message.event);
+                  openZapModal();
                 }}
               >
-                <Trash2 className="h-4 w-4 mr-3" />
-                Delete
+                <Zap className="h-4 w-4 mr-3 text-orange-500" />
+                <span className="text-orange-500">Zap</span>
               </ContextMenuItem>
-            )}
-            <ContextMenuItem onClick={() => setReplyTo(message)}>
-              <Undo className="h-4 w-4 mr-3" />
-              Reply
-            </ContextMenuItem>
-            <ContextMenuItem
-              onClick={() => {
-                setZapTarget(message.event);
-                openZapModal();
-              }}
-            >
-              <Zap className="h-4 w-4 mr-3 text-orange-500" />
-              <span className="text-orange-500">Zap</span>
-            </ContextMenuItem>
-          </ContextMenuContent>
+            </ContextMenuContent>
+          )}
         </ContextMenu>
       </div>
 

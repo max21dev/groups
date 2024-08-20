@@ -65,6 +65,23 @@ export const useChatListItem = ({
     event.publish();
   }
 
+  function likeMessage(eventId: string, groupId: string, like: boolean) {
+    if (!activeUser) {
+      openLoginModal();
+      return;
+    }
+
+    const event = createNewEvent();
+    event.kind = 7;
+    event.content = like ? '+' : '-';
+    event.tags = [
+      ['h', groupId],
+      ['e', eventId],
+      ['p', activeUser.pubkey],
+    ];
+    event.publish();
+  }
+
   return {
     isLastMessage,
     sameAuthorAsNextMessage,
@@ -80,5 +97,7 @@ export const useChatListItem = ({
     reply,
     setZapTarget,
     openZapModal,
+    activeUser,
+    likeMessage
   };
 };
