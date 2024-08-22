@@ -2,10 +2,9 @@ import { GroupAvatar } from '@/features/groups';
 
 import { Button } from '@/shared/components/ui/button.tsx';
 
-import { cn, ellipsis } from '@/shared/utils';
+import { cn, ellipsis, displayTime } from '@/shared/utils';
 
 import { useGroupsListItem } from './hooks';
-import { displayTime } from './utils';
 
 export const GroupsListItem = ({ groupId }: { groupId: string | undefined }) => {
   const { group, isCollapsed, messages, setActiveGroupId, activeGroupId } = useGroupsListItem({

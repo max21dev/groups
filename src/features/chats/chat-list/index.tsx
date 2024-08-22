@@ -2,9 +2,11 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 import { ChatListItem } from '@/features/chats';
 
-import { cn } from '@/shared/utils';
+import { cn, sameDay } from '@/shared/utils';
 
 import { useChatList } from './hooks';
+
+import { format } from 'date-fns';
 
 export function ChatList() {
   const {
@@ -50,6 +52,11 @@ export function ChatList() {
                 messageRefs.current[message.id] = el;
               }}
             >
+              {(i == 0 || !sameDay(message.createdAt, processedMessages[i - 1].createdAt)) && (
+                <div className="w-full text-center">
+                  {format(new Date(message.createdAt * 1000), 'dd MMMM')}
+                </div>
+              )}
               <ChatListItem
                 message={message}
                 setDeletedMessages={setDeletedMessages}

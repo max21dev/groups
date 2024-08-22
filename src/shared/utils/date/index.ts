@@ -9,3 +9,7 @@ export const displayTime = (createdAt: number) => {
       ? formatted.split(' at ')[0]
       : formatted;
 };
+
+export const sameDay = (date1: number, date2: number) => {
+  return new Date(date1 * 1000).getDate() === new Date(date2 * 1000).getDate();
+}

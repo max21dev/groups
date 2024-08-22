@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import { ThumbsDown, ThumbsUp, Trash2, Undo, Zap } from 'lucide-react';
 import { useState } from 'react';
 
@@ -14,6 +13,7 @@ import { cn, ellipsis, loader } from '@/shared/utils';
 
 import { useChatListItem } from './hooks';
 import { ChatListItemProps } from './types';
+import { format } from 'date-fns';
 
 export const ChatListItem = ({
   message,
