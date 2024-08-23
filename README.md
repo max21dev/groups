@@ -15,7 +15,7 @@ This client enables users to participate in groups managed by relays, where acce
   - ✅ Real-time updates.
   - ✅ Built-in caching and data persistence.
   - ✅ Image and URL previews.
-  - 🚧 Dark mode support.
+  - ✅ Dark mode support.
   - 🚧 Customizable settings.
   - 🚧 Offline support.
   - 🚧 PWA support.
@@ -25,6 +25,7 @@ This client enables users to participate in groups managed by relays, where acce
   - ✅ Send and delete messages.
   - ✅ React to messages with emojis.
   - ✅ Reply to messages.
+  - 🚧 Reaction to message (kind:7 in supported relay).
   - 🚧 Mention users in messages.
   - 🚧 Pin important messages.
   - 🚧 Receive notifications for new messages.
