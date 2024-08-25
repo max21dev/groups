@@ -10,18 +10,23 @@ export const useGroups = () => {
 
   const groups = useMemo(
     () =>
-      groupsEvents.map((e) => {
-        const nameTag = e.getMatchingTags('name')[0];
-        const pictureTag = e.getMatchingTags('picture')[0];
-        return {
-          id: e.dTag,
-          name: nameTag ? nameTag[1] : 'Unknown',
-          privacy: e.getMatchingTags('public') ? 'public' : 'private',
-          type: e.getMatchingTags('open') ? 'open' : 'closed',
-          picture: pictureTag ? pictureTag[1] : '',
-          event: e,
-        } as Group;
-      }),
+      groupsEvents
+        .filter((e) => {
+          const nameTag = e.getMatchingTags('name')?.[0];
+
+          return nameTag && nameTag[1] !== '';
+        })
+        .map(
+          (e) =>
+            ({
+              id: e.dTag,
+              name: e.getMatchingTags('name')?.[0]?.[1],
+              privacy: e.getMatchingTags('public') ? 'public' : 'private',
+              type: e.getMatchingTags('open') ? 'open' : 'closed',
+              picture: e.getMatchingTags('picture')?.[0]?.[1] || '',
+              event: e,
+            }) as Group,
+        ),
     [groupsEvents],
   );
 
