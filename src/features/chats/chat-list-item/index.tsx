@@ -138,19 +138,22 @@ export const ChatListItem = ({
                     }
                   })}
                 </div>
+
                 {reactions && reactions.like > 0 && (
                   <span className="flex rounded items-center bg-gray-400 bg-opacity-30 ml-auto text-end text-xs font-light text-gray-300">
                     <span className="mr-1">{reactions.like}</span>
                     <ThumbsUp className="h-3 w-3" />
                   </span>
                 )}
+
                 {reactions && reactions.disLike > 0 && (
                   <span className="flex rounded items-center bg-gray-400 bg-opacity-30 ml-auto text-end text-xs font-light text-gray-300">
                     <span className="mr-1">{reactions.disLike}</span>
                     <ThumbsDown className="h-3 w-3" />
                   </span>
                 )}
-                <span className="ml-auto text-end text-xs font-light text-gray-300">
+
+                <span className="ml-auto text-end text-xs font-light text-gray-300 cursor-default">
                   {format(new Date(message.createdAt * 1000), 'HH:mm')}
                 </span>
               </div>
