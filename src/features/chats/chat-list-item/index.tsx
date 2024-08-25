@@ -72,7 +72,7 @@ export const ChatListItem = ({
               )}
             >
               {firstMessageAuthor && (
-                <div className="text-sm font-semibold opacity-40">
+                <div className="mb-1 text-sm font-semibold opacity-40">
                   {profile?.displayName
                     ? profile.displayName
                     : message.authorPublicKey.slice(0, 5) + '...'}
@@ -81,7 +81,7 @@ export const ChatListItem = ({
 
               {message.replyTo && (
                 <div
-                  className="text-sm bg-white bg-opacity-30 text-white cursor-pointer border-l-4 rounded-lg p-1 flex items-start"
+                  className="mb-2 text-sm bg-white bg-opacity-30 text-white cursor-pointer border-l-4 rounded-lg p-1 flex items-start"
                   onClick={() => scrollToMessage(message.replyTo || '')}
                 >
                   {firstReplyImageUrl && (
@@ -101,7 +101,7 @@ export const ChatListItem = ({
               <div
                 className={cn(
                   'flex gap-2',
-                  message.content.length < 100 ? 'items-end' : 'flex-col justify-end',
+                  message.content.length < 80 ? 'items-center' : 'flex-col justify-end',
                 )}
               >
                 <div>
@@ -139,23 +139,23 @@ export const ChatListItem = ({
                   })}
                 </div>
 
-                {reactions && reactions.like > 0 && (
-                  <span className="flex rounded items-center bg-gray-400 bg-opacity-30 ml-auto text-end text-xs font-light text-gray-300">
-                    <span className="mr-1">{reactions.like}</span>
-                    <ThumbsUp className="h-3 w-3" />
-                  </span>
-                )}
+                <div className="ml-auto flex gap-2 items-center text-end text-xs font-light cursor-default opacity-60">
+                  {reactions && reactions.like > 0 && (
+                    <div className="flex items-center">
+                      <span className="mr-1">{reactions.like}</span>
+                      <ThumbsUp className="h-3 w-3" />
+                    </div>
+                  )}
 
-                {reactions && reactions.disLike > 0 && (
-                  <span className="flex rounded items-center bg-gray-400 bg-opacity-30 ml-auto text-end text-xs font-light text-gray-300">
-                    <span className="mr-1">{reactions.disLike}</span>
-                    <ThumbsDown className="h-3 w-3" />
-                  </span>
-                )}
+                  {reactions && reactions.disLike > 0 && (
+                    <div className="flex items-center">
+                      <span className="mr-1">{reactions.disLike}</span>
+                      <ThumbsDown className="h-3 w-3" />
+                    </div>
+                  )}
 
-                <span className="ml-auto text-end text-xs font-light text-gray-300 cursor-default">
-                  {format(new Date(message.createdAt * 1000), 'HH:mm')}
-                </span>
+                  <span>{format(new Date(message.createdAt * 1000), 'HH:mm')}</span>
+                </div>
               </div>
             </div>
           </ContextMenuTrigger>
