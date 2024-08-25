@@ -1,12 +1,10 @@
-import { format } from 'date-fns';
 import { AnimatePresence, motion } from 'framer-motion';
 
-import { ChatListItem } from '@/features/chats';
+import { ChatListDateBadge, ChatListItem } from '@/features/chats';
 
 import { cn, sameDay } from '@/shared/utils';
 
 import { useChatList } from './hooks';
-import { Badge } from '@/shared/components/ui/badge';
 
 export function ChatList() {
   const {
@@ -53,9 +51,7 @@ export function ChatList() {
               }}
             >
               {(i == 0 || !sameDay(message.createdAt, processedMessages[i - 1].createdAt)) && (
-                <Badge className="mt-2 mx-auto cursor-default" variant="outline">
-                  {format(new Date(message.createdAt * 1000), 'dd MMMM')}
-                </Badge>
+                <ChatListDateBadge date={new Date(message.createdAt * 1000)} />
               )}
               <ChatListItem
                 message={message}
