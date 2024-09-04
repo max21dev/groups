@@ -7,11 +7,18 @@ import { cn, ellipsis, displayTime } from '@/shared/utils';
 import { useGroupsListItem } from './hooks';
 
 export const GroupsListItem = ({ groupId }: { groupId: string | undefined }) => {
-  const { group, isCollapsed, messages, setActiveGroupId, activeGroupId } = useGroupsListItem({
+  const {
+    group,
+    isCollapsed,
+    messages,
+    setActiveGroupId,
+    activeGroupId,
+    showGroup,
+  } = useGroupsListItem({
     groupId,
   });
 
-  if (!group) return null;
+  if (!group || !showGroup) return null;
 
   return (
     <Button

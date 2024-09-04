@@ -54,3 +54,10 @@ export type LimitFilter = {
   until?: number;
   limit?: number;
 };
+
+export type GroupsFilter = {
+  belongTo?: boolean;
+  manage?: boolean;
+  own?: boolean;
+  notJoined?: boolean;
+};

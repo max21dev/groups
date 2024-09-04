@@ -2,7 +2,7 @@ import NDK, { NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { GroupMessage } from '../types';
+import { GroupMessage, GroupsFilter } from '../types';
 
 type AppState = {
   sidebarWidth: number;
@@ -52,6 +52,14 @@ type ChatActions = {
   toggleGroupDetails: () => void;
 };
 
+type GroupsState = {
+  groupsFilter: GroupsFilter | undefined;
+};
+
+type GroupsActions = {
+  setGroupsFilter: (groupsFilter: GroupsFilter | undefined) => void;
+};
+
 type RelaysState = {
   relays: string[];
   activeRelayIndex: number;
@@ -71,7 +79,9 @@ export const useStore = create<
     ChatState &
     ChatActions &
     RelaysState &
-    RelaysActions
+    RelaysActions &
+    GroupsState &
+    GroupsActions
 >()(
   persist(
     (set, get) => ({
@@ -153,6 +163,9 @@ export const useStore = create<
       },
 
       setActiveRelayIndex: (activeRelayIndex) => set({ activeRelayIndex }),
+
+      groupsFilter: { belongTo: true, manage: true, own: true, notJoined: true },
+      setGroupsFilter: (groupsFilter) => set({ groupsFilter }),
     }),
     {
       name: 'app-storage',

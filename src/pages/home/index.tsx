@@ -9,9 +9,10 @@ import { cn } from '@/shared/utils/cn';
 
 import { useHomePage } from './hooks';
 import { ModeToggle } from '@/shared/components/mode-toggle';
+import { GroupsFilterDropdown } from '@/features/groups/groups-list/groups-filter-dropdown';
 
 export function HomePage() {
-  const { isCollapsed, activeGroupId } = useHomePage();
+  const { isCollapsed, activeGroupId, activeUser } = useHomePage();
 
   return (
     <>
@@ -23,6 +24,11 @@ export function HomePage() {
                 {!isCollapsed && <ModeToggle />}
                 <RelaySelectDropdown />
               </div>
+              {activeUser?.pubkey && (
+                <div className="flex gap-1">
+                  <GroupsFilterDropdown />
+                </div>
+              )}
 
               {!isCollapsed && <RelayGroupsCount />}
 
