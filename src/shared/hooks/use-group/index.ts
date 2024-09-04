@@ -33,7 +33,9 @@ export const useGroup = (groupId: string | undefined) => {
       name: nameTag ? nameTag[1] : 'Unknown',
       privacy: groupEvent.getMatchingTags('public') ? 'public' : 'private',
       type: groupEvent.getMatchingTags('open') ? 'open' : 'closed',
-      about: groupEvent.getMatchingTags('about') ? groupEvent.getMatchingTags('about') : '',
+      about: groupEvent.getMatchingTags('about')?.length
+        ? groupEvent.getMatchingTags('about')[0]
+        : '',
       picture: pictureTag ? pictureTag[1] : '',
       event: groupEvent,
     } as Group;

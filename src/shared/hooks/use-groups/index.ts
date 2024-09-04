@@ -21,6 +21,7 @@ export const useGroups = () => {
             ({
               id: e.dTag,
               name: e.getMatchingTags('name')?.[0]?.[1],
+              about: e.getMatchingTags('about')?.[0]?.[1],
               privacy: e.getMatchingTags('public') ? 'public' : 'private',
               type: e.getMatchingTags('open') ? 'open' : 'closed',
               picture: e.getMatchingTags('picture')?.[0]?.[1] || '',
