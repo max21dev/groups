@@ -15,6 +15,11 @@ export const loader = (src: string, opt?: { w?: number; h?: number }) => {
   }
 
   return `${import.meta.env.VITE_IMAGE_PROXY_API_ENDPOINT}${encodeURIComponent(
-    btoa(src),
+    btoa(
+      String.fromCharCode(
+        ...new TextEncoder()
+          .encode(src)
+      )
+    ) ,
   )}${queries}`;
 };
