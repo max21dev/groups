@@ -26,13 +26,13 @@ export const useChatBottomBar = () => {
 
   const { globalNdk } = useGlobalNdk();
   const { nip29Ndk } = useNip29Ndk();
-
   const { activeGroupId } = useActiveGroup();
   const { members } = useGroupMembers(activeGroupId);
   const { admins } = useGroupAdmins(activeGroupId);
-  const { activeUser } = useActiveUser({ customNdk: globalNdk });
-  const messages = useGroupMessages(activeGroupId, limitFilter);
+  const { messages } = useGroupMessages(activeGroupId, limitFilter);
   const { openLoginModal } = useLoginModalState();
+
+  const { activeUser } = useActiveUser({ customNdk: globalNdk });
   const { createNewEvent } = useNewEvent({ customNdk: nip29Ndk });
 
   const handleThumbsUp = () => {

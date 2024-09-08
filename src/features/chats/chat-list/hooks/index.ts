@@ -13,11 +13,10 @@ export const useChatList = () => {
   const [deletedMessages, setDeletedMessages] = useState<string[]>([]);
 
   const { globalNdk } = useGlobalNdk();
-
   const { activeGroupId } = useActiveGroup();
-  const { activeUser } = useActiveUser({ customNdk: globalNdk });
+  const { messages } = useGroupMessages(activeGroupId, limitFilter);
 
-  const messages = useGroupMessages(activeGroupId, limitFilter);
+  const { activeUser } = useActiveUser({ customNdk: globalNdk });
 
   const processedMessages = useMemo(
     () =>

@@ -44,5 +44,5 @@ export const useGroupMessages = (
     [messagesEvents],
   );
 
-  return messages;
+  return { messages };
 };

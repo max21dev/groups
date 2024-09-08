@@ -17,14 +17,15 @@ const limitFilter: LimitFilter = { limit: 100 };
 export const useGroupsListItem = ({ groupId }: { groupId: string | undefined }) => {
   const [showGroup, setShowGroup] = useState<boolean>(true);
 
-  const { globalNdk } = useGlobalNdk();
+  const groupsFilter = useStore((state) => state.groupsFilter);
 
   const { setActiveGroupId, activeGroupId } = useActiveGroup();
-  const { activeUser } = useActiveUser({ customNdk: globalNdk });
+  const { globalNdk } = useGlobalNdk();
   const { group } = useGroup(groupId);
-  const { members } = useGroupMembers(group?.id);
-  const { admins } = useGroupAdmins(group?.id);
-  const groupsFilter = useStore((state) => state.groupsFilter);
+  const { admins } = useGroupAdmins(groupId);
+  const { members } = useGroupMembers(groupId);
+
+  const { activeUser } = useActiveUser({ customNdk: globalNdk });
 
   useEffect(() => {
     const hasFilter = groupsFilter && Object.values(groupsFilter).some((value) => !value);
@@ -50,7 +51,7 @@ export const useGroupsListItem = ({ groupId }: { groupId: string | undefined }) 
     }
   }, [members, admins, activeUser, groupsFilter]);
 
-  const messages = useGroupMessages(groupId, limitFilter);
+  const { messages } = useGroupMessages(groupId, limitFilter);
 
   const isCollapsed = useStore((state) => state.isCollapsed);
 
