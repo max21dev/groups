@@ -18,7 +18,7 @@ export const GroupDetails = ({ groupId }: { groupId: string }) => {
         </Button>
       )}
       {editMode ? (
-        <GroupDetailsEdit group={group} />
+        <GroupDetailsEdit setEditMode={setEditMode} group={group} />
       ) : (
         <GroupDetailsView group={group} admins={admins} members={members} />
       )}

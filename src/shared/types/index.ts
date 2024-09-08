@@ -12,6 +12,13 @@ export type Group = {
   event: NDKEvent;
 };
 
+export type GroupMetadata = {
+  id: string;
+  name: string;
+  picture: string;
+  about: string;
+};
+
 export type GroupAdmin = {
   publicKey: string;
   permissions: GroupAdminPermission[];

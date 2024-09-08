@@ -13,8 +13,10 @@ import {
   FormMessage,
 } from '@/shared/components/ui/form';
 import { Input } from '@/shared/components/ui/input';
-import { Group } from '@/shared/types';
+import { Group, GroupMetadata } from '@/shared/types';
 import { Textarea } from '@/shared/components/ui/textarea.tsx';
+import { useGroupDetails } from '@/features/groups/group-details/hooks';
+import React from 'react';
 
 const formSchema = z.object({
   name: z.string().min(5, {
@@ -29,7 +31,14 @@ const formSchema = z.object({
   about: z.string().optional(),
 });
 
-export const GroupDetailsEdit = ({ group }: { group: Group | undefined }) => {
+export const GroupDetailsEdit = ({
+  group,
+  setEditMode,
+}: {
+  group: Group | undefined;
+  setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  const { updateGroupMetadata } = useGroupDetails({ groupId: group?.id });
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,8 +49,14 @@ export const GroupDetailsEdit = ({ group }: { group: Group | undefined }) => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    //TODO: Implement submit logic for send the event type 39000
-    console.log(values);
+    const updatedGroup: GroupMetadata = {
+      id: group?.id,
+      name: values.name,
+      picture: values.picture,
+      about: values.about,
+    } as GroupMetadata;
+    updateGroupMetadata(updatedGroup);
+    setEditMode(false);
   }
 
   return (

@@ -27,15 +27,14 @@ export const useGroup = (groupId: string | undefined) => {
 
     const nameTag = groupEvent.getMatchingTags('name')[0];
     const pictureTag = groupEvent.getMatchingTags('picture')[0];
+    const aboutTag = groupEvent.getMatchingTags('about')[0];
 
     return {
       id: groupEvent.dTag,
       name: nameTag ? nameTag[1] : 'Unknown',
       privacy: groupEvent.getMatchingTags('public') ? 'public' : 'private',
       type: groupEvent.getMatchingTags('open') ? 'open' : 'closed',
-      about: groupEvent.getMatchingTags('about')?.length
-        ? groupEvent.getMatchingTags('about')[0]
-        : '',
+      about: aboutTag ? aboutTag[1] : '',
       picture: pictureTag ? pictureTag[1] : '',
       event: groupEvent,
     } as Group;
