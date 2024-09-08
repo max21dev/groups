@@ -3,16 +3,18 @@ import { useMemo } from 'react';
 
 import {
   useActiveGroup,
+  useGlobalNdk,
   useGlobalProfile,
   useGroupAdmin,
   useLoginModalState,
+  useMessageReactions,
+  useNip29Ndk,
   useZapModalState,
 } from '@/shared/hooks';
 import { useStore } from '@/shared/store';
 
 import { ChatListItemProps } from '../types';
 import { categorizeMessageContent, fetchFirstContentImage } from '../utils';
-import { useMessageReactions } from '@/shared/hooks/use-message-reactions';
 
 export const useChatListItem = ({
   message,
@@ -24,11 +26,14 @@ export const useChatListItem = ({
   const { openLoginModal } = useLoginModalState();
   const { setZapTarget, openZapModal } = useZapModalState();
 
-  const { createNewEvent } = useNewEvent();
-  const { activeUser } = useActiveUser();
+  const { globalNdk } = useGlobalNdk();
+  const { nip29Ndk } = useNip29Ndk();
+
+  const { createNewEvent } = useNewEvent({ customNdk: nip29Ndk });
+  const { activeUser } = useActiveUser({ customNdk: globalNdk });
   const { activeGroupId } = useActiveGroup();
   const { canDeleteEvent } = useGroupAdmin(activeGroupId, activeUser?.pubkey);
-  const { reactions } = useMessageReactions(activeGroupId,message)
+  const { reactions } = useMessageReactions(activeGroupId, message);
 
   const { profile } = useGlobalProfile({ pubkey: message?.authorPublicKey });
 
@@ -101,6 +106,6 @@ export const useChatListItem = ({
     openZapModal,
     activeUser,
     likeMessage,
-    reactions
+    reactions,
   };
 };

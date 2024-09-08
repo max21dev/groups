@@ -1,11 +1,14 @@
 import { useSubscribe } from 'nostr-hooks';
 import { useEffect, useMemo, useState } from 'react';
 
+import { useNip29Ndk } from '@/shared/hooks';
 import { Group } from '@/shared/types';
 
 type Status = 'idle' | 'loading' | 'success';
 
 export const useGroup = (groupId: string | undefined) => {
+  const { nip29Ndk } = useNip29Ndk();
+
   const [status, setStatus] = useState<Status>('idle');
 
   const { events: groupsEvents } = useSubscribe(
@@ -13,6 +16,7 @@ export const useGroup = (groupId: string | undefined) => {
       () => ({
         filters: !groupId ? [] : [{ kinds: [39000], '#d': [groupId] }],
         enabled: !!groupId,
+        customNdk: nip29Ndk,
       }),
       [groupId],
     ),

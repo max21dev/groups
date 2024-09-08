@@ -3,10 +3,12 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import {
   useActiveGroup,
+  useGlobalNdk,
   useGroupAdmins,
   useGroupMembers,
   useGroupMessages,
   useLoginModalState,
+  useNip29Ndk,
 } from '@/shared/hooks';
 import { useStore } from '@/shared/store';
 import { GroupMessage, LimitFilter } from '@/shared/types';
@@ -22,14 +24,16 @@ export const useChatBottomBar = () => {
   const replyTo = useStore((state) => state.replyTo);
   const setReplyTo = useStore((state) => state.setReplyTo);
 
+  const { globalNdk } = useGlobalNdk();
+  const { nip29Ndk } = useNip29Ndk();
   const { activeGroupId } = useActiveGroup();
   const { members } = useGroupMembers(activeGroupId);
   const { admins } = useGroupAdmins(activeGroupId);
-  const { activeUser } = useActiveUser();
-  const messages = useGroupMessages(activeGroupId, limitFilter);
-
+  const { messages } = useGroupMessages(activeGroupId, limitFilter);
   const { openLoginModal } = useLoginModalState();
-  const { createNewEvent } = useNewEvent();
+
+  const { activeUser } = useActiveUser({ customNdk: globalNdk });
+  const { createNewEvent } = useNewEvent({ customNdk: nip29Ndk });
 
   const handleThumbsUp = () => {
     sendMessage('👍', replyTo);

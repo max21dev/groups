@@ -1,15 +1,8 @@
-import { NDKSigner } from '@nostr-dev-kit/ndk';
-
 import { useStore } from '@/shared/store';
 
 export const useGlobalNdk = () => {
-  const globalNdk = useStore((state) => state.globalNDK);
-  const setGlobalNDK = useStore((state) => state.setGlobalNDK);
+  const globalNdk = useStore((state) => state.globalNdk);
+  const setGlobalNdk = useStore((state) => state.setGlobalNdk);
 
-  const setGlobalSigner = (signer: NDKSigner | undefined) => {
-    globalNdk.signer = signer;
-    setGlobalNDK(globalNdk);
-  };
-
-  return { globalNdk, setGlobalNDK, setGlobalSigner };
+  return { globalNdk, setGlobalNdk };
 };

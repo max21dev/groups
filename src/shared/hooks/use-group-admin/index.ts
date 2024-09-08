@@ -1,16 +1,18 @@
-import { GroupAdmin, GroupAdminPermission } from '@/shared/types';
 import { NDKKind } from '@nostr-dev-kit/ndk';
-import { useNdk } from 'nostr-hooks';
 import { useEffect, useMemo, useState } from 'react';
 
+import { useNip29Ndk } from '@/shared/hooks';
+import { GroupAdmin, GroupAdminPermission } from '@/shared/types';
+
 export const useGroupAdmin = (groupId: string | undefined, adminPublickey: string | undefined) => {
+  const { nip29Ndk } = useNip29Ndk();
+
   const [admin, setAdmin] = useState<GroupAdmin | undefined>(undefined);
-  const { ndk } = useNdk();
 
   useEffect(() => {
-    if (!groupId || !ndk || !adminPublickey) return;
+    if (!groupId || !nip29Ndk || !adminPublickey) return;
 
-    ndk
+    nip29Ndk
       .fetchEvent({ kinds: [39001 as NDKKind], '#d': [groupId], '#p': [adminPublickey] })
       .then((event) => {
         if (!event) return;
@@ -26,7 +28,7 @@ export const useGroupAdmin = (groupId: string | undefined, adminPublickey: strin
           permissions: pTag.slice(3) as GroupAdminPermission[],
         });
       });
-  }, [groupId, adminPublickey, ndk]);
+  }, [groupId, adminPublickey, nip29Ndk]);
 
   return {
     admin,
