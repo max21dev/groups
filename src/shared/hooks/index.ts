@@ -8,4 +8,6 @@ export { useGroupMembers } from './use-group-members';
 export { useGroupMessages } from './use-group-messages';
 export { useGroups } from './use-groups';
 export { useLoginModalState } from './use-login-modal-state';
+export { useMessageReactions } from './use-message-reactions';
+export { useNip29Ndk } from './use-nip29-ndk';
 export { useZapModalState } from './use-zap-modal-state';

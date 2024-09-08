@@ -1,7 +1,7 @@
 import { useActiveUser } from 'nostr-hooks';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { useActiveGroup, useGroupMessages } from '@/shared/hooks';
+import { useActiveGroup, useGlobalNdk, useGroupMessages } from '@/shared/hooks';
 import { LimitFilter } from '@/shared/types';
 
 const limitFilter: LimitFilter = { limit: 200 };
@@ -12,8 +12,10 @@ export const useChatList = () => {
 
   const [deletedMessages, setDeletedMessages] = useState<string[]>([]);
 
+  const { globalNdk } = useGlobalNdk();
+
   const { activeGroupId } = useActiveGroup();
-  const { activeUser } = useActiveUser();
+  const { activeUser } = useActiveUser({ customNdk: globalNdk });
 
   const messages = useGroupMessages(activeGroupId, limitFilter);
 

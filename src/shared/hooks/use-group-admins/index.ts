@@ -2,15 +2,19 @@ import { NDKKind } from '@nostr-dev-kit/ndk';
 import { useSubscribe } from 'nostr-hooks';
 import { useMemo } from 'react';
 
+import { useNip29Ndk } from '@/shared/hooks';
 import { GroupAdminPermission } from '@/shared/types';
 
 export const useGroupAdmins = (groupId: string | undefined) => {
+  const { nip29Ndk } = useNip29Ndk();
+
   const { events } = useSubscribe(
     useMemo(
       () => ({
         filters: !groupId ? [] : [{ kinds: [39001 as NDKKind], '#d': [groupId], limit: 1 }],
         enabled: !!groupId,
         opts: { groupable: false },
+        customNdk: nip29Ndk,
       }),
       [groupId],
     ),

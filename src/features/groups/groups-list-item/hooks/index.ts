@@ -1,5 +1,9 @@
+import { useActiveUser } from 'nostr-hooks';
+import { useEffect, useState } from 'react';
+
 import {
   useActiveGroup,
+  useGlobalNdk,
   useGroup,
   useGroupAdmins,
   useGroupMembers,
@@ -7,15 +11,16 @@ import {
 } from '@/shared/hooks';
 import { useStore } from '@/shared/store';
 import { LimitFilter } from '@/shared/types';
-import { useActiveUser } from 'nostr-hooks';
-import { useEffect, useState } from 'react';
 
 const limitFilter: LimitFilter = { limit: 100 };
 
 export const useGroupsListItem = ({ groupId }: { groupId: string | undefined }) => {
   const [showGroup, setShowGroup] = useState<boolean>(true);
+
+  const { globalNdk } = useGlobalNdk();
+
   const { setActiveGroupId, activeGroupId } = useActiveGroup();
-  const { activeUser } = useActiveUser();
+  const { activeUser } = useActiveUser({ customNdk: globalNdk });
   const { group } = useGroup(groupId);
   const { members } = useGroupMembers(group?.id);
   const { admins } = useGroupAdmins(group?.id);

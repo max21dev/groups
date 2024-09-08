@@ -1,6 +1,8 @@
 import { NDKKind } from '@nostr-dev-kit/ndk';
 import { useSubscribe } from 'nostr-hooks';
 import { useMemo } from 'react';
+
+import { useNip29Ndk } from '@/shared/hooks';
 import { GroupMessage, LimitFilter } from '@/shared/types';
 
 export const useMessageReactions = (
@@ -8,6 +10,8 @@ export const useMessageReactions = (
   message: GroupMessage | undefined,
   limitFilter?: LimitFilter | undefined,
 ) => {
+  const { nip29Ndk } = useNip29Ndk();
+
   const { events: reactionsEvents } = useSubscribe(
     useMemo(
       () => ({
@@ -23,6 +27,7 @@ export const useMessageReactions = (
                 },
               ],
         enabled: !!message?.id,
+        customNdk: nip29Ndk,
       }),
       [message, groupId, limitFilter],
     ),
@@ -39,5 +44,5 @@ export const useMessageReactions = (
 
   console.log(reactions);
 
-  return {reactions};
+  return { reactions };
 };
