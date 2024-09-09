@@ -16,7 +16,7 @@ export const useLoginModal = () => {
 
   const { globalNdk, setGlobalNdk } = useGlobalNdk();
 
-  const { loginWithExtention, loginWithRemoteSigner, loginWithSecretKey } = useLogin({
+  const { loginWithExtension, loginWithRemoteSigner, loginWithSecretKey } = useLogin({
     customNdk: globalNdk,
     setCustomNdk: setGlobalNdk,
   });
@@ -26,7 +26,7 @@ export const useLoginModal = () => {
   const handleExtensionSigner = () => {
     setLoading(true);
 
-    loginWithExtention({
+    loginWithExtension({
       onError: (e) => {
         console.error(e);
         toast({ title: 'Error', description: String(e), variant: 'destructive' });
