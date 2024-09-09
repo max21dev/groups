@@ -9,7 +9,9 @@ const filters = [{ kinds: [39000], limit: 100 }];
 export const useGroups = () => {
   const { nip29Ndk } = useNip29Ndk();
 
-  const { events: groupsEvents } = useSubscribe({ filters, customNdk: nip29Ndk });
+  const { events: groupsEvents } = useSubscribe(
+    useMemo(() => ({ filters, customNdk: nip29Ndk }), [nip29Ndk]),
+  );
 
   const groups = useMemo(
     () =>

@@ -26,7 +26,7 @@ export const useGroupMessages = (
         enabled: !!groupId,
         customNdk: nip29Ndk,
       }),
-      [groupId, limitFilter],
+      [groupId, limitFilter, nip29Ndk],
     ),
   );
 

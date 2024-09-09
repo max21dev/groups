@@ -18,7 +18,7 @@ export const useGroup = (groupId: string | undefined) => {
         enabled: !!groupId,
         customNdk: nip29Ndk,
       }),
-      [groupId],
+      [groupId, nip29Ndk],
     ),
   );
 
