@@ -16,7 +16,7 @@ export const useGroupAdmins = (groupId: string | undefined) => {
         opts: { groupable: false },
         customNdk: nip29Ndk,
       }),
-      [groupId],
+      [groupId, nip29Ndk],
     ),
   );
 

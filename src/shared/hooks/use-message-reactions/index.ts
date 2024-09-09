@@ -29,7 +29,7 @@ export const useMessageReactions = (
         enabled: !!message?.id,
         customNdk: nip29Ndk,
       }),
-      [message, groupId, limitFilter],
+      [message, groupId, limitFilter, nip29Ndk],
     ),
   );
 

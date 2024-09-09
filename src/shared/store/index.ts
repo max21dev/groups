@@ -1,4 +1,5 @@
 import NDK, { NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
+import NDKCacheAdapterDexie from '@nostr-dev-kit/ndk-cache-dexie';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -119,6 +120,7 @@ export const useStore = create<
         explicitRelayUrls: ['wss://nos.lol'],
         autoConnectUserRelays: true,
         autoFetchUserMutelist: false,
+        cacheAdapter: new NDKCacheAdapterDexie({ dbName: `db-global` }),
       }),
 
       setGlobalNdk: (globalNdk) => set({ globalNdk }),
