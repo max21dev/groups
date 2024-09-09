@@ -1,6 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { Dispatch, SetStateAction } from 'react';
 
 import { Button } from '@/shared/components/ui/button';
 import {
@@ -13,51 +11,19 @@ import {
   FormMessage,
 } from '@/shared/components/ui/form';
 import { Input } from '@/shared/components/ui/input';
-import { Group, GroupMetadata } from '@/shared/types';
 import { Textarea } from '@/shared/components/ui/textarea.tsx';
-import { useGroupDetails } from '@/features/groups/group-details/hooks';
-import React from 'react';
 
-const formSchema = z.object({
-  name: z.string().min(5, {
-    message: 'Username must be at least 5 characters.',
-  }),
-  picture: z.union([
-    z.string().url({
-      message: 'Please enter a valid URL.',
-    }),
-    z.literal(''),
-  ]),
-  about: z.string().optional(),
-});
+import { Group } from '@/shared/types';
 
-export const GroupDetailsEdit = ({
-  group,
-  setEditMode,
-}: {
+import { useGroupDetailsEdit } from './hooks';
+
+type Props = {
   group: Group | undefined;
-  setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
-  const { updateGroupMetadata } = useGroupDetails({ groupId: group?.id });
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: group?.name,
-      about: group?.about,
-      picture: group?.picture,
-    },
-  });
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+};
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    const updatedGroup: GroupMetadata = {
-      id: group?.id,
-      name: values.name,
-      picture: values.picture,
-      about: values.about,
-    } as GroupMetadata;
-    updateGroupMetadata(updatedGroup);
-    setEditMode(false);
-  }
+export const GroupDetailsEdit = ({ group, setEditMode }: Props) => {
+  const { form, onSubmit } = useGroupDetailsEdit({ group, setEditMode });
 
   return (
     <Form {...form}>
