@@ -1,6 +1,6 @@
 import NDK from '@nostr-dev-kit/ndk';
 import NDKCacheAdapterDexie from '@nostr-dev-kit/ndk-cache-dexie';
-import { useLogin, useSigner } from 'nostr-hooks';
+import { useLogin } from 'nostr-hooks';
 import { useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
 
@@ -22,12 +22,7 @@ export const App = () => {
   const { nip29Ndk, setNip29Ndk } = useNip29Ndk();
 
   const { loginFromLocalStorage } = useLogin({ customNdk: globalNdk, setCustomNdk: setGlobalNdk });
-
-  const { setSigner: setNip29Signer } = useSigner({
-    customNdk: nip29Ndk,
-    setCustomNdk: setNip29Ndk,
-  });
-
+  
   useEffect(() => {
     globalNdk.connect();
   }, [globalNdk]);
@@ -50,7 +45,7 @@ export const App = () => {
 
   useEffect(() => {
     loginFromLocalStorage();
-  }, [loginFromLocalStorage, setNip29Signer]);
+  }, [loginFromLocalStorage]);
 
   return (
     <>
