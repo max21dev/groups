@@ -42,7 +42,5 @@ export const useMessageReactions = (
     [message?.id, reactionsEvents],
   );
 
-  console.log(reactions);
-
   return { reactions };
 };
