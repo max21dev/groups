@@ -1,5 +1,12 @@
 export const payInvoiceByWebln = async (invoice: string): Promise<boolean> => {
-  const { webln } = window as { webln?: any };
+  // Define the WebLN type locally
+  type WeblnType = {
+    enable: () => Promise<void>;
+    sendPayment: (invoice: string) => Promise<void>;
+  };
+
+  // Use type assertion to safely access window.webln
+  const webln = (window as { webln?: WeblnType }).webln;
 
   if (webln) {
     try {
@@ -7,12 +14,11 @@ export const payInvoiceByWebln = async (invoice: string): Promise<boolean> => {
 
       try {
         await webln.sendPayment(invoice);
-
         return true;
-      } catch (_) {
+      } catch {
         return false;
       }
-    } catch (_) {
+    } catch {
       return false;
     }
   } else {
