@@ -21,6 +21,7 @@ import {
 
 import { Group } from '@/shared/types';
 import { useGroupDetailsEdit } from './hooks';
+import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/shared/components/ui/tabs';
 
 type Props = {
   group: Group | undefined;
@@ -28,7 +29,7 @@ type Props = {
 };
 
 export const GroupDetailsEdit = ({ group, setEditMode }: Props) => {
-  const { form, onSubmit } = useGroupDetailsEdit({ group, setEditMode });
+  const { metadataForm, onSubmit } = useGroupDetailsEdit({ group, setEditMode });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -37,58 +38,67 @@ export const GroupDetailsEdit = ({ group, setEditMode }: Props) => {
   };
 
   const handleConfirm = () => {
-    form.handleSubmit(onSubmit)();
+    metadataForm.handleSubmit(onSubmit)();
     setIsDialogOpen(false);
   };
 
   return (
     <>
-      <Form {...form}>
-        <form onSubmit={handleSubmit} className="space-y-2 mt-6">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Group name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter Group Name" {...field} />
-                </FormControl>
-                <FormDescription>Enter the name of the group.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="picture"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Picture</FormLabel>
-                <FormControl>
-                  <Input placeholder="Picture URL" {...field} />
-                </FormControl>
-                <FormDescription>Enter the picture URL of the group.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="about"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>About</FormLabel>
-                <FormControl>
-                  <Textarea placeholder="About group ..." {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit">Submit</Button>
-        </form>
-      </Form>
+      <Tabs defaultValue="metadata" className="mt-4">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="metadata">Metadata</TabsTrigger>
+          <TabsTrigger value="status">Status</TabsTrigger>
+        </TabsList>
+        <TabsContent value="metadata">
+          <Form {...metadataForm}>
+            <form onSubmit={handleSubmit} className="space-y-2 mt-6">
+              <FormField
+                control={metadataForm.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Group name:</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter Group Name" {...field} />
+                    </FormControl>
+                    <FormDescription>Enter the name of the group.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={metadataForm.control}
+                name="picture"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Picture:</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Picture URL" {...field} />
+                    </FormControl>
+                    <FormDescription>Enter the picture URL of the group.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={metadataForm.control}
+                name="about"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>About:</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="About group ..." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Submit</Button>
+            </form>
+          </Form>
+        </TabsContent>
+        <TabsContent value="status">Coming soon!!!</TabsContent>
+      </Tabs>
 
       {/* Confirmation Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

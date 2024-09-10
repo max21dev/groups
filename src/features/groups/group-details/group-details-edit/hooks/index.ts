@@ -7,7 +7,7 @@ import { useGlobalNdk, useLoginModalState, useNip29Ndk } from '@/shared/hooks';
 import { Group, GroupMetadata } from '@/shared/types';
 import { useToast } from '@/shared/components/ui/use-toast';
 
-const formSchema = z.object({
+const metadataFormSchema = z.object({
   name: z.string().min(5, {
     message: 'Username must be at least 5 characters.',
   }),
@@ -59,8 +59,8 @@ export const useGroupDetailsEdit = ({
     });
   };
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const metadataForm = useForm<z.infer<typeof metadataFormSchema>>({
+    resolver: zodResolver(metadataFormSchema),
     defaultValues: {
       name: group?.name,
       about: group?.about,
@@ -68,7 +68,7 @@ export const useGroupDetailsEdit = ({
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof metadataFormSchema>) {
     const updatedGroup: GroupMetadata = {
       id: group?.id,
       name: values.name,
@@ -86,5 +86,5 @@ export const useGroupDetailsEdit = ({
     setEditMode(false);
   }
 
-  return { form, onSubmit };
+  return { metadataForm, onSubmit };
 };
