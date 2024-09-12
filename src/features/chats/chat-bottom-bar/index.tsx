@@ -69,7 +69,7 @@ export const ChatBottomBar = () => {
           </button>
         </div>
       )}
-      <div className="flex justify-between w-full items-center gap-2">
+      <div className="p-2 flex justify-between w-full items-center gap-2">
         <div className="flex">
           <Popover>
             <PopoverTrigger asChild>

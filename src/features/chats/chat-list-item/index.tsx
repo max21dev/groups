@@ -71,7 +71,7 @@ export const ChatListItem = ({
                   : 'bg-secondary text-secondary-foreground',
               )}
             >
-              {firstMessageAuthor && (
+              {firstMessageAuthor && !sameAsCurrentUser && (
                 <div className="mb-1 text-xs font-semibold opacity-50">
                   {profile?.displayName
                     ? profile.displayName
