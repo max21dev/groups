@@ -67,12 +67,12 @@ export const ChatListItem = ({
               className={cn(
                 'p-2 mt-1 rounded-lg max-w-xl whitespace-pre-wrap',
                 sameAsCurrentUser
-                  ? 'bg-blue-400 dark:bg-blue-900 text-white mr-2'
-                  : 'bg-gray-400 dark:bg-gray-900  text-white',
+                  ? 'mr-2 bg-blue text-blue-foreground'
+                  : 'bg-secondary text-secondary-foreground',
               )}
             >
               {firstMessageAuthor && (
-                <div className="mb-1 text-sm font-semibold opacity-40">
+                <div className="mb-1 text-xs font-semibold opacity-50">
                   {profile?.displayName
                     ? profile.displayName
                     : message.authorPublicKey.slice(0, 5) + '...'}
@@ -81,14 +81,14 @@ export const ChatListItem = ({
 
               {message.replyTo && (
                 <div
-                  className="mb-2 text-sm bg-white bg-opacity-30 text-white cursor-pointer border-l-4 rounded-lg p-1 flex items-start"
+                  className="mb-2 text-xs bg-primary/20 text-foreground/80 cursor-pointer border-l-4 rounded-lg p-1 flex items-start"
                   onClick={() => scrollToMessage(message.replyTo || '')}
                 >
                   {firstReplyImageUrl && (
                     <img src={loader(firstReplyImageUrl, { w: 50 })} alt="Reply Message Image" />
                   )}
                   <div>
-                    <div className="text-sm font-semibold opacity-40">
+                    <div className="text-xs font-semibold opacity-60">
                       {replyAuthorProfile?.displayName
                         ? replyAuthorProfile.displayName
                         : reply?.authorPublicKey?.slice(0, 5) + '...'}
@@ -190,8 +190,8 @@ export const ChatListItem = ({
                   openZapModal();
                 }}
               >
-                <Zap className="h-4 w-4 mr-3 text-orange-500" />
-                <span className="text-orange-500">Zap</span>
+                <Zap className="h-4 w-4 mr-3 text-warning" />
+                <span className="text-warning">Zap</span>
               </ContextMenuItem>
             </ContextMenuContent>
           )}
@@ -201,7 +201,7 @@ export const ChatListItem = ({
       {/* Image Overlay */}
       {selectedImage && (
         <div
-          className="fixed max-w-full p-20 inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75"
+          className="fixed max-w-full p-20 inset-0 z-50 flex items-center justify-center bg-black/80"
           onClick={() => setSelectedImage(null)}
         >
           <img src={selectedImage} alt="Enlarged message" className="h-auto rounded-lg" />

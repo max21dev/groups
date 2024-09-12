@@ -1,5 +1,5 @@
 const colors = [
-  'bg-red-500',
+  'bg-amber-600',
   'bg-blue-500',
   'bg-green-500',
   'bg-yellow-500',
@@ -17,7 +17,7 @@ const getHash = (str: string) => {
   return hash;
 };
 
-export const getBackgroundColor = (str: string) => {
+export const getAvatarFallbackColor = (str: string) => {
   const hash = getHash(str);
   const index = Math.abs(hash) % colors?.length;
 

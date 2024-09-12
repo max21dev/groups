@@ -1,3 +1,6 @@
+import { Filter } from 'lucide-react';
+
+import { Button } from '@/shared/components/ui/button.tsx';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -6,9 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/components/ui/dropdown-menu.tsx';
-import { Button } from '@/shared/components/ui/button.tsx';
-import { Filter } from 'lucide-react';
-import { useGroupFilterDropDown } from '@/features/groups/groups-list/groups-filter-dropdown/hooks';
+
+import { useGroupFilterDropDown } from './hooks';
 
 export const GroupsFilterDropdown = () => {
   const { setBelongTo, setManage, setOwn, setNotJoined, groupsFilter, isCollapsed } =
@@ -36,7 +38,11 @@ export const GroupsFilterDropdown = () => {
           <DropdownMenuCheckboxItem checked={groupsFilter?.manage} onCheckedChange={setManage}>
             I manage
           </DropdownMenuCheckboxItem>
-          <DropdownMenuCheckboxItem disabled={true} checked={groupsFilter?.own} onCheckedChange={setOwn}>
+          <DropdownMenuCheckboxItem
+            disabled={true}
+            checked={groupsFilter?.own}
+            onCheckedChange={setOwn}
+          >
             I own
           </DropdownMenuCheckboxItem>
           <DropdownMenuCheckboxItem

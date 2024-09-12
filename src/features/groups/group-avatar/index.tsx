@@ -1,16 +1,15 @@
 import { Avatar, AvatarImage } from '@/shared/components/ui/avatar';
 
-import { loader } from '@/shared/utils';
+import { getAvatarFallbackColor, loader } from '@/shared/utils';
 
 import { useGroupAvatar } from './hooks';
-import { getBackgroundColor } from './utils';
 
 export const GroupAvatar = ({ groupId }: { groupId: string | undefined }) => {
   const { picture, name } = useGroupAvatar(groupId);
 
   return (
     <Avatar
-      className={`flex justify-center items-center ${!picture ? getBackgroundColor(name || '') : ''}`}
+      className={`flex justify-center items-center ${!picture ? getAvatarFallbackColor(groupId + (name || '')) : ''}`}
     >
       {picture ? (
         <AvatarImage

@@ -45,8 +45,8 @@ export const ChatTopBar = () => {
             </SheetTrigger>
             <SheetContent className="w-full lg:max-w-screen-md overflow-y-auto">
               <SheetHeader>
-                <SheetTitle/>
-                <SheetDescription/>
+                <SheetTitle />
+                <SheetDescription />
               </SheetHeader>
               {isGroupDetailsOpen && activeGroupId && (
                 <div className="grid gap-4 py-4">
