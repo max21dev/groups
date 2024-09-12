@@ -16,10 +16,13 @@ export const useGroups = () => {
   const groups = useMemo(
     () =>
       groupsEvents
-        .filter((e) => {
-          const nameTag = e.getMatchingTags('name')?.[0];
+        .filter((e, i, self) => {
+          const isUnique = self.findIndex((t) => t.dTag === e.dTag) === i;
 
-          return nameTag && nameTag[1] !== '';
+          const nameTag = e.getMatchingTags('name')?.[0];
+          const hasValidNameTag = nameTag && nameTag[1] !== '';
+
+          return isUnique && hasValidNameTag;
         })
         .map(
           (e) =>
