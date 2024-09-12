@@ -2,6 +2,8 @@ import { UserAvatar } from '@/features/users';
 
 import { Button } from '@/shared/components/ui/button';
 
+import { cn } from '@/shared/utils';
+
 import { useActiveUserInfo } from './hooks';
 
 export function ActiveUserInfo() {
@@ -10,7 +12,7 @@ export function ActiveUserInfo() {
   return (
     <>
       {activeUser ? (
-        <div className="flex p-2 justify-center rounded-full bg-blue-50 dark:bg-gray-800  truncate">
+        <div className={cn('p-2 flex justify-center border-t', !isCollapsed && 'bg-accent')}>
           <UserAvatar pubkey={activeUser?.pubkey} />
 
           {!isCollapsed && (
@@ -25,8 +27,8 @@ export function ActiveUserInfo() {
           )}
         </div>
       ) : !activeGroupId ? (
-        <div className="w-full">
-          <Button variant="ghost" size="lg" className="w-full" onClick={() => openLoginModal()}>
+        <div className="p-2 w-full border-t">
+          <Button variant="outline" className="w-full" onClick={() => openLoginModal()}>
             Login
           </Button>
         </div>
