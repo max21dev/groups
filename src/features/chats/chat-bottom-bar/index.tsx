@@ -57,14 +57,14 @@ export const ChatBottomBar = () => {
   }
 
   return (
-    <div className="p-2 flex flex-col w-full items-center gap-2">
+    <div className="flex flex-col w-full items-center gap-2">
       {replyTo && (
-        <div className="p-2 bg-gray-100 border-t border-gray-300 w-full flex justify-between items-center">
+        <div className="p-2 bg-accent border-t w-full flex justify-between items-center">
           <span className="text-sm text-gray-500">
             Replying to:{' '}
             {messages?.find((msg) => msg.id === replyTo.id)?.content || 'Deleted message'}
           </span>
-          <button onClick={() => setReplyTo(undefined)} className="text-sm text-blue-500 ml-2">
+          <button onClick={() => setReplyTo(undefined)} className="text-sm ml-2">
             Cancel
           </button>
         </div>
@@ -77,7 +77,7 @@ export const ChatBottomBar = () => {
                 className={cn(
                   buttonVariants({ variant: 'ghost', size: 'icon' }),
                   'h-9 w-9',
-                  'dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white',
+                  'dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-accent-foreground',
                 )}
               >
                 <PlusCircle size={20} className="text-muted-foreground" />
@@ -90,7 +90,7 @@ export const ChatBottomBar = () => {
                     className={cn(
                       buttonVariants({ variant: 'ghost', size: 'icon' }),
                       'h-9 w-9',
-                      'dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white',
+                      'dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-accent-foreground',
                     )}
                   >
                     <Mic size={20} className="text-muted-foreground" />
@@ -101,7 +101,7 @@ export const ChatBottomBar = () => {
                       className={cn(
                         buttonVariants({ variant: 'ghost', size: 'icon' }),
                         'h-9 w-9',
-                        'dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white',
+                        'dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-accent-foreground',
                       )}
                     >
                       <icon.icon size={20} className="text-muted-foreground" />
@@ -113,7 +113,7 @@ export const ChatBottomBar = () => {
                   className={cn(
                     buttonVariants({ variant: 'ghost', size: 'icon' }),
                     'h-9 w-9',
-                    'dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white',
+                    'dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-accent-foreground',
                   )}
                 >
                   <Mic size={20} className="text-muted-foreground" />
@@ -129,7 +129,7 @@ export const ChatBottomBar = () => {
                   className={cn(
                     buttonVariants({ variant: 'ghost', size: 'icon' }),
                     'h-9 w-9',
-                    'dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white',
+                    'dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-accent-foreground',
                   )}
                 >
                   <icon.icon size={20} className="text-muted-foreground" />
@@ -162,7 +162,7 @@ export const ChatBottomBar = () => {
               onKeyDown={handleKeyPress}
               onChange={(event) => setMessage(event.target.value)}
               name="message"
-              placeholder="Aa"
+              placeholder="Write a message..."
               className="w-full border rounded-full flex items-center h-10 resize-none overflow-hidden bg-background"
             ></Textarea>
             <div className="absolute right-2 bottom-2.5 flex gap-2">
@@ -182,7 +182,7 @@ export const ChatBottomBar = () => {
               className={cn(
                 buttonVariants({ variant: 'ghost', size: 'icon' }),
                 'h-9 w-9',
-                'dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white shrink-0',
+                'dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-accent-foreground shrink-0',
               )}
               onClick={handleSend}
             >
@@ -193,7 +193,7 @@ export const ChatBottomBar = () => {
               className={cn(
                 buttonVariants({ variant: 'ghost', size: 'icon' }),
                 'h-9 w-9',
-                'dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white shrink-0',
+                'dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-accent-foreground shrink-0',
               )}
               onClick={handleThumbsUp}
             >
