@@ -81,7 +81,7 @@ export const ChatListItem = ({
 
               {message.replyTo && (
                 <div
-                  className="mb-2 text-xs bg-primary/20 text-foreground/80 cursor-pointer border-l-4 rounded-lg p-1 flex items-start"
+                  className="mb-2 text-xs bg-primary/20 cursor-pointer border-l-4 border-primary/25 rounded-lg p-1 flex items-start"
                   onClick={() => scrollToMessage(message.replyTo || '')}
                 >
                   {firstReplyImageUrl && (
@@ -130,7 +130,7 @@ export const ChatListItem = ({
                           href={part.content}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-blue-500 underline break-all"
+                          className="text-xs text-pink-400 underline break-all"
                         >
                           {part.content}
                         </a>
