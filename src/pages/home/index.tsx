@@ -1,15 +1,14 @@
 import { ChatBottomBar, ChatList, ChatTopBar } from '@/features/chats';
-import { GroupsList } from '@/features/groups';
+import { GroupsFilterDropdown, GroupsList } from '@/features/groups';
 import { RelayGroupsCount, RelaySelectDropdown } from '@/features/relays';
 import { ActiveUserInfo } from '@/features/users';
 
+import { ModeToggle } from '@/shared/components/mode-toggle';
 import { Sidebar } from '@/shared/components/sidebar';
 
-import { cn } from '@/shared/utils/cn';
+import { cn } from '@/shared/utils';
 
 import { useHomePage } from './hooks';
-import { ModeToggle } from '@/shared/components/mode-toggle';
-import { GroupsFilterDropdown } from '@/features/groups/groups-list/groups-filter-dropdown';
 
 export function HomePage() {
   const { isCollapsed, activeGroupId, activeUser } = useHomePage();
@@ -18,8 +17,8 @@ export function HomePage() {
     <>
       <div className="flex w-full h-full">
         <Sidebar>
-          <div className="flex flex-col h-full p-2 dark:bg-gray-950">
-            <div className="flex flex-col h-full gap-4 overflow-y-hidden hover:overflow-y-auto">
+          <div className="flex flex-col w-full h-full">
+            <div className="p-2">
               <div className="flex gap-1">
                 {!isCollapsed && <ModeToggle />}
 
@@ -27,19 +26,24 @@ export function HomePage() {
               </div>
 
               {activeUser?.pubkey && (
-                <div className="flex gap-1">
+                <div className="mt-2 flex gap-1">
                   <GroupsFilterDropdown />
                 </div>
               )}
-
-              {!isCollapsed && <RelayGroupsCount />}
-
-              <div className={cn('flex flex-col', isCollapsed && 'justify-center')}>
-                <GroupsList />
-              </div>
             </div>
 
-            <div className="mt-auto w-full pt-2">
+            <div className="p-2">{!isCollapsed && <RelayGroupsCount />}</div>
+
+            <div
+              className={cn(
+                'p-2 flex flex-col h-full gap-4 overflow-y-hidden hover:overflow-y-auto',
+                isCollapsed && 'justify-center',
+              )}
+            >
+              <GroupsList />
+            </div>
+
+            <div className="mt-auto w-full">
               <ActiveUserInfo />
             </div>
           </div>
