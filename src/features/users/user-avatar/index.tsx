@@ -6,7 +6,8 @@ import {
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip';
 
-import { loader } from '@/shared/utils';
+import { cn, loader, getAvatarFallbackColor } from '@/shared/utils';
+
 import { useUserAvatar } from './hooks';
 
 export function UserAvatar({ pubkey }: { pubkey: string }) {
@@ -16,9 +17,13 @@ export function UserAvatar({ pubkey }: { pubkey: string }) {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Avatar className="flex justify-center items-center">
+          <Avatar>
             {!profile || !profile.image ? (
-              <AvatarFallback>{pubkey.slice(0, 2).toUpperCase()}</AvatarFallback>
+              <AvatarFallback
+                className={cn('text-primary-foreground', getAvatarFallbackColor(pubkey))}
+              >
+                {pubkey.slice(0, 2).toUpperCase()}
+              </AvatarFallback>
             ) : (
               <AvatarImage src={loader(profile?.image, { w: 50, h: 50 })} alt={profile?.name} />
             )}
