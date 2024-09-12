@@ -22,8 +22,10 @@ export function HomePage() {
             <div className="flex flex-col h-full gap-4 overflow-y-hidden hover:overflow-y-auto">
               <div className="flex gap-1">
                 {!isCollapsed && <ModeToggle />}
+
                 <RelaySelectDropdown />
               </div>
+
               {activeUser?.pubkey && (
                 <div className="flex gap-1">
                   <GroupsFilterDropdown />
@@ -32,9 +34,9 @@ export function HomePage() {
 
               {!isCollapsed && <RelayGroupsCount />}
 
-              <nav className={cn('grid grid-cols-1 gap-4', isCollapsed && 'justify-center')}>
+              <div className={cn('flex flex-col', isCollapsed && 'justify-center')}>
                 <GroupsList />
-              </nav>
+              </div>
             </div>
 
             <div className="mt-auto w-full pt-2">

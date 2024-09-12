@@ -7,16 +7,10 @@ import { cn, ellipsis, displayTime } from '@/shared/utils';
 import { useGroupsListItem } from './hooks';
 
 export const GroupsListItem = ({ groupId }: { groupId: string | undefined }) => {
-  const {
-    group,
-    isCollapsed,
-    messages,
-    setActiveGroupId,
-    activeGroupId,
-    showGroup,
-  } = useGroupsListItem({
-    groupId,
-  });
+  const { group, isCollapsed, messages, setActiveGroupId, activeGroupId, showGroup } =
+    useGroupsListItem({
+      groupId,
+    });
 
   if (!group || !showGroup) return null;
 
@@ -34,14 +28,14 @@ export const GroupsListItem = ({ groupId }: { groupId: string | undefined }) => 
       <GroupAvatar groupId={groupId} />
 
       {!isCollapsed && (
-        <div className="flex flex-col items-start w-full">
-          <div className="flex w-full justify-between">
-            <span>{group.name}</span>
+        <div className="flex flex-col items-start w-full min-w-0">
+          <div className="w-full flex items-center">
+            <div className="truncate">{group.name}</div>
 
             {messages.length > 0 && (
-              <span className="ml-1 text-gray-300 text-xs">
+              <div className="ml-auto shrink-0 text-gray-300 text-xs">
                 {displayTime(messages[0].createdAt)}
-              </span>
+              </div>
             )}
           </div>
 
