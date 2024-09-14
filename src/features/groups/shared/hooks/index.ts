@@ -19,7 +19,9 @@ export const createGroup = (
   event.tags = [['h', groupMetadata.id]];
   event.publish().then((r) => {
     r.size > 0 ? onSuccess?.() : onError?.();
-  });
+  },
+    () =>  onError?.()
+  );
 };
 
 export const addGroupPermissions = (

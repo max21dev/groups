@@ -68,7 +68,7 @@ export const useGroupCreate = (
             }),
         ),
       () =>
-        toast({ title: 'Error', description: 'Failed to Create group', variant: 'destructive' }),
+        toast({ title: 'Error', description: 'Failed to create the group. Please ensure that your selected relay supports group creation!', variant: 'destructive' }),
     );
   }
 

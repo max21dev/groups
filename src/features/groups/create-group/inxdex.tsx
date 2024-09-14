@@ -86,7 +86,8 @@ export const CreateGroup = () => {
                 )}
               />
               <DialogFooter>
-                <Button type="submit">Submit</Button>
+                <Button variant='outline' type="reset" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+                <Button type="submit">Create</Button>
               </DialogFooter>
             </form>
           </Form>
