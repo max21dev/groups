@@ -28,15 +28,19 @@ export type GroupMember = {
   publicKey: string;
 };
 
-export type GroupAdminPermission =
-  | 'add-user'
-  | 'edit-metadata'
-  | 'delete-event'
-  | 'remove-user'
-  | 'add-permission'
-  | 'remove-permission'
-  | 'edit-group-status'
-  | 'create-group';
+export enum GroupAdminPermissionEnum {
+  AddUser = 'add-user',
+  EditMetadata = 'edit-metadata',
+  DeleteEvent = 'delete-event',
+  RemoveUser = 'remove-user',
+  AddPermission = 'add-permission',
+  RemovePermission = 'remove-permission',
+  EditGroupStatus = 'edit-group-status',
+  CreateGroup = 'create-group',
+  DeleteGroup = 'delete-group',
+}
+
+export type GroupAdminPermission = `${GroupAdminPermissionEnum}`;
 
 export type GroupMessage = {
   id: string;

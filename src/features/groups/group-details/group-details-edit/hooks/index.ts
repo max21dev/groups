@@ -1,24 +1,10 @@
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useActiveUser, useNewEvent } from 'nostr-hooks';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { useGlobalNdk, useLoginModalState, useNip29Ndk } from '@/shared/hooks';
 import { Group, GroupMetadata } from '@/shared/types';
 import { useToast } from '@/shared/components/ui/use-toast';
-
-const metadataFormSchema = z.object({
-  name: z.string().min(5, {
-    message: 'Username must be at least 5 characters.',
-  }),
-  picture: z.union([
-    z.string().url({
-      message: 'Please enter a valid URL.',
-    }),
-    z.literal(''),
-  ]),
-  about: z.string().optional(),
-});
+import { metadataFormSchema, useMetadataForm } from '@/shared/types/forms-types';
 
 export const useGroupDetailsEdit = ({
   group,
@@ -59,14 +45,7 @@ export const useGroupDetailsEdit = ({
     });
   };
 
-  const metadataForm = useForm<z.infer<typeof metadataFormSchema>>({
-    resolver: zodResolver(metadataFormSchema),
-    defaultValues: {
-      name: group?.name,
-      about: group?.about,
-      picture: group?.picture,
-    },
-  });
+  const metadataForm = useMetadataForm(group);
 
   function onSubmit(values: z.infer<typeof metadataFormSchema>) {
     const updatedGroup: GroupMetadata = {
