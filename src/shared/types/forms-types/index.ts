@@ -4,8 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Group } from '@/shared/types';
 
 export const metadataFormSchema = z.object({
-  name: z.string().min(5, {
-    message: 'Username must be at least 5 characters.',
+  name: z.string().min(3, {
+    message: 'Username must be at least 3 characters.',
   }),
   picture: z.union([
     z.string().url({
@@ -20,8 +20,8 @@ export const useMetadataForm = (group: Group | undefined) =>
   useForm<z.infer<typeof metadataFormSchema>>({
     resolver: zodResolver(metadataFormSchema),
     defaultValues: {
-      name: group?.name ?? undefined,
-      about: group?.about ?? undefined,
-      picture: group?.picture ?? undefined,
+      name: group?.name ?? '',
+      about: group?.about ?? '',
+      picture: group?.picture ?? '',
     },
   });
