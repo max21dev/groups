@@ -1,6 +1,7 @@
 import { useActiveUser, useNewEvent } from 'nostr-hooks';
 
 import {
+  useActiveGroup,
   useGlobalNdk,
   useGroup,
   useGroupAdmin,
@@ -17,6 +18,7 @@ export const useGroupDetails = ({ groupId }: { groupId: string | undefined }) =>
   const { members } = useGroupMembers(groupId);
   const { admins } = useGroupAdmins(groupId);
   const { activeUser } = useActiveUser({ customNdk: globalNdk });
+  const { setActiveGroupId } = useActiveGroup();
   const { openLoginModal } = useLoginModalState();
   const { nip29Ndk } = useNip29Ndk();
   const { createNewEvent } = useNewEvent({ customNdk: nip29Ndk });
@@ -31,8 +33,9 @@ export const useGroupDetails = ({ groupId }: { groupId: string | undefined }) =>
       createNewEvent,
       groupId,
       () => {
-        toast({ title: 'Success', description: 'Group Deleted successfully!' });
+        toast({ title: 'Success', description: 'Group deleted successfully!' });
         setIsDialogOpen(false);
+        setActiveGroupId(undefined);
       },
       () =>
         toast({
