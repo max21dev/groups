@@ -18,7 +18,7 @@ export const GroupDetails = ({ groupId }: { groupId: string }) => {
           {editMode ? 'Back to view mode' : 'Edit'}
         </Button>
       )}
-      {!canDeleteGroup && <DeleteGroup groupId={group?.id} />}
+      {canDeleteGroup && <DeleteGroup groupId={group?.id} />}
       {editMode ? (
         <GroupDetailsEdit setEditMode={setEditMode} group={group} />
       ) : (

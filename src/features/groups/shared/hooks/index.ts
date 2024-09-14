@@ -50,7 +50,7 @@ export const addGroupPermissions = (
     ['permission', GroupAdminPermissionEnum.AddPermission],
     ['permission', GroupAdminPermissionEnum.RemovePermission],
     ['permission', GroupAdminPermissionEnum.EditGroupStatus],
-    //['permission', 'delete-group'], it is not supported on fiatjaf based relay
+    //['permission', 'delete-group'], it is not supported on fiatjaf relay29
   ];
   event.publish().then((r) => {
     r.size > 0 ? onSuccess?.() : onError?.();

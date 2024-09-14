@@ -34,9 +34,14 @@ This client enables users to participate in groups managed by relays, where acce
   - 🚧 Create and manage threads.
   - 🚧 Create and manage polls.
 - **Group Moderation**:
-  - 🚧 Create new groups with custom settings.
+  - ✅ Create new groups with custom settings.
+    - ✅ Create group (kind 9007).
   - 🚧 Edit and customize existing groups.
+    - ✅ Update group metadata (kind 9002).
+    - ✅ Delete group (kind 9008).
   - 🚧 View and manage group members and admins.
+    - ✅ View members (kind 39002).
+    - ✅ View admins (kind 39001).
   - 🚧 Moderate group content and messages.
   - 🚧 Create and manage private groups.
 
