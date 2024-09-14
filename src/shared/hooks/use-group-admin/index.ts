@@ -48,5 +48,6 @@ export const useGroupAdmin = (groupId: string | undefined, adminPublickey: strin
     ),
     canEditMetadata: useMemo(() => admin?.permissions.includes('edit-metadata') || false, [admin]),
     canDeleteEvent: useMemo(() => admin?.permissions.includes('delete-event') || false, [admin]),
+    canDeleteGroup: useMemo(() => admin?.permissions.includes('delete-group') || false, [admin]),
   };
 };

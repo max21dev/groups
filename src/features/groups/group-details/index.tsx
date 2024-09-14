@@ -4,9 +4,10 @@ import { useState } from 'react';
 import { GroupDetailsEdit } from '@/features/groups/group-details/group-details-edit';
 import { Edit, Undo2 } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
+import { DeleteGroup } from '@/features/groups/group-details/group-delete/inxdex.tsx';
 
 export const GroupDetails = ({ groupId }: { groupId: string }) => {
-  const { admins, group, members, canEditMetadata } = useGroupDetails({ groupId });
+  const { admins, group, members, canEditMetadata, canDeleteGroup } = useGroupDetails({ groupId });
   const [editMode, setEditMode] = useState(false);
 
   return (
@@ -17,6 +18,7 @@ export const GroupDetails = ({ groupId }: { groupId: string }) => {
           {editMode ? 'Back to view mode' : 'Edit'}
         </Button>
       )}
+      {!canDeleteGroup && <DeleteGroup groupId={group?.id} />}
       {editMode ? (
         <GroupDetailsEdit setEditMode={setEditMode} group={group} />
       ) : (

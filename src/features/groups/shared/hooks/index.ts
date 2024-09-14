@@ -17,10 +17,11 @@ export const createGroup = (
   const event = createNewEvent();
   event.kind = 9007;
   event.tags = [['h', groupMetadata.id]];
-  event.publish().then((r) => {
-    r.size > 0 ? onSuccess?.() : onError?.();
-  },
-    () =>  onError?.()
+  event.publish().then(
+    (r) => {
+      r.size > 0 ? onSuccess?.() : onError?.();
+    },
+    () => onError?.(),
   );
 };
 
@@ -84,6 +85,29 @@ export const updateGroupMetadata = (
   });
 };
 
+export const deleteGroup = (
+  activeUser: NDKUser | undefined,
+  openLoginModal: () => void,
+  createNewEvent: () => NDKEvent,
+  groupId: string,
+  onSuccess?: () => void,
+  onError?: () => void,
+) => {
+  if (!activeUser) {
+    console.log('activeUser false ', activeUser);
+    openLoginModal();
+    return;
+  }
+  const event = createNewEvent();
+  event.kind = 9008;
+  event.tags = [['h', groupId]];
+  event.publish().then(
+    (r) => {
+      r.size > 0 ? onSuccess?.() : onError?.();
+    },
+    () => onError?.(),
+  );
+};
 
 export function generateGroupId(): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
