@@ -5,6 +5,7 @@ import { useGlobalNdk, useLoginModalState, useNip29Ndk } from '@/shared/hooks';
 import { Group, GroupMetadata } from '@/shared/types';
 import { useToast } from '@/shared/components/ui/use-toast';
 import { metadataFormSchema, useMetadataForm } from '@/shared/types/forms-types';
+import { updateGroupMetadata } from '@/features/groups/shared/hooks';
 
 export const useGroupDetailsEdit = ({
   group,
@@ -22,29 +23,6 @@ export const useGroupDetailsEdit = ({
 
   const { toast } = useToast();
 
-  const updateGroupMetadata = (
-    groupMetadata: GroupMetadata,
-    onSuccess?: () => void,
-    onError?: () => void,
-  ) => {
-    if (!activeUser) {
-      openLoginModal();
-      return;
-    }
-
-    const event = createNewEvent();
-    event.kind = 9002;
-    event.tags = [
-      ['h', groupMetadata.id],
-      ['name', groupMetadata?.name],
-      ['about', groupMetadata?.about],
-      ['picture', groupMetadata?.picture],
-    ];
-    event.publish().then((r) => {
-      r.size > 0 ? onSuccess?.() : onError?.();
-    });
-  };
-
   const metadataForm = useMetadataForm(group);
 
   function onSubmit(values: z.infer<typeof metadataFormSchema>) {
@@ -56,6 +34,9 @@ export const useGroupDetailsEdit = ({
     } as GroupMetadata;
 
     updateGroupMetadata(
+      activeUser,
+      openLoginModal,
+      createNewEvent,
       updatedGroup,
       () => toast({ title: 'Success', description: 'Group updated successfully' }),
       () =>
