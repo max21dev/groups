@@ -6,9 +6,11 @@ import {
   useGroup,
   useGroupAdmin,
   useGroupAdmins,
-  useGroupMembers, useLoginModalState, useNip29Ndk,
+  useGroupMembers,
+  useLoginModalState,
+  useNip29Ndk,
 } from '@/shared/hooks';
-import { deleteGroup } from '@/features/groups/shared/hooks';
+import { deleteGroup, leaveGroup } from '@/features/groups/shared/hooks';
 import { useToast } from '@/shared/components/ui/use-toast.ts';
 
 export const useGroupDetails = ({ groupId }: { groupId: string | undefined }) => {
@@ -47,5 +49,34 @@ export const useGroupDetails = ({ groupId }: { groupId: string | undefined }) =>
     setIsDialogOpen(false);
   };
 
-  return { group, members, admins, canEditMetadata, canDeleteGroup, handleDeleteGroup };
+  const handleLeaveGroup = (setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
+    if (!groupId) return;
+    leaveGroup(
+      activeUser,
+      openLoginModal,
+      createNewEvent,
+      groupId,
+      () => {
+        toast({ title: 'Success', description: 'You leave the group successfully!' });
+        setIsDialogOpen(false);
+      },
+      () =>
+        toast({
+          title: 'Error',
+          description: 'Failed to leave group!',
+          variant: 'destructive',
+        }),
+    );
+    setIsDialogOpen(false);
+  };
+
+  return {
+    group,
+    members,
+    admins,
+    canEditMetadata,
+    canDeleteGroup,
+    handleDeleteGroup,
+    handleLeaveGroup,
+  };
 };

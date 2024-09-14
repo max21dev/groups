@@ -108,6 +108,29 @@ export const deleteGroup = (
     () => onError?.(),
   );
 };
+export const leaveGroup = (
+  activeUser: NDKUser | undefined,
+  openLoginModal: () => void,
+  createNewEvent: () => NDKEvent,
+  groupId: string,
+  onSuccess?: () => void,
+  onError?: () => void,
+) => {
+  if (!activeUser) {
+    console.log('activeUser false ', activeUser);
+    openLoginModal();
+    return;
+  }
+  const event = createNewEvent();
+  event.kind = 9022;
+  event.tags = [['h', groupId]];
+  event.publish().then(
+    (r) => {
+      r.size > 0 ? onSuccess?.() : onError?.();
+    },
+    () => onError?.(),
+  );
+};
 
 export function generateGroupId(): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

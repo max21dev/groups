@@ -5,6 +5,7 @@ import { GroupDetailsEdit } from '@/features/groups/group-details/group-details-
 import { Edit, Undo2 } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { DeleteGroup } from '@/features/groups/group-details/group-delete/inxdex.tsx';
+import { LeaveGroup } from '@/features/groups/group-details/group-leave/inxdex.tsx';
 
 export const GroupDetails = ({ groupId }: { groupId: string }) => {
   const { admins, group, members, canEditMetadata, canDeleteGroup } = useGroupDetails({ groupId });
@@ -18,6 +19,7 @@ export const GroupDetails = ({ groupId }: { groupId: string }) => {
           {editMode ? 'Back to view mode' : 'Edit'}
         </Button>
       )}
+      <LeaveGroup groupId={group?.id} />
       {canDeleteGroup && <DeleteGroup groupId={group?.id} />}
       {editMode ? (
         <GroupDetailsEdit setEditMode={setEditMode} group={group} />
