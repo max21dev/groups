@@ -1,4 +1,4 @@
-import { GroupAdminPermissionEnum, GroupMetadata } from '@/shared/types';
+import { GroupAdminPermissionEnum, GroupMetadata, GroupStatus } from '@/shared/types';
 import { NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
 
 export const createGroup = (
@@ -80,6 +80,33 @@ export const updateGroupMetadata = (
     ['picture', groupMetadata?.picture],
   ];
   event.tags = tagsArray.filter(([, value]) => value !== undefined && value !== null);
+  event.publish().then((r) => {
+    r.size > 0 ? onSuccess?.() : onError?.();
+  });
+};
+
+export const updateGroupStatus = (
+  activeUser: NDKUser | undefined,
+  openLoginModal: () => void,
+  createNewEvent: () => NDKEvent,
+  groupStatus: GroupStatus,
+  onSuccess?: () => void,
+  onError?: () => void,
+) => {
+  if (!activeUser) {
+    openLoginModal();
+    return;
+  }
+
+  const event = createNewEvent();
+  event.kind = 9006;
+
+  event.tags = [
+    ['h', groupStatus.id],
+    [groupStatus.type.toString()],
+    [groupStatus.privacy.toString()],
+  ];
+
   event.publish().then((r) => {
     r.size > 0 ? onSuccess?.() : onError?.();
   });

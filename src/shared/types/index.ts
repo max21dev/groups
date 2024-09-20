@@ -19,6 +19,13 @@ export type GroupMetadata = {
   about: string;
 };
 
+export type GroupStatus = {
+  id: string;
+  privacy: 'public' | 'private';
+  type: 'open' | 'closed';
+};
+
+
 export type GroupAdmin = {
   publicKey: string;
   permissions: GroupAdminPermission[];

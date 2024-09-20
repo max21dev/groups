@@ -25,3 +25,21 @@ export const useMetadataForm = (group: Group | undefined) =>
       picture: group?.picture ?? '',
     },
   });
+
+export const groupStatusSchema = z.object({
+  privacy: z.enum(['public', 'private'], {
+    errorMap: () => ({ message: 'Privacy must be either "public" or "private".' }),
+  }),
+  type: z.enum(['open', 'closed'], {
+    errorMap: () => ({ message: 'Type must be either "open" or "closed".' }),
+  }),
+});
+
+export const useGroupStatusForm = (group: Group | undefined) =>
+  useForm<z.infer<typeof groupStatusSchema>>({
+    resolver: zodResolver(groupStatusSchema),
+    defaultValues: {
+      privacy: group?.privacy ?? 'public',
+      type: group?.type ?? 'open',
+    },
+  });

@@ -22,7 +22,7 @@ export const GroupDetailsView = ({
     | undefined;
 }) => {
   return (
-    <div className="h-full overflow-y-auto">
+    <div className="h-full overflow-y-auto mt-4">
       <div className="flex flex-col items-center min-h-3">
         <GroupAvatar key={group?.id} groupId={group?.id} />
         <div className="text-sm font-light mt-2">{group?.id}</div>

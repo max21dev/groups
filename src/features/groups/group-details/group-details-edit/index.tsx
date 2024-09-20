@@ -22,6 +22,14 @@ import {
 import { Group } from '@/shared/types';
 import { useGroupDetailsEdit } from './hooks';
 import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/shared/components/ui/tabs';
+import {
+  Select,
+  SelectItem,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/components/ui/select';
+import { Label } from '@/shared/components/ui/label.tsx';
 
 type Props = {
   group: Group | undefined;
@@ -29,21 +37,39 @@ type Props = {
 };
 
 export const GroupDetailsEdit = ({ group, setEditMode }: Props) => {
-  const { metadataForm, onSubmit } = useGroupDetailsEdit({ group, setEditMode });
+  const { metadataForm, groupStatusForm, onSubmitMetadata, onSubmitGroupStatus } =
+    useGroupDetailsEdit({
+      group,
+      setEditMode,
+    });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isMetadataForm, setIsMetadataForm] = useState(true);
 
-  const handleSubmit = (event: React.FormEvent) => {
+  // Updated Submit Handlers
+  const handleSubmitMetadata = (event: React.FormEvent) => {
     event.preventDefault();
+    setIsMetadataForm(true);
+    setIsDialogOpen(true);
+  };
+
+  const handleSubmitStatus = (event: React.FormEvent) => {
+    event.preventDefault();
+    setIsMetadataForm(false);
     setIsDialogOpen(true);
   };
 
   const handleConfirm = () => {
-    metadataForm.handleSubmit(onSubmit)();
+    if (isMetadataForm) {
+      metadataForm.handleSubmit(onSubmitMetadata)();
+    } else {
+      groupStatusForm.handleSubmit(onSubmitGroupStatus)(); // Handle status form
+    }
     setIsDialogOpen(false);
   };
 
   return (
     <>
+      <Label className='flex mt-4 mb-4'>Update info of group: {group?.id}</Label>
       <Tabs defaultValue="metadata" className="mt-4">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="metadata">Metadata</TabsTrigger>
@@ -51,7 +77,7 @@ export const GroupDetailsEdit = ({ group, setEditMode }: Props) => {
         </TabsList>
         <TabsContent value="metadata">
           <Form {...metadataForm}>
-            <form onSubmit={handleSubmit} className="space-y-2 mt-6">
+            <form onSubmit={handleSubmitMetadata} className="space-y-2 mt-6">
               <FormField
                 control={metadataForm.control}
                 name="name"
@@ -97,7 +123,53 @@ export const GroupDetailsEdit = ({ group, setEditMode }: Props) => {
             </form>
           </Form>
         </TabsContent>
-        <TabsContent value="status">Coming soon!!!</TabsContent>
+        <TabsContent value="status">
+          <Form {...groupStatusForm}>
+            <form onSubmit={handleSubmitStatus} className="space-y-2 mt-6">
+              <FormField
+                control={groupStatusForm.control}
+                name="privacy"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Group Privacy:</FormLabel>
+                    <Select {...field} onValueChange={field.onChange} value={field.value}>
+                      <FormControl></FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Set the privacy of the group." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="public">Public</SelectItem>
+                        <SelectItem value="private">Private</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={groupStatusForm.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Group Type:</FormLabel>
+                    <Select {...field} onValueChange={field.onChange} value={field.value}>
+                      <FormControl></FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Set the type of the group." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="open">Open</SelectItem>
+                        <SelectItem value="closed">Closed</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Submit</Button>
+            </form>
+          </Form>
+        </TabsContent>
       </Tabs>
 
       {/* Confirmation Dialog */}
@@ -106,7 +178,7 @@ export const GroupDetailsEdit = ({ group, setEditMode }: Props) => {
           <DialogHeader>
             <DialogTitle>Confirm</DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to update group metadata?</p>
+          <p>Are you sure you want to update group info?</p>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
               Cancel
