@@ -36,8 +36,8 @@ export const useGroup = (groupId: string | undefined) => {
     return {
       id: groupEvent.dTag,
       name: nameTag ? nameTag[1] : 'Unknown',
-      privacy: groupEvent.getMatchingTags('public') ? 'public' : 'private',
-      type: groupEvent.getMatchingTags('open') ? 'open' : 'closed',
+      privacy: groupEvent.getMatchingTags('public')[0] ? 'public' : 'private',
+      type: groupEvent.getMatchingTags('open')[0] ? 'open' : 'closed',
       about: aboutTag ? aboutTag[1] : '',
       picture: pictureTag ? pictureTag[1] : '',
       event: groupEvent,
