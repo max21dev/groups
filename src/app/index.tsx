@@ -1,4 +1,4 @@
-import NDK from '@nostr-dev-kit/ndk';
+import NDK, { NDKRelayAuthPolicies } from '@nostr-dev-kit/ndk';
 import NDKCacheAdapterDexie from '@nostr-dev-kit/ndk-cache-dexie';
 import { useLogin, useSigner } from 'nostr-hooks';
 import { useEffect } from 'react';
@@ -41,15 +41,18 @@ export const App = () => {
   }, [nip29Ndk]);
 
   useEffect(() => {
-    setNip29Ndk(
-      new NDK({
-        explicitRelayUrls: [relays[activeRelayIndex]],
-        autoConnectUserRelays: false,
-        autoFetchUserMutelist: false,
-        cacheAdapter: new NDKCacheAdapterDexie({ dbName: `db-${relays[activeRelayIndex]}` }),
-        signer: globalNdk.signer,
-      }),
-    );
+    const ndk = new NDK({
+      explicitRelayUrls: [relays[activeRelayIndex]],
+      autoConnectUserRelays: false,
+      autoFetchUserMutelist: false,
+      cacheAdapter: new NDKCacheAdapterDexie({ dbName: `db-${relays[activeRelayIndex]}` }),
+      signer: globalNdk.signer,
+      relayAuthDefaultPolicy: undefined, // Placeholder for now, we'll set it after initialization
+    });
+
+    ndk.relayAuthDefaultPolicy = NDKRelayAuthPolicies.signIn({ ndk, signer: globalNdk.signer });
+
+    setNip29Ndk(ndk);
   }, [relays, activeRelayIndex, globalNdk.signer]);
 
   useEffect(() => {
