@@ -38,6 +38,7 @@ This client enables users to participate in groups managed by relays, where acce
     - ✅ Create group (kind 9007).
   - 🚧 Edit and customize existing groups.
     - ✅ Update group metadata (kind 9002).
+    - ✅ Update group status (kind 9006).
     - ✅ Delete group (kind 9008).
   - 🚧 View and manage group members and admins.
     - ✅ View members (kind 39002).
