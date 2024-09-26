@@ -15,6 +15,7 @@ import { useStore } from '@/shared/store';
 
 import { ChatListItemProps } from '../types';
 import { categorizeMessageContent, fetchFirstContentImage } from '../utils';
+import { useToast } from '@/shared/components/ui/use-toast';
 
 export const useChatListItem = ({
   message,
@@ -56,6 +57,14 @@ export const useChatListItem = ({
     () => fetchFirstContentImage(reply?.content || ''),
     [reply?.content],
   );
+  const { toast } = useToast();
+  const onSuccess = () => toast({ title: 'Success', description: 'Message deleted successfully!' });
+  const onError = () =>
+    toast({
+      title: 'Error',
+      description: 'Failed to delete message!',
+      variant: 'destructive',
+    });
 
   function deleteMessage(eventId: string, groupId: string) {
     if (!activeUser) {
@@ -69,7 +78,12 @@ export const useChatListItem = ({
       ['h', groupId],
       ['e', eventId],
     ];
-    event.publish();
+    event.publish().then(
+      (r) => {
+        r.size > 0 ? onSuccess() : onError();
+      },
+      () => onError?.(),
+    );
   }
 
   function likeMessage(eventId: string, groupId: string, like: boolean) {
