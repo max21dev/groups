@@ -24,6 +24,7 @@ import { Input } from '@/shared/components/ui/input';
 
 import { MANDATORY_RELAYS } from './config';
 import { useRelaySelectDropDown } from './hooks';
+import { cn } from '@/shared/utils';
 
 export const RelaySelectDropdown = () => {
   const {
@@ -44,7 +45,10 @@ export const RelaySelectDropdown = () => {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+        <DropdownMenuTrigger
+          className={cn(relays.find(r => r.url === activeRelayUrl)?.status)}
+          asChild
+        >
           {isCollapsed ? (
             <Button variant="outline">
               <Globe />

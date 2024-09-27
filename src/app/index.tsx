@@ -13,7 +13,7 @@ import { useStore } from '@/shared/store';
 import './index.css';
 
 export const App = () => {
-  const { relays, setRelayStatus, activeRelayUrl } = useStore((state) => ({
+  const { setRelayStatus, activeRelayUrl } = useStore((state) => ({
     relays: state.relays,
     setRelayStatus: state.setRelayStatus,
     activeRelayUrl: state.activeRelayUrl,
@@ -22,15 +22,21 @@ export const App = () => {
   const { globalNdk, setGlobalNdk } = useGlobalNdk();
   const { nip29Ndk, setNip29Ndk } = useNip29Ndk();
 
-  const { setSigner: setGlobalSigner } = useSigner({ customNdk: globalNdk, setCustomNdk: setGlobalNdk });
-  const { setSigner: setNip29Signer } = useSigner({ customNdk: nip29Ndk, setCustomNdk: setNip29Ndk });
+  const { setSigner: setGlobalSigner } = useSigner({
+    customNdk: globalNdk,
+    setCustomNdk: setGlobalNdk,
+  });
+  const { setSigner: setNip29Signer } = useSigner({
+    customNdk: nip29Ndk,
+    setCustomNdk: setNip29Ndk,
+  });
   const { loginFromLocalStorage } = useLogin({ customNdk: globalNdk, setCustomNdk: setGlobalNdk });
 
-  const removeTrailingSlash = (url: string): string => url.endsWith('/') ? url.slice(0, -1) : url;
+  const removeTrailingSlash = (url: string): string => (url.endsWith('/') ? url.slice(0, -1) : url);
 
   const handleRelayStatus = (status: string) => (relay: { url: string }) => {
     const relayUrl = removeTrailingSlash(relay.url);
-    relays.find((r) => r.url === relayUrl) ?? setRelayStatus(relayUrl, status);
+    setRelayStatus(relayUrl, status);
     console.log(`${status} to relay`, relayUrl);
   };
 
@@ -47,8 +53,7 @@ export const App = () => {
       pool.on('relay:connect', handleRelayStatus('CONNECTED'));
       pool.on('relay:disconnect', handleRelayStatus('DISCONNECTED'));
     }
-
-  }, [nip29Ndk, relays]);
+  }, [nip29Ndk]);
 
   useEffect(() => {
     const ndk = new NDK({

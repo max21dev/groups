@@ -110,3 +110,12 @@
     @apply text-sm font-medium leading-none;
   }
 }
+.CONNECTED{
+    background-color: rgba(108, 165, 93, 0.64);
+}
+.CONNECTING{
+    background-color: #9a9a59;
+}
+.DISCONNECTED {
+    background-color: #a66868;
+}
