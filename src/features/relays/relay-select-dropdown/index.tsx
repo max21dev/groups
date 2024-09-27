@@ -33,11 +33,11 @@ export const RelaySelectDropdown = () => {
     setDialogOpen,
     error,
     relays,
-    activeRelayIndex,
+    activeRelayUrl,
     handleAddNewRelay,
     handleDeleteRelay,
     isCollapsed,
-    setActiveRelayIndex,
+    setActiveRelayUrl,
     setActiveGroupId,
   } = useRelaySelectDropDown();
 
@@ -51,7 +51,7 @@ export const RelaySelectDropdown = () => {
             </Button>
           ) : (
             <Button variant="outline" className="w-full">
-              {relays[activeRelayIndex]}
+              {activeRelayUrl}
             </Button>
           )}
         </DropdownMenuTrigger>
@@ -59,27 +59,27 @@ export const RelaySelectDropdown = () => {
           <DropdownMenuLabel>Select a relay</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuRadioGroup
-            value={activeRelayIndex.toString()}
+            value={activeRelayUrl.toString()}
             onValueChange={(value) => {
-              setActiveRelayIndex(+value);
+              setActiveRelayUrl(value);
               setActiveGroupId(undefined);
             }}
           >
-            {relays.map((relay, index) => (
+            {relays.map((relay) => (
               <DropdownMenuRadioItem
-                key={relay}
-                value={index.toString()}
+                key={relay.url}
+                value={relay.url}
                 className="flex justify-between items-center"
               >
-                <span>{relay}</span>
-                {!MANDATORY_RELAYS.includes(relay) && (
+                <span>{relay.url}</span>
+                {!MANDATORY_RELAYS.includes(relay.url) && (
                   <Button
                     className="z-10"
                     variant="ghost"
                     size="icon"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleDeleteRelay(relay);
+                      handleDeleteRelay(relay.url);
                     }}
                   >
                     <TrashIcon className="w-4 h-4 text-red-600" />

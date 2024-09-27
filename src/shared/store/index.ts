@@ -64,14 +64,15 @@ type GroupsActions = {
 };
 
 type RelaysState = {
-  relays: string[];
-  activeRelayIndex: number;
+  relays: { url: string; status: string }[];
+  activeRelayUrl: string;
 };
 
 type RelaysActions = {
   addRelay: (relay: string) => void;
   safeRemoveRelay: (relay: string) => void;
-  setActiveRelayIndex: (activeRelayIndex: number) => void;
+  setActiveRelayUrl: (activeRelayUrl: string) => void;
+  setRelayStatus: (relay: string, status: string) => void;
 };
 
 export const useStore = create<
@@ -150,15 +151,19 @@ export const useStore = create<
 
       // Relay State
 
-      relays: ['wss://groups.fiatjaf.com', 'wss://relay.groups.nip29.com'],
+      relays: [
+        { url: 'wss://groups.fiatjaf.com', status: '' },
+        { url: 'wss://relay.groups.nip29.com', status: '' },
+      ],
 
-      activeRelayIndex: 0,
+      activeRelayUrl: 'wss://relay.groups.nip29.com',
 
       addRelay: (relay) => {
+        relay = relay.trim();
         const { relays } = get();
-
-        if (!relays.includes(relay)) {
-          set({ relays: [...relays, relay] });
+        // Check if the relay URL already exists before adding
+        if (!relays.some((r) => r.url === relay)) {
+          set({ relays: [...relays, { url: relay, status: '' }] });
         }
       },
 
@@ -170,12 +175,19 @@ export const useStore = create<
         }
 
         set({
-          activeRelayIndex: 0,
-          relays: relays.filter((r) => r !== relay),
+          activeRelayUrl: relays[0].url,
+          relays: relays.filter((r) => r.url !== relay),
         });
       },
 
-      setActiveRelayIndex: (activeRelayIndex) => set({ activeRelayIndex }),
+      setRelayStatus: (relay, status) => {
+        const { relays } = get();
+        set({
+          relays: relays.map((r) => (r.url === relay ? { ...r, status } : r)),
+        });
+      },
+
+      setActiveRelayUrl: (activeRelayUrl) => set({ activeRelayUrl }),
 
       groupsFilter: { belongTo: true, manage: true, own: true, notJoined: true },
       setGroupsFilter: (groupsFilter) => set({ groupsFilter }),
@@ -183,10 +195,11 @@ export const useStore = create<
     {
       name: 'app-storage',
       partialize: (state) => ({
-        activeRelayIndex: state.activeRelayIndex,
-        relays: [
-          ...new Set(['wss://groups.fiatjaf.com', 'wss://relay.groups.nip29.com', ...state.relays]),
-        ],
+        activeRelayUrl: state.activeRelayUrl,
+        relays: state.relays.filter(
+          (relay, index, self) =>
+            index === self.findIndex((r) => r.url === relay.url) // Filter to ensure unique URLs
+        ),
         sidebarWidth: state.sidebarWidth,
         isCollapsed: state.isCollapsed,
         hasCustomSidebarWidth: state.hasCustomSidebarWidth,

@@ -14,8 +14,8 @@ export const useRelaySelectDropDown = () => {
   const relays = useStore((state) => state.relays);
   const addRelay = useStore((state) => state.addRelay);
   const safeRemoveRelay = useStore((state) => state.safeRemoveRelay);
-  const activeRelayIndex = useStore((state) => state.activeRelayIndex);
-  const setActiveRelayIndex = useStore((state) => state.setActiveRelayIndex);
+  const activeRelayUrl = useStore((state) => state.activeRelayUrl);
+  const setActiveRelayUrl = useStore((state) => state.setActiveRelayUrl);
   const setActiveGroupId = useStore((state) => state.setActiveGroupId);
   const isCollapsed = useStore((state) => state.isCollapsed);
 
@@ -51,11 +51,11 @@ export const useRelaySelectDropDown = () => {
     setDialogOpen,
     error,
     relays,
-    activeRelayIndex,
+    activeRelayUrl,
     isCollapsed,
     handleAddNewRelay,
     handleDeleteRelay,
-    setActiveRelayIndex,
+    setActiveRelayUrl,
     setActiveGroupId,
   };
 };
