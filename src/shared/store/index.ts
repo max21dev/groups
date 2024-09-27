@@ -152,8 +152,8 @@ export const useStore = create<
       // Relay State
 
       relays: [
-        { url: 'wss://groups.fiatjaf.com', status: '' },
-        { url: 'wss://relay.groups.nip29.com', status: '' },
+        { url: 'wss://groups.fiatjaf.com', status: 'DISCONNECTED' },
+        { url: 'wss://relay.groups.nip29.com', status: 'DISCONNECTED' },
       ],
 
       activeRelayUrl: 'wss://relay.groups.nip29.com',
@@ -163,7 +163,7 @@ export const useStore = create<
         const { relays } = get();
         // Check if the relay URL already exists before adding
         if (!relays.some((r) => r.url === relay)) {
-          set({ relays: [...relays, { url: relay, status: '' }] });
+          set({ relays: [...relays, { url: relay, status: 'DISCONNECTED' }] });
         }
       },
 
@@ -196,11 +196,11 @@ export const useStore = create<
       name: 'app-storage',
       partialize: (state) => ({
         activeRelayUrl: state.activeRelayUrl,
-        //TODO: Uncomment this after fixing the issue with localStorage
-        // relays: state.relays.filter(
-        //   (relay, index, self) =>
-        //     index === self.findIndex((r) => r.url === relay.url) // Filter to ensure unique URLs
-        // ),
+        relays: state.relays
+          .filter((relay) => relay && typeof relay?.url === 'string') // Skip problematic objects
+          .filter(
+            (relay, index, self) => index === self.findIndex((r) => r.url === relay.url), // Ensure unique URLs
+          ),
         sidebarWidth: state.sidebarWidth,
         isCollapsed: state.isCollapsed,
         hasCustomSidebarWidth: state.hasCustomSidebarWidth,
