@@ -196,10 +196,11 @@ export const useStore = create<
       name: 'app-storage',
       partialize: (state) => ({
         activeRelayUrl: state.activeRelayUrl,
-        relays: state.relays.filter(
-          (relay, index, self) =>
-            index === self.findIndex((r) => r.url === relay.url) // Filter to ensure unique URLs
-        ),
+        //TODO: Uncomment this after fixing the issue with localStorage
+        // relays: state.relays.filter(
+        //   (relay, index, self) =>
+        //     index === self.findIndex((r) => r.url === relay.url) // Filter to ensure unique URLs
+        // ),
         sidebarWidth: state.sidebarWidth,
         isCollapsed: state.isCollapsed,
         hasCustomSidebarWidth: state.hasCustomSidebarWidth,
