@@ -55,9 +55,11 @@ export const GroupDetailsEdit = ({ group, setEditMode }: Props) => {
     <>
       <Label className="flex mt-4 mb-4">Update info of group: {group?.id}</Label>
       <Tabs defaultValue="metadata" className="mt-4">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="metadata">Metadata</TabsTrigger>
           <TabsTrigger value="status">Status</TabsTrigger>
+          <TabsTrigger value="members">Members</TabsTrigger>
+          <TabsTrigger value="admins">Admins</TabsTrigger>
         </TabsList>
         <TabsContent value="metadata">
           <GroupDetailsEditMetadata
@@ -71,6 +73,8 @@ export const GroupDetailsEdit = ({ group, setEditMode }: Props) => {
             handleSubmitStatus={handleSubmitStatus}
           />
         </TabsContent>
+        <TabsContent value="members">Coming Soon ...</TabsContent>
+        <TabsContent value="admins">Coming Soon ...</TabsContent>
       </Tabs>
 
       {/* Confirmation Dialog */}
