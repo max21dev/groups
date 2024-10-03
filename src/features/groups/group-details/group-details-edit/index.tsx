@@ -14,6 +14,7 @@ import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/shared/components/ui
 import { Label } from '@/shared/components/ui/label.tsx';
 import { GroupDetailsEditStatus } from '@/features/groups/group-details/group-details-edit-status';
 import { GroupDetailsEditMetadata } from '@/features/groups/group-details/group-details-edit-metadata';
+import { GroupDetailsEditMembers } from '@/features/groups/group-details/group-details-edit-members';
 
 type Props = {
   group: Group | undefined;
@@ -73,7 +74,9 @@ export const GroupDetailsEdit = ({ group, setEditMode }: Props) => {
             handleSubmitStatus={handleSubmitStatus}
           />
         </TabsContent>
-        <TabsContent value="members">Coming Soon ...</TabsContent>
+        <TabsContent value="members">
+          <GroupDetailsEditMembers />
+        </TabsContent>
         <TabsContent value="admins">Coming Soon ...</TabsContent>
       </Tabs>
 
