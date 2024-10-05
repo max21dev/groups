@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { GroupMember } from '@/shared/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
@@ -7,12 +8,21 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip.tsx';
-import { useGlobalProfile } from '@/shared/hooks';
 import { Button } from '@/shared/components/ui/button.tsx';
 import { Check, Copy, Trash } from 'lucide-react';
-import { useState } from 'react';
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/shared/components/ui/dialog';
+import { useGlobalProfile } from '@/shared/hooks'; // Assuming you have a dialog component
 
-export const membersColumns: ColumnDef<GroupMember>[] = [
+export const membersColumns: (
+  removeMember: (pubkey: string) => void,
+) => ColumnDef<GroupMember>[] = (removeMember) => [
   {
     id: 'avatar',
     header: 'avatar',
@@ -33,7 +43,7 @@ export const membersColumns: ColumnDef<GroupMember>[] = [
               </Avatar>
             </TooltipTrigger>
             <TooltipContent>
-              <p>{profile?.name ? profile?.name : pubkey}</p>
+              <p>{profile?.name || pubkey}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -51,7 +61,6 @@ export const membersColumns: ColumnDef<GroupMember>[] = [
       return profile?.name ? profile?.name : '-';
     },
   },
-
   {
     id: 'publicKey',
     accessorKey: 'publicKey',
@@ -67,7 +76,7 @@ export const membersColumns: ColumnDef<GroupMember>[] = [
         if (pubkey) {
           navigator.clipboard.writeText(pubkey);
           setCopied(true);
-          setTimeout(() => setCopied(false), 2000); // Reset the copied state after 2 seconds
+          setTimeout(() => setCopied(false), 2000);
         }
       };
 
@@ -82,8 +91,6 @@ export const membersColumns: ColumnDef<GroupMember>[] = [
                 <p>{pubkey}</p>
               </TooltipContent>
             </Tooltip>
-
-            {/* Copy to clipboard button */}
             <Button variant="ghost" size="sm" onClick={handleCopy}>
               {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
             </Button>
@@ -95,16 +102,41 @@ export const membersColumns: ColumnDef<GroupMember>[] = [
   {
     id: 'actions',
     header: 'Actions',
-  },
-  {
-    id: 'actions',
-    cell: () => {
+    cell: ({ row }) => {
+      const pubkey: string = row?.getValue('publicKey');
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const [isDialogOpen, setDialogOpen] = useState(false);
+
+      const handleRemove = () => {
+        removeMember(pubkey);
+        setDialogOpen(false);
+      };
+
       return (
         <div>
-          <Button disabled={true} variant="destructive">
-            <Trash className="h-3 w-3 mr-2" />
-            Remove
-          </Button>
+          <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="destructive">
+                <Trash className="h-3 w-3 mr-2" />
+                Remove
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-xl">
+              <DialogTitle>Confirm Removal</DialogTitle>
+              <DialogDescription>
+                <p>Are you sure you want to remove this member? This action cannot be undone.</p>
+                <p>{row?.getValue('publicKey')}</p>
+              </DialogDescription>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button variant="destructive" onClick={handleRemove}>
+                  Remove
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       );
     },

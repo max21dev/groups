@@ -10,7 +10,7 @@ import {
   useLoginModalState,
   useNip29Ndk,
 } from '@/shared/hooks';
-import { deleteGroup, leaveGroup } from '@/features/groups/shared/hooks';
+import { deleteGroup, leaveGroup, removeUserFromGroup } from '@/features/groups/shared/hooks';
 import { useToast } from '@/shared/components/ui/use-toast.ts';
 
 export const useGroupDetails = ({ groupId }: { groupId: string | undefined }) => {
@@ -49,6 +49,26 @@ export const useGroupDetails = ({ groupId }: { groupId: string | undefined }) =>
     setIsDialogOpen(false);
   };
 
+  const handleRemoveUserFromGroup = (pubkey: string) => {
+    if (!groupId || !pubkey) return;
+    removeUserFromGroup(
+      activeUser,
+      pubkey,
+      openLoginModal,
+      createNewEvent,
+      groupId,
+      () => {
+        toast({ title: 'Success', description: 'User removed successfully!' });
+      },
+      () =>
+        toast({
+          title: 'Error',
+          description: 'Failed to remove user from group!',
+          variant: 'destructive',
+        }),
+    );
+  };
+
   const handleLeaveGroup = (setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
     if (!groupId) return;
     leaveGroup(
@@ -78,5 +98,6 @@ export const useGroupDetails = ({ groupId }: { groupId: string | undefined }) =>
     canDeleteGroup,
     handleDeleteGroup,
     handleLeaveGroup,
+    handleRemoveUserFromGroup,
   };
 };
