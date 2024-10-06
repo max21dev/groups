@@ -15,6 +15,7 @@ import { Label } from '@/shared/components/ui/label.tsx';
 import { GroupDetailsEditStatus } from '@/features/groups/group-details/group-details-edit-status';
 import { GroupDetailsEditMetadata } from '@/features/groups/group-details/group-details-edit-metadata';
 import { GroupDetailsEditMembers } from '@/features/groups/group-details/group-details-edit-members';
+import { GroupDetailsEditAdmins } from '@/features/groups/group-details/group-details-edit-admins';
 
 type Props = {
   group: Group | undefined;
@@ -77,7 +78,9 @@ export const GroupDetailsEdit = ({ group, setEditMode }: Props) => {
         <TabsContent value="members">
           <GroupDetailsEditMembers />
         </TabsContent>
-        <TabsContent value="admins">Coming Soon ...</TabsContent>
+        <TabsContent value="admins">
+          <GroupDetailsEditAdmins />
+        </TabsContent>
       </Tabs>
 
       {/* Confirmation Dialog */}
