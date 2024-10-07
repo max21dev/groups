@@ -9,7 +9,7 @@ import {
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip.tsx';
 import { Button } from '@/shared/components/ui/button.tsx';
-import { Check, Copy, Trash } from 'lucide-react';
+import { Check, Copy, Edit, Trash } from 'lucide-react';
 import {
   Dialog,
   DialogTrigger,
@@ -131,7 +131,35 @@ export const adminsColumns: (removeAdmins: (pubkey: string) => void) => ColumnDe
       };
 
       return (
+
         <div>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button disabled={true} variant="default" className="mb-2">
+                <Edit className="h-3 w-3 mr-2" />
+                Set Roles
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-xl">
+              <DialogTitle>Change Permissions</DialogTitle>
+              <DialogDescription>
+                <p>Change Permission for this user</p>
+                <p>{row?.getValue('publicKey')}</p>
+                <ul>
+                  <li>permission</li>
+                </ul>
+              </DialogDescription>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button variant="destructive" onClick={handleRemove}>
+                  Update
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
           <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
               <Button variant="destructive">
