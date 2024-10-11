@@ -2,51 +2,30 @@ import { useState } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
 import { GroupAdmin, GroupAdminPermission } from '@/shared/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/shared/components/ui/tooltip.tsx';
+
 import { Button } from '@/shared/components/ui/button.tsx';
 import { Check, Copy, Edit, Trash } from 'lucide-react';
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from '@/shared/components/ui/dialog';
-import { useGlobalProfile } from '@/shared/hooks'; // Assuming you have a dialog component
+import { useGlobalProfile } from '@/shared/hooks';
+import { ConfirmDialog } from '@/features/groups/group-details/confirm-dialog';
 
 export const adminsColumns: (removeAdmins: (pubkey: string) => void) => ColumnDef<GroupAdmin>[] = (
   removeAdmins,
 ) => [
   {
     id: 'avatar',
-    header: 'avatar',
+    header: 'Avatar',
     cell: ({ row }) => {
       const pubkey: string | undefined = row?.getValue('publicKey');
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const { profile } = useGlobalProfile({ pubkey: pubkey });
       return (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Avatar className="flex justify-center items-center">
-                {!profile || !profile?.image ? (
-                  <AvatarFallback>{pubkey?.slice(0, 2).toUpperCase()}</AvatarFallback>
-                ) : (
-                  <AvatarImage src={profile?.image} alt={profile?.name} />
-                )}
-              </Avatar>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{profile?.name || pubkey}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Avatar className="flex justify-center items-center">
+          {!profile || !profile?.image ? (
+            <AvatarFallback>{pubkey?.slice(0, 2).toUpperCase()}</AvatarFallback>
+          ) : (
+            <AvatarImage src={profile?.image} alt={profile?.name} />
+          )}
+        </Avatar>
       );
     },
   },
@@ -81,21 +60,12 @@ export const adminsColumns: (removeAdmins: (pubkey: string) => void) => ColumnDe
       };
 
       return (
-        <TooltipProvider>
-          <div className="flex items-center space-x-2">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <span>{shortenedPubkey}</span>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{pubkey}</p>
-              </TooltipContent>
-            </Tooltip>
-            <Button variant="ghost" size="sm" onClick={handleCopy}>
-              {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
-            </Button>
-          </div>
-        </TooltipProvider>
+        <div className="flex items-center space-x-2">
+          <span>{shortenedPubkey}</span>
+          <Button variant="ghost" size="sm" onClick={handleCopy}>
+            {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+          </Button>
+        </div>
       );
     },
   },
@@ -104,7 +74,6 @@ export const adminsColumns: (removeAdmins: (pubkey: string) => void) => ColumnDe
     accessorKey: 'permissions',
     header: 'Permissions',
     cell: ({ row }) => {
-      console.log('permissions', row?.getValue('permissions'));
       const permissions: GroupAdminPermission[] = row?.getValue('permissions');
       return (
         permissions && (
@@ -131,58 +100,48 @@ export const adminsColumns: (removeAdmins: (pubkey: string) => void) => ColumnDe
       };
 
       return (
-
         <div>
-          <Dialog>
-            <DialogTrigger asChild>
+          {/* Set Roles Dialog */}
+          <ConfirmDialog
+            triggerButton={
               <Button disabled={true} variant="default" className="mb-2">
                 <Edit className="h-3 w-3 mr-2" />
                 Set Roles
               </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-xl">
-              <DialogTitle>Change Permissions</DialogTitle>
-              <DialogDescription>
-                <p>Change Permission for this user</p>
-                <p>{row?.getValue('publicKey')}</p>
-                <ul>
-                  <li>permission</li>
-                </ul>
-              </DialogDescription>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button variant="destructive" onClick={handleRemove}>
-                  Update
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+            }
+            title="Change Permissions"
+            confirmButtonLabel="Update"
+            confirmButtonVariant="default"
+            confirmAction={() => console.log('Permission updated')} // Replace with actual logic
+            open={isDialogOpen}
+            onOpenChange={setDialogOpen}
+          >
+            <p>Change Permission for this user</p>
+            <p>{row?.getValue('publicKey')}</p>
+            <ul>
+              <li>Permission 1</li>
+              <li>Permission 2</li>
+              {/* Add more permissions or other dynamic content */}
+            </ul>
+          </ConfirmDialog>
 
-          <Dialog open={isDialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
+          <ConfirmDialog
+            triggerButton={
               <Button variant="destructive">
                 <Trash className="h-3 w-3 mr-2" />
                 Remove
               </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-xl">
-              <DialogTitle>Confirm Removal</DialogTitle>
-              <DialogDescription>
-                <p>Are you sure you want to remove this admin? This action cannot be undone.</p>
-                <p>{row?.getValue('publicKey')}</p>
-              </DialogDescription>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button variant="destructive" onClick={handleRemove}>
-                  Remove
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
+            }
+            title="Confirm Removal"
+            confirmButtonLabel="Remove"
+            confirmButtonVariant="destructive"
+            confirmAction={handleRemove}
+            open={isDialogOpen}
+            onOpenChange={setDialogOpen}
+          >
+            <p>Are you sure you want to remove this admin? This action cannot be undone.</p>
+            <p>{row?.getValue('publicKey')}</p>
+          </ConfirmDialog>
         </div>
       );
     },
