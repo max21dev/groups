@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { GroupAdmin, GroupAdminPermission } from '@/shared/types';
+import { GroupAdmin, GroupAdminAvailablePermission, GroupAdminPermission } from '@/shared/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
 
 import { Button } from '@/shared/components/ui/button.tsx';
 import { Check, Copy, Edit, Trash } from 'lucide-react';
 import { useGlobalProfile } from '@/shared/hooks';
 import { ConfirmDialog } from '@/features/groups/group-details/confirm-dialog';
+import { Checkbox } from '@/shared/components/ui/checkbox.tsx';
 
 export const adminsColumns: (removeAdmins: (pubkey: string) => void) => ColumnDef<GroupAdmin>[] = (
   removeAdmins,
@@ -92,11 +93,13 @@ export const adminsColumns: (removeAdmins: (pubkey: string) => void) => ColumnDe
     cell: ({ row }) => {
       const pubkey: string = row?.getValue('publicKey');
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const [isDialogOpen, setDialogOpen] = useState(false);
+      const [isSetRolesDialogOpen, setSetRolesDialogOpen] = useState(false); // Separate state for Set Roles
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const [isRemoveDialogOpen, setRemoveDialogOpen] = useState(false); // Separate state for Remove Dialog
 
       const handleRemove = () => {
         removeAdmins(pubkey);
-        setDialogOpen(false);
+        setRemoveDialogOpen(false);
       };
 
       return (
@@ -104,7 +107,7 @@ export const adminsColumns: (removeAdmins: (pubkey: string) => void) => ColumnDe
           {/* Set Roles Dialog */}
           <ConfirmDialog
             triggerButton={
-              <Button disabled={true} variant="default" className="mb-2">
+              <Button variant="default" className="mb-2">
                 <Edit className="h-3 w-3 mr-2" />
                 Set Roles
               </Button>
@@ -113,16 +116,20 @@ export const adminsColumns: (removeAdmins: (pubkey: string) => void) => ColumnDe
             confirmButtonLabel="Update"
             confirmButtonVariant="default"
             confirmAction={() => console.log('Permission updated')} // Replace with actual logic
-            open={isDialogOpen}
-            onOpenChange={setDialogOpen}
+            open={isSetRolesDialogOpen}
+            onOpenChange={setSetRolesDialogOpen}
           >
             <p>Change Permission for this user</p>
-            <p>{row?.getValue('publicKey')}</p>
-            <ul>
-              <li>Permission 1</li>
-              <li>Permission 2</li>
+            <p>{String(row?.getValue('publicKey'))?.slice(0, 10) ?? '-'}...</p>
+            <p className="no ">
+              {GroupAdminAvailablePermission.map((permission: GroupAdminPermission) => (
+                <div className="m-2" key={permission}>
+                  <Checkbox key={permission} title={permission} value={permission} />
+                  <span className="ml-2"> {permission}</span>
+                </div>
+              ))}
               {/* Add more permissions or other dynamic content */}
-            </ul>
+            </p>
           </ConfirmDialog>
 
           <ConfirmDialog
@@ -136,11 +143,11 @@ export const adminsColumns: (removeAdmins: (pubkey: string) => void) => ColumnDe
             confirmButtonLabel="Remove"
             confirmButtonVariant="destructive"
             confirmAction={handleRemove}
-            open={isDialogOpen}
-            onOpenChange={setDialogOpen}
+            open={isRemoveDialogOpen}
+            onOpenChange={setRemoveDialogOpen}
           >
             <p>Are you sure you want to remove this admin? This action cannot be undone.</p>
-            <p>{row?.getValue('publicKey')}</p>
+            <p>{String(row?.getValue('publicKey'))?.slice(0, 10) ?? '-'}...</p>
           </ConfirmDialog>
         </div>
       );

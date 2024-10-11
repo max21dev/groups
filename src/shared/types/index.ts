@@ -25,7 +25,6 @@ export type GroupStatus = {
   type: 'open' | 'closed';
 };
 
-
 export type GroupAdmin = {
   publicKey: string;
   permissions: GroupAdminPermission[];
@@ -46,6 +45,18 @@ export enum GroupAdminPermissionEnum {
   CreateGroup = 'create-group',
   DeleteGroup = 'delete-group',
 }
+
+export const GroupAdminAvailablePermission: GroupAdminPermission[] = [
+  GroupAdminPermissionEnum.AddUser,
+  GroupAdminPermissionEnum.EditMetadata,
+  GroupAdminPermissionEnum.DeleteEvent,
+  GroupAdminPermissionEnum.RemoveUser,
+  GroupAdminPermissionEnum.AddPermission,
+  GroupAdminPermissionEnum.RemovePermission,
+  GroupAdminPermissionEnum.EditGroupStatus,
+  GroupAdminPermissionEnum.CreateGroup,
+  GroupAdminPermissionEnum.DeleteGroup,
+];
 
 export type GroupAdminPermission = `${GroupAdminPermissionEnum}`;
 

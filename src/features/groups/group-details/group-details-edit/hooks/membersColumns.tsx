@@ -122,7 +122,7 @@ export const membersColumns: (
           onOpenChange={setDialogOpen}
         >
           <p>Are you sure you want to remove this member? This action cannot be undone.</p>
-          <p>{pubkey}</p>
+          <p>{String(row?.getValue('publicKey'))?.slice(0, 10) ?? '-'}...</p>
         </ConfirmDialog>
       );
     },
