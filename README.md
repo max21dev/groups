@@ -43,6 +43,7 @@ This client enables users to participate in groups managed by relays, where acce
   - 🚧 View and manage group members and admins.
     - ✅ View members (kind 39002).
     - ✅ View admins (kind 39001).
+    - ✅ Remove user (kind 9001).
   - 🚧 Moderate group content and messages.
   - 🚧 Create and manage private groups.
 
