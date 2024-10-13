@@ -101,6 +101,7 @@ export const adminsColumns: (removeAdmins: (pubkey: string) => void) => ColumnDe
         removeAdmins(pubkey);
         setRemoveDialogOpen(false);
       };
+      const permissions: GroupAdminPermission[] = row?.getValue('permissions');
 
       return (
         <div>
@@ -124,7 +125,7 @@ export const adminsColumns: (removeAdmins: (pubkey: string) => void) => ColumnDe
             <p className="no ">
               {GroupAdminAvailablePermission.map((permission: GroupAdminPermission) => (
                 <div className="m-2" key={permission}>
-                  <Checkbox key={permission} title={permission} value={permission} />
+                  <Checkbox checked={permissions.includes(permission)} key={permission} title={permission} value={permission} />
                   <span className="ml-2"> {permission}</span>
                 </div>
               ))}
