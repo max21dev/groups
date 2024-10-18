@@ -10,7 +10,11 @@ import {
   useLoginModalState,
   useNip29Ndk,
 } from '@/shared/hooks';
-import { deleteGroup, leaveGroup, removeUserFromGroup } from '@/features/groups/shared/hooks';
+import {
+  deleteGroup,
+  leaveGroup,
+  removeUserFromGroup,
+} from '@/features/groups/shared/hooks';
 import { useToast } from '@/shared/components/ui/use-toast.ts';
 
 export const useGroupDetails = ({ groupId }: { groupId: string | undefined }) => {
@@ -36,7 +40,7 @@ export const useGroupDetails = ({ groupId }: { groupId: string | undefined }) =>
       groupId,
       () => {
         group && nip29Ndk?.cacheAdapter?.deleteEvent?.(group.event);
-        
+
         toast({ title: 'Success', description: 'Group deleted successfully!' });
         setIsDialogOpen(false);
         setActiveGroupId(undefined);

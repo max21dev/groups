@@ -9,9 +9,14 @@ import { useGlobalProfile } from '@/shared/hooks';
 import { ConfirmDialog } from '@/features/groups/group-details/confirm-dialog';
 import { Checkbox } from '@/shared/components/ui/checkbox.tsx';
 
-export const adminsColumns: (removeAdmins: (pubkey: string) => void) => ColumnDef<GroupAdmin>[] = (
-  removeAdmins,
-) => [
+export const adminsColumns: (
+  removeAdmins: (pubkey: string) => void,
+  updateAdminPermissions: (
+    pubkey: string,
+    addPermissions: GroupAdminPermission[] | [],
+    removePermissions: GroupAdminPermission[] | [],
+  ) => void,
+) => ColumnDef<GroupAdmin>[] = (removeAdmins, updateAdminPermissions) => [
   {
     id: 'avatar',
     header: 'Avatar',
@@ -96,13 +101,30 @@ export const adminsColumns: (removeAdmins: (pubkey: string) => void) => ColumnDe
       const [isSetRolesDialogOpen, setSetRolesDialogOpen] = useState(false); // Separate state for Set Roles
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const [isRemoveDialogOpen, setRemoveDialogOpen] = useState(false); // Separate state for Remove Dialog
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const [permissions, setPermissions] = useState<GroupAdminPermission[]>(
+        row?.getValue('permissions') || [],
+      ); // State for permissions
+
+      // Handle checkbox change
+      const handleCheckboxChange = (permission: GroupAdminPermission) => {
+        if (permissions.includes(permission)) {
+          // If the permission is already included, remove it
+          setPermissions(permissions.filter((p) => p !== permission));
+        } else {
+          // Otherwise, add it
+          setPermissions([...permissions, permission]);
+        }
+      };
 
       const handleRemove = () => {
         removeAdmins(pubkey);
         setRemoveDialogOpen(false);
       };
-      const permissions: GroupAdminPermission[] = row?.getValue('permissions');
-
+      const handleUpdatePermissions = () => {
+        updateAdminPermissions(pubkey, permissions, []);
+        setSetRolesDialogOpen(false);
+      };
       return (
         <div>
           {/* Set Roles Dialog */}
@@ -116,7 +138,7 @@ export const adminsColumns: (removeAdmins: (pubkey: string) => void) => ColumnDe
             title="Change Permissions"
             confirmButtonLabel="Update"
             confirmButtonVariant="default"
-            confirmAction={() => console.log('Permission updated')} // Replace with actual logic
+            confirmAction={handleUpdatePermissions}
             open={isSetRolesDialogOpen}
             onOpenChange={setSetRolesDialogOpen}
           >
@@ -125,7 +147,11 @@ export const adminsColumns: (removeAdmins: (pubkey: string) => void) => ColumnDe
             <p className="no ">
               {GroupAdminAvailablePermission.map((permission: GroupAdminPermission) => (
                 <div className="m-2" key={permission}>
-                  <Checkbox checked={permissions.includes(permission)} key={permission} title={permission} value={permission} />
+                  <Checkbox
+                    checked={permissions.includes(permission)}
+                    onCheckedChange={() => handleCheckboxChange(permission)} // Handle state change
+                    id={permission}
+                  />
                   <span className="ml-2"> {permission}</span>
                 </div>
               ))}
