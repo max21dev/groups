@@ -10,7 +10,6 @@ export const createGroup = (
   onError?: () => void,
 ) => {
   if (!activeUser) {
-    console.log('activeUser false ', activeUser);
     openLoginModal();
     return;
   }
@@ -34,7 +33,6 @@ export const addGroupPermissions = (
   onError?: () => void,
 ) => {
   if (!activeUser?.pubkey) {
-    console.log('activeUser false ', activeUser);
     openLoginModal();
     return;
   }
@@ -121,7 +119,6 @@ export const deleteGroup = (
   onError?: () => void,
 ) => {
   if (!activeUser) {
-    console.log('activeUser false ', activeUser);
     openLoginModal();
     return;
   }
@@ -145,7 +142,6 @@ export const leaveGroup = (
   onError?: () => void,
 ) => {
   if (!activeUser) {
-    console.log('activeUser false ', activeUser);
     openLoginModal();
     return;
   }
@@ -170,7 +166,6 @@ export const removeUserFromGroup = (
   onError?: () => void,
 ) => {
   if (!activeUser) {
-    console.log('activeUser false ', activeUser);
     openLoginModal();
     return;
   }
