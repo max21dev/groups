@@ -17,11 +17,21 @@ export const GroupDetailsEditAdmins = () => {
 
   const updateAdminPermissions = (
     pubkey: string,
-    addPermissions: GroupAdminPermission[] | [],
-    removePermissions: GroupAdminPermission[] | [],
+    oldPermissions: GroupAdminPermission[] | [],
+    newPermissions: GroupAdminPermission[] | [],
   ) => {
     ///TODO: Implement this function , it should be done in two events, one for adding permissions and one for removing permissions (kinds: 9003,9004)
-    console.log(pubkey, addPermissions, removePermissions);
+    const permissionsToAdd = newPermissions.filter((permission) => {
+      // @ts-ignore
+      return !oldPermissions.includes(permission);
+    });
+    const permissionsToRemove = oldPermissions.filter((permission) => {
+      // @ts-ignore
+      return !newPermissions.includes(permission);
+    });
+    console.log(pubkey, oldPermissions, newPermissions);
+    console.log('permissionsToAdd', permissionsToAdd);
+    console.log('permissionsToRemove', permissionsToRemove);
   };
 
   const columns = adminsColumns(removeAdmins, updateAdminPermissions);

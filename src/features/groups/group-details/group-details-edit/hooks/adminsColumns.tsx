@@ -13,8 +13,8 @@ export const adminsColumns: (
   removeAdmins: (pubkey: string) => void,
   updateAdminPermissions: (
     pubkey: string,
-    addPermissions: GroupAdminPermission[] | [],
-    removePermissions: GroupAdminPermission[] | [],
+    oldPermissions: GroupAdminPermission[] | [],
+    newPermissions: GroupAdminPermission[] | [],
   ) => void,
 ) => ColumnDef<GroupAdmin>[] = (removeAdmins, updateAdminPermissions) => [
   {
@@ -122,7 +122,7 @@ export const adminsColumns: (
         setRemoveDialogOpen(false);
       };
       const handleUpdatePermissions = () => {
-        updateAdminPermissions(pubkey, permissions, []);
+        updateAdminPermissions(pubkey, row?.getValue('permissions'), permissions);
         setSetRolesDialogOpen(false);
       };
       return (
