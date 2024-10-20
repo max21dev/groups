@@ -1,4 +1,4 @@
-import { GroupAdminPermission, GroupAdminPermissionEnum, GroupMetadata, GroupStatus } from '@/shared/types';
+import { GroupAdminPermission, GroupAdminPermissionEnum, GroupMetadata, GroupStatus, Kind } from '@/shared/types';
 import { NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
 
 export const createGroup = (
@@ -14,7 +14,7 @@ export const createGroup = (
     return;
   }
   const event = createNewEvent();
-  event.kind = 9007;
+  event.kind = Kind.KindSimpleGroupCreateGroup;
   event.tags = [['h', groupMetadata.id]];
   event.publish().then(
     (r) => {
@@ -37,7 +37,7 @@ export const addGroupPermissions = (
     return;
   }
   const event = createNewEvent();
-  event.kind = 9003;
+  event.kind = Kind.KindSimpleGroupAddPermission;
   event.tags = [
     ['h', groupMetadata.id],
     ['p', activeUser.pubkey],
@@ -69,7 +69,7 @@ export const updateGroupMetadata = (
   }
 
   const event = createNewEvent();
-  event.kind = 9002;
+  event.kind = Kind.KindSimpleGroupEditMetadata;
 
   const tagsArray: [string, string][] = [
     ['h', groupMetadata.id],
@@ -97,7 +97,7 @@ export const updateGroupStatus = (
   }
 
   const event = createNewEvent();
-  event.kind = 9006;
+  event.kind = Kind.KindSimpleGroupEditGroupStatus;
 
   event.tags = [
     ['h', groupStatus.id],
@@ -123,7 +123,7 @@ export const deleteGroup = (
     return;
   }
   const event = createNewEvent();
-  event.kind = 9008;
+  event.kind = Kind.KindSimpleGroupDeleteGroup;
   event.tags = [['h', groupId]];
   event.publish().then(
     (r) => {
@@ -146,7 +146,7 @@ export const leaveGroup = (
     return;
   }
   const event = createNewEvent();
-  event.kind = 9022;
+  event.kind = Kind.KindSimpleGroupLeaveRequest;
   event.tags = [['h', groupId]];
   event.publish().then(
     (r) => {
@@ -170,7 +170,7 @@ export const removeUserFromGroup = (
     return;
   }
   const event = createNewEvent();
-  event.kind = 9001;
+  event.kind = Kind.KindSimpleGroupRemoveUser;
   event.tags = [
     ['h', groupId],
     ['p', pubKey],
@@ -198,7 +198,7 @@ export const addAdminPermissions = (
     return;
   }
   const event = createNewEvent();
-  event.kind = 9003;
+  event.kind = Kind.KindSimpleGroupAddPermission;
   event.tags = [
     ['h', groupId],
     ['p', pubKey],

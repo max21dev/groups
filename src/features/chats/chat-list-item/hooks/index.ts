@@ -16,6 +16,7 @@ import { useStore } from '@/shared/store';
 import { ChatListItemProps } from '../types';
 import { categorizeMessageContent, fetchFirstContentImage } from '../utils';
 import { useToast } from '@/shared/components/ui/use-toast';
+import { Kind } from '@/shared/types';
 
 export const useChatListItem = ({
   message,
@@ -73,7 +74,7 @@ export const useChatListItem = ({
     }
 
     const event = createNewEvent();
-    event.kind = 9005;
+    event.kind = Kind.KindSimpleGroupDeleteEvent;
     event.tags = [
       ['h', groupId],
       ['e', eventId],
@@ -93,7 +94,7 @@ export const useChatListItem = ({
     }
 
     const event = createNewEvent();
-    event.kind = 7;
+    event.kind = Kind.KindReaction;
     event.content = like ? '+' : '-';
     event.tags = [
       ['h', groupId],

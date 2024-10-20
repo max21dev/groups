@@ -11,7 +11,7 @@ import {
   useNip29Ndk,
 } from '@/shared/hooks';
 import { useStore } from '@/shared/store';
-import { GroupMessage, LimitFilter } from '@/shared/types';
+import { GroupMessage, Kind, LimitFilter } from '@/shared/types';
 
 const limitFilter: LimitFilter = { limit: 200 };
 
@@ -73,7 +73,7 @@ export const useChatBottomBar = () => {
     }
 
     const event = createNewEvent();
-    event.kind = 9;
+    event.kind = Kind.KindSimpleGroupChatMessage;
     event.content = message;
     event.tags = [['h', activeGroupId], ...(replyTo?.id ? [['e', replyTo.id, '', 'reply']] : [])];
     event.publish();
@@ -88,7 +88,7 @@ export const useChatBottomBar = () => {
     if (!activeGroupId) return;
 
     const event = createNewEvent();
-    event.kind = 9021;
+    event.kind = Kind.KindSimpleGroupJoinRequest;
     event.tags = [['h', activeGroupId]];
     event.publish();
     //TODO: check if join request was successful
