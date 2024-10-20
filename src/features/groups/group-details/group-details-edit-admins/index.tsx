@@ -7,7 +7,7 @@ import { GroupAdminPermission } from '@/shared/types';
 export const GroupDetailsEditAdmins = () => {
   const { activeGroupId } = useActiveGroup();
   const { admins } = useGroupAdmins(activeGroupId);
-  const { handleRemoveUserFromGroup } = useGroupDetails({
+  const { handleRemoveUserFromGroup, handleAddAdminPermissions } = useGroupDetails({
     groupId: activeGroupId,
   });
 
@@ -29,7 +29,11 @@ export const GroupDetailsEditAdmins = () => {
       // @ts-ignore
       return !newPermissions.includes(permission);
     });
-    console.log(pubkey, oldPermissions, newPermissions);
+    // console.log(pubkey, oldPermissions, newPermissions);
+    if (permissionsToAdd.length > 0) {
+      handleAddAdminPermissions(pubkey, permissionsToAdd);
+    }
+
     console.log('permissionsToAdd', permissionsToAdd);
     console.log('permissionsToRemove', permissionsToRemove);
   };

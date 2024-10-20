@@ -10,12 +10,9 @@ import {
   useLoginModalState,
   useNip29Ndk,
 } from '@/shared/hooks';
-import {
-  deleteGroup,
-  leaveGroup,
-  removeUserFromGroup,
-} from '@/features/groups/shared/hooks';
+import { addAdminPermissions, deleteGroup, leaveGroup, removeUserFromGroup } from '@/features/groups/shared/hooks';
 import { useToast } from '@/shared/components/ui/use-toast.ts';
+import { GroupAdminPermission } from '@/shared/types';
 
 export const useGroupDetails = ({ groupId }: { groupId: string | undefined }) => {
   const { globalNdk } = useGlobalNdk();
@@ -75,6 +72,27 @@ export const useGroupDetails = ({ groupId }: { groupId: string | undefined }) =>
     );
   };
 
+  const handleAddAdminPermissions = (pubkey: string, permissions: GroupAdminPermission[]) => {
+    if (!groupId || !pubkey || !permissions) return;
+    addAdminPermissions(
+      activeUser,
+      pubkey,
+      permissions,
+      openLoginModal,
+      createNewEvent,
+      groupId,
+      () => {
+        toast({ title: 'Success', description: 'Permissions added successfully!' });
+      },
+      () =>
+        toast({
+          title: 'Error',
+          description: 'Failed to add permissions!',
+          variant: 'destructive',
+        }),
+    );
+  };
+
   const handleLeaveGroup = (setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
     if (!groupId) return;
     leaveGroup(
@@ -105,5 +123,6 @@ export const useGroupDetails = ({ groupId }: { groupId: string | undefined }) =>
     handleDeleteGroup,
     handleLeaveGroup,
     handleRemoveUserFromGroup,
+    handleAddAdminPermissions,
   };
 };

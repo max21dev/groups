@@ -1,4 +1,4 @@
-import { GroupAdminPermissionEnum, GroupMetadata, GroupStatus } from '@/shared/types';
+import { GroupAdminPermission, GroupAdminPermissionEnum, GroupMetadata, GroupStatus } from '@/shared/types';
 import { NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
 
 export const createGroup = (
@@ -175,6 +175,38 @@ export const removeUserFromGroup = (
     ['h', groupId],
     ['p', pubKey],
   ];
+  event.publish().then(
+    (r) => {
+      r.size > 0 ? onSuccess?.() : onError?.();
+    },
+    () => onError?.(),
+  );
+};
+
+export const addAdminPermissions = (
+  activeUser: NDKUser | undefined,
+  pubKey: string,
+  permissions: GroupAdminPermission[],
+  openLoginModal: () => void,
+  createNewEvent: () => NDKEvent,
+  groupId: string,
+  onSuccess?: () => void,
+  onError?: () => void,
+) => {
+  if (!activeUser) {
+    openLoginModal();
+    return;
+  }
+  const event = createNewEvent();
+  event.kind = 9003;
+  event.tags = [
+    ['h', groupId],
+    ['p', pubKey],
+  ];
+  permissions.forEach((permission) => {
+    event.tags.push(['permission', permission]);
+  });
+
   event.publish().then(
     (r) => {
       r.size > 0 ? onSuccess?.() : onError?.();
