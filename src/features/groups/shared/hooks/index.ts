@@ -215,6 +215,38 @@ export const addAdminPermissions = (
   );
 };
 
+export const removeAdminPermissions = (
+  activeUser: NDKUser | undefined,
+  pubKey: string,
+  permissions: GroupAdminPermission[],
+  openLoginModal: () => void,
+  createNewEvent: () => NDKEvent,
+  groupId: string,
+  onSuccess?: () => void,
+  onError?: () => void,
+) => {
+  if (!activeUser) {
+    openLoginModal();
+    return;
+  }
+  const event = createNewEvent();
+  event.kind = Kind.KindSimpleGroupRemovePermission;
+  event.tags = [
+    ['h', groupId],
+    ['p', pubKey],
+  ];
+  permissions.forEach((permission) => {
+    event.tags.push(['permission', permission]);
+  });
+
+  event.publish().then(
+    (r) => {
+      r.size > 0 ? onSuccess?.() : onError?.();
+    },
+    () => onError?.(),
+  );
+};
+
 export function generateGroupId(): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const length = Math.floor(Math.random() * 3) + 8;

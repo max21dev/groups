@@ -7,9 +7,10 @@ import { GroupAdminPermission } from '@/shared/types';
 export const GroupDetailsEditAdmins = () => {
   const { activeGroupId } = useActiveGroup();
   const { admins } = useGroupAdmins(activeGroupId);
-  const { handleRemoveUserFromGroup, handleAddAdminPermissions } = useGroupDetails({
-    groupId: activeGroupId,
-  });
+  const { handleRemoveUserFromGroup, handleAddAdminPermissions, handleRemoveAdminPermissions } =
+    useGroupDetails({
+      groupId: activeGroupId,
+    });
 
   const removeAdmins = (pubkey: string) => {
     handleRemoveUserFromGroup(pubkey);
@@ -20,7 +21,6 @@ export const GroupDetailsEditAdmins = () => {
     oldPermissions: GroupAdminPermission[] | [],
     newPermissions: GroupAdminPermission[] | [],
   ) => {
-    ///TODO: Implement this function , it should be done in two events, one for adding permissions and one for removing permissions (kinds: 9003,9004)
     const permissionsToAdd = newPermissions.filter((permission) => {
       // @ts-ignore
       return !oldPermissions.includes(permission);
@@ -29,13 +29,12 @@ export const GroupDetailsEditAdmins = () => {
       // @ts-ignore
       return !newPermissions.includes(permission);
     });
-    // console.log(pubkey, oldPermissions, newPermissions);
     if (permissionsToAdd.length > 0) {
       handleAddAdminPermissions(pubkey, permissionsToAdd);
     }
-
-    console.log('permissionsToAdd', permissionsToAdd);
-    console.log('permissionsToRemove', permissionsToRemove);
+    if (permissionsToRemove.length > 0) {
+      handleRemoveAdminPermissions(pubkey, permissionsToRemove);
+    }
   };
 
   const columns = adminsColumns(removeAdmins, updateAdminPermissions);
