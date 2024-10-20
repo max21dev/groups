@@ -127,7 +127,6 @@ export const adminsColumns: (
       };
       return (
         <div>
-          {/* Set Roles Dialog */}
           <ConfirmDialog
             triggerButton={
               <Button variant="default" className="mb-2">
@@ -144,7 +143,7 @@ export const adminsColumns: (
           >
             <p>Change Permission for this user</p>
             <p>{String(row?.getValue('publicKey'))?.slice(0, 10) ?? '-'}...</p>
-            <p className="no ">
+            <p>
               {GroupAdminAvailablePermission.map((permission: GroupAdminPermission) => (
                 <div className="m-2" key={permission}>
                   <Checkbox
@@ -155,7 +154,6 @@ export const adminsColumns: (
                   <span className="ml-2"> {permission}</span>
                 </div>
               ))}
-              {/* Add more permissions or other dynamic content */}
             </p>
           </ConfirmDialog>
 
