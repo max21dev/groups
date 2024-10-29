@@ -1,14 +1,20 @@
+import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FileImage, Mic, Paperclip, PlusCircle, SendHorizontal, ThumbsUp } from 'lucide-react';
-
 import { EmojiPicker } from '@/shared/components/emoji-picker';
-import { buttonVariants } from '@/shared/components/ui/button';
+import { Button, buttonVariants } from '@/shared/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/components/ui/popover';
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTrigger,
+} from '@/shared/components/ui/dialog';
 import { Textarea } from '@/shared/components/ui/textarea';
-
 import { cn } from '@/shared/utils';
-
 import { useChatBottomBar } from './hooks';
+import { ImageSelector } from '@/features/chats/chat-bottom-bar/image-selector';
 
 const BottomBarIcons = [{ icon: FileImage }, { icon: Paperclip }];
 
@@ -30,12 +36,23 @@ export const ChatBottomBar = () => {
     messages,
   } = useChatBottomBar();
 
+  const [imageDialogOpen, setImageDialogOpen] = useState(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+
+  const handleInsertImage = () => {
+    if (selectedImageUrl) {
+      setMessage((prevMessage) => `${prevMessage} ${selectedImageUrl}`);
+      setSelectedImageUrl(null);
+      setImageDialogOpen(false);
+    }
+  };
+
   if (!activeUser) {
     return (
       <div className="p-2 flex flex-col w-full items-center gap-2">
         <button
           className={cn(buttonVariants({ variant: 'outline', size: 'lg' }))}
-          onClick={() => openLoginModal()}
+          onClick={openLoginModal}
         >
           To send messages, please login first.
         </button>
@@ -121,20 +138,48 @@ export const ChatBottomBar = () => {
               )}
             </PopoverContent>
           </Popover>
+          <Dialog open={imageDialogOpen} onOpenChange={setImageDialogOpen}>
+            <DialogTrigger asChild>
+              <div
+                key={'FileImage'}
+                className={cn(
+                  buttonVariants({ variant: 'ghost', size: 'icon' }),
+                  'h-9 w-9',
+                  'dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-accent-foreground',
+                )}
+              >
+                <FileImage size={20} className="text-muted-foreground" />
+              </div>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>Select an option for adding image to your message</DialogHeader>
+              <ImageSelector setImage={(url) => setSelectedImageUrl(url)} />
+              <DialogFooter>
+                <Button
+                  onClick={() => setImageDialogOpen(false)}
+                  variant={'outline'}
+                >Close</Button>
+                <Button
+                  className={cn(buttonVariants({ variant: 'default' }))}
+                  onClick={handleInsertImage}
+                >
+                  Insert Image
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
           {!message.trim() && (
             <div className="flex">
-              {BottomBarIcons.map((icon, index) => (
-                <div
-                  key={index}
-                  className={cn(
-                    buttonVariants({ variant: 'ghost', size: 'icon' }),
-                    'h-9 w-9',
-                    'dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-accent-foreground',
-                  )}
-                >
-                  <icon.icon size={20} className="text-muted-foreground" />
-                </div>
-              ))}
+              <div
+                key={'Paperclip'}
+                className={cn(
+                  buttonVariants({ variant: 'ghost', size: 'icon' }),
+                  'h-9 w-9',
+                  'dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-accent-foreground',
+                )}
+              >
+                <Paperclip size={20} className="text-muted-foreground" />
+              </div>
             </div>
           )}
         </div>
