@@ -8,7 +8,7 @@ import {
   Dialog,
   DialogContent,
   DialogFooter,
-  DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from '@/shared/components/ui/dialog';
 import { Textarea } from '@/shared/components/ui/textarea';
@@ -152,13 +152,12 @@ export const ChatBottomBar = () => {
               </div>
             </DialogTrigger>
             <DialogContent>
-              <DialogHeader>Select an option for adding image to your message</DialogHeader>
+              <DialogTitle>Select an option for adding image to your message</DialogTitle>
               <ImageSelector setImage={(url) => setSelectedImageUrl(url)} />
               <DialogFooter>
-                <Button
-                  onClick={() => setImageDialogOpen(false)}
-                  variant={'outline'}
-                >Close</Button>
+                <Button onClick={() => setImageDialogOpen(false)} variant={'outline'}>
+                  Close
+                </Button>
                 <Button
                   className={cn(buttonVariants({ variant: 'default' }))}
                   onClick={handleInsertImage}
