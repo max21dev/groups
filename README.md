@@ -30,7 +30,8 @@ This client enables users to participate in groups managed by relays, where acce
   - 🚧 Mention users in messages.
   - 🚧 Pin important messages.
   - 🚧 Receive notifications for new messages.
-  - 🚧 Attach images and files.
+  - ✅ upload images.
+  - 🚧 Attach files.
   - 🚧 Create and manage threads.
   - 🚧 Create and manage polls.
 - **Group Moderation**:
@@ -45,7 +46,10 @@ This client enables users to participate in groups managed by relays, where acce
     - ✅ View admins (kind 39001).
     - ✅ Remove user (kind 9001).
   - 🚧 Moderate group content and messages.
+      - ✅ Add admin permission (kind 9003).
+      - ✅ Remove admin permission (kind 9004).
   - 🚧 Create and manage private groups.
+    - ✅ Create private groups.
 
 ## Live Demo
 
@@ -58,10 +62,10 @@ You can access the live demo of **"Groups"** at the following URL:
     - 9000	add-user 🚧
     - 9001	remove-user 🚧
     - 9002	edit-metadata ✅
-    - 9003	add-permission 🚧
-    - 9004	remove-permission 🚧
+    - 9003	add-permission ✅
+    - 9004	remove-permission ✅
     - 9005	delete-event ✅
-    - 9006	edit-group-status 🚧
+    - 9006	edit-group-status ✅
   - ### Chat: 
     - 7 send-reaction ✅
     - 9 send-message ✅
