@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FileImage, Mic, Paperclip, PlusCircle, SendHorizontal, ThumbsUp } from 'lucide-react';
+import { useState } from 'react';
+
 import { EmojiPicker } from '@/shared/components/emoji-picker';
 import { Button, buttonVariants } from '@/shared/components/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/shared/components/ui/popover';
 import {
   Dialog,
   DialogContent,
@@ -11,16 +11,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/shared/components/ui/dialog';
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/components/ui/popover';
 import { Textarea } from '@/shared/components/ui/textarea';
-import { cn } from '@/shared/utils';
-import { useChatBottomBar } from './hooks';
+
 import { ImageSelector } from '@/features/chats/chat-bottom-bar/image-selector';
+
+import { cn } from '@/shared/utils';
+
+import { useChatBottomBar } from './hooks';
 
 const BottomBarIcons = [{ icon: FileImage }, { icon: Paperclip }];
 
 export const ChatBottomBar = () => {
   const {
-    inputRef,
+    textareaRef,
     message,
     setMessage,
     isMember,
@@ -186,7 +190,7 @@ export const ChatBottomBar = () => {
         <AnimatePresence initial={false}>
           <motion.div
             key="input"
-            className="w-full relative"
+            className="w-full relative h-full"
             layout
             initial={{ opacity: 0, scale: 1 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -200,21 +204,21 @@ export const ChatBottomBar = () => {
             }}
           >
             <Textarea
+              ref={textareaRef}
               autoComplete="off"
               value={message}
-              ref={inputRef}
               onKeyDown={handleKeyPress}
               onChange={(event) => setMessage(event.target.value)}
               name="message"
               placeholder="Write a message..."
-              className="w-full border rounded-full flex items-center h-10 resize-none overflow-hidden bg-background"
+              className="w-full border flex items-center resize-none overflow-x-hidden overflow-y-auto bg-background max-h-64"
             ></Textarea>
             <div className="absolute right-2 bottom-2.5 flex gap-2">
               <EmojiPicker
                 onChange={(value) => {
                   setMessage(message + value);
-                  if (inputRef.current) {
-                    inputRef.current.focus();
+                  if (textareaRef.current) {
+                    textareaRef.current.focus();
                   }
                 }}
               />

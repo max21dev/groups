@@ -51,7 +51,7 @@ export function HomePage() {
         </Sidebar>
 
         <div className="w-full">
-          <div className="flex flex-col justify-between w-full h-full">
+          <div className="flex flex-col w-full h-full">
             {!activeGroupId ? (
               <div className="flex flex-col justify-center items-center h-full">
                 <h3>Please select a Group from the list on the left </h3>

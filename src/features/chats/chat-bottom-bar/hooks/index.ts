@@ -16,7 +16,7 @@ import { GroupMessage, Kind, LimitFilter } from '@/shared/types';
 const limitFilter: LimitFilter = { limit: 200 };
 
 export const useChatBottomBar = () => {
-  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [message, setMessage] = useState('');
   const [isMember, setIsMember] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -47,8 +47,8 @@ export const useChatBottomBar = () => {
       setMessage('');
       setReplyTo(undefined);
 
-      if (inputRef.current) {
-        inputRef.current.focus();
+      if (textareaRef.current) {
+        textareaRef.current.focus();
       }
     }
   };
@@ -112,7 +112,7 @@ export const useChatBottomBar = () => {
     isMember,
     replyTo,
     setReplyTo,
-    inputRef,
+    textareaRef,
     messages,
     activeUser,
     openLoginModal,
