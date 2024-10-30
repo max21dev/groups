@@ -37,7 +37,7 @@ This client enables users to participate in groups managed by relays, where acce
 - **Group Moderation**:
   - ✅ Create new groups with custom settings.
     - ✅ Create group (kind 9007).
-  - 🚧 Edit and customize existing groups.
+  - ✅ Edit and customize existing groups.
     - ✅ Update group metadata (kind 9002).
     - ✅ Update group status (kind 9006).
     - ✅ Delete group (kind 9008).
@@ -45,11 +45,16 @@ This client enables users to participate in groups managed by relays, where acce
     - ✅ View members (kind 39002).
     - ✅ View admins (kind 39001).
     - ✅ Remove user (kind 9001).
+    - 🚧 Add user (kind 9000).
   - 🚧 Moderate group content and messages.
       - ✅ Add admin permission (kind 9003).
       - ✅ Remove admin permission (kind 9004).
+      - ✅ Delete message (kind 9005).
+      - 🚧 Ban user.
+      - 🚧 Change member to admin.
   - 🚧 Create and manage private groups.
     - ✅ Create private groups.
+    - 🚧 Join private groups.
 
 ## Live Demo
 
