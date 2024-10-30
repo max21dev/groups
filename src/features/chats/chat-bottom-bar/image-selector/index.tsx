@@ -62,10 +62,8 @@ export const ImageSelector = ({ setImage }: Props) => {
     <Tabs defaultValue="upload" className="w-full mt-4">
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="upload">Upload</TabsTrigger>
-        <TabsTrigger value="stock">Stock Images</TabsTrigger>
         <TabsTrigger value="url">URL</TabsTrigger>
       </TabsList>
-
       <TabsContent value="upload">
         <div className="mt-4">
           <h4 className="text-lg">Image / Upload</h4>
@@ -93,8 +91,6 @@ export const ImageSelector = ({ setImage }: Props) => {
           </div>
         </div>
       </TabsContent>
-
-      <TabsContent value="stock">Coming soon!!</TabsContent>
 
       <TabsContent value="url">
         <div className="mt-4">
