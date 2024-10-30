@@ -1,6 +1,8 @@
 import { useActiveUser, useNewEvent } from 'nostr-hooks';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { useToast } from '@/shared/components/ui/use-toast';
+
 import {
   useActiveGroup,
   useGlobalNdk,
@@ -20,6 +22,7 @@ export const useChatBottomBar = () => {
   const [message, setMessage] = useState('');
   const [isMember, setIsMember] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   const replyTo = useStore((state) => state.replyTo);
   const setReplyTo = useStore((state) => state.setReplyTo);
@@ -34,6 +37,8 @@ export const useChatBottomBar = () => {
 
   const { activeUser } = useActiveUser({ customNdk: globalNdk });
   const { createNewEvent } = useNewEvent({ customNdk: nip29Ndk });
+
+  const { toast } = useToast();
 
   const handleThumbsUp = () => {
     sendMessage('👍', replyTo);
@@ -94,6 +99,62 @@ export const useChatBottomBar = () => {
     //TODO: check if join request was successful
   };
 
+  const addUploadedImageUrlToMessage = (url: string) => {
+    setMessage((prev) => {
+      if (prev.trim().length == 0) {
+        return url;
+      }
+
+      return `${prev}\n${url}`;
+    });
+
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  };
+
+  const handleUploadError = (e: unknown) => {
+    console.error(e);
+    toast({ title: 'Error', description: 'Failed to upload image', variant: 'destructive' });
+  };
+
+  const openImageUploadDialog = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+
+    input.onchange = (event) => {
+      const file = (event.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('fileToUpload', file);
+
+      setIsUploadingImage(true);
+
+      fetch(import.meta.env.VITE_NOSTR_BUILD_UPLOAD_API_ENDPOINT, {
+        method: 'POST',
+        body: formData,
+      })
+        .then((res) => res.json())
+        .then(({ status, data }) => {
+          if (status === 'success' && data?.[0]?.url) {
+            addUploadedImageUrlToMessage(data[0].url);
+          } else {
+            handleUploadError(status);
+          }
+        })
+        .catch((e) => {
+          handleUploadError(e);
+        })
+        .finally(() => {
+          setIsUploadingImage(false);
+        });
+    };
+
+    input.click();
+  };
+
   useEffect(() => {
     if (!activeUser) return;
 
@@ -116,5 +177,7 @@ export const useChatBottomBar = () => {
     messages,
     activeUser,
     openLoginModal,
+    openImageUploadDialog,
+    isUploadingImage,
   };
 };
