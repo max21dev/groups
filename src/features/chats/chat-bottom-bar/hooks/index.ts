@@ -118,7 +118,7 @@ export const useChatBottomBar = () => {
     toast({ title: 'Error', description: 'Failed to upload image', variant: 'destructive' });
   };
 
-  const openImageUploadDialog = () => {
+  const openUploadImageDialog = () => {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
@@ -177,7 +177,7 @@ export const useChatBottomBar = () => {
     messages,
     activeUser,
     openLoginModal,
-    openImageUploadDialog,
+    openUploadImageDialog,
     isUploadingImage,
   };
 };
