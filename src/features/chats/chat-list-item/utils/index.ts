@@ -4,6 +4,8 @@ export const categorizeMessageContent = (content: string): CategorizedMessageCon
   // Regular expression to match URLs and image URLs
   const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
   const imageRegex = /\.(jpg|jpeg|png|gif|bmp|svg|webp)$/i;
+  const videoRegex = /\.(mp4|mov)$/i;
+  const youtubeRegex = /https?:\/\/(www\.)?youtube\.com\/watch\?v=[\w-]+$/i;
 
   const parts = content.split(urlRegex).filter((part) => part !== '');
 
@@ -11,7 +13,9 @@ export const categorizeMessageContent = (content: string): CategorizedMessageCon
     if (urlRegex.test(part)) {
       if (imageRegex.test(part)) {
         return { category: 'image', content: part };
-      } else {
+      } else if (videoRegex.test(part) || youtubeRegex.test(part)) {
+        return { category: 'video', content: part };
+      }else {
         return { category: 'url', content: part };
       }
     } else {

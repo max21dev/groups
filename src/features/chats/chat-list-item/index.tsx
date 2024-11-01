@@ -1,5 +1,6 @@
 import { ThumbsDown, ThumbsUp, Trash2, Undo, Zap } from 'lucide-react';
 import { useState } from 'react';
+import ReactPlayer from 'react-player'
 
 import {
   ContextMenu,
@@ -122,6 +123,16 @@ export const ChatListItem = ({
                           max-width="200"
                           onClick={() => setSelectedImage(part.content)}
                         />
+                      );
+                    } else if (part.category == 'video') {
+                      return (
+                        <div className="max-w-full rounded-lg mt-2 react-player">
+                        <ReactPlayer
+                          width={500}
+                          url={part.content}
+                          controls={true}
+                        />
+                        </div>
                       );
                     } else if (part.category == 'url') {
                       return (

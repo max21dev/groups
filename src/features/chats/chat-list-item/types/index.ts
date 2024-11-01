@@ -10,7 +10,7 @@ export type ChatListItemProps = {
   setDeletedMessages: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-export type MessageContentCategory = 'text' | 'image' | 'url';
+export type MessageContentCategory = 'text' | 'image' | 'video' | 'url';
 
 export type CategorizedMessageContent = {
   category: MessageContentCategory;
