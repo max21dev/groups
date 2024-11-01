@@ -7,7 +7,7 @@ import { LoginButton } from './login-button';
 import { ReplyTo } from './reply-to';
 import { SendButton } from './send-button';
 import { ThumbsUpButton } from './thumbs-up-button';
-import { UploadImageButton } from './upload-image-button';
+import { UploadImageButton } from './upload-media-button';
 
 export const ChatBottomBar = () => {
   const {
@@ -24,8 +24,8 @@ export const ChatBottomBar = () => {
     sendJoinRequest,
     activeUser,
     messages,
-    openUploadImageDialog,
-    isUploadingImage,
+    openUploadMediaDialog,
+    isUploadingMedia,
     openLoginModal,
   } = useChatBottomBar();
 
@@ -43,8 +43,8 @@ export const ChatBottomBar = () => {
 
       <div className="w-full h-full flex items-center gap-2">
         <UploadImageButton
-          isUploadingImage={isUploadingImage}
-          openUploadImageDialog={openUploadImageDialog}
+          isUploadingMedia={isUploadingMedia}
+          openUploadMediaDialog={openUploadMediaDialog}
         />
 
         <InputMessage

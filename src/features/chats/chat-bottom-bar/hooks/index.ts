@@ -22,7 +22,7 @@ export const useChatBottomBar = () => {
   const [message, setMessage] = useState('');
   const [isMember, setIsMember] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [isUploadingMedia, setisUploadingMedia] = useState(false);
 
   const replyTo = useStore((state) => state.replyTo);
   const setReplyTo = useStore((state) => state.setReplyTo);
@@ -99,7 +99,7 @@ export const useChatBottomBar = () => {
     //TODO: check if join request was successful
   };
 
-  const addUploadedImageUrlToMessage = (url: string) => {
+  const addUploadedMediaUrlToMessage = (url: string) => {
     setMessage((prev) => {
       if (prev.trim().length == 0) {
         return url;
@@ -115,13 +115,13 @@ export const useChatBottomBar = () => {
 
   const handleUploadError = (e: unknown) => {
     console.error(e);
-    toast({ title: 'Error', description: 'Failed to upload image', variant: 'destructive' });
+    toast({ title: 'Error', description: 'Failed to upload media file', variant: 'destructive' });
   };
 
-  const openUploadImageDialog = () => {
+  const openUploadMediaDialog = () => {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = 'image/*';
+    input.accept = 'image/*,video/*';
 
     input.onchange = (event) => {
       const file = (event.target as HTMLInputElement).files?.[0];
@@ -130,7 +130,7 @@ export const useChatBottomBar = () => {
       const formData = new FormData();
       formData.append('fileToUpload', file);
 
-      setIsUploadingImage(true);
+      setisUploadingMedia(true);
 
       fetch(import.meta.env.VITE_NOSTR_BUILD_UPLOAD_API_ENDPOINT, {
         method: 'POST',
@@ -139,7 +139,7 @@ export const useChatBottomBar = () => {
         .then((res) => res.json())
         .then(({ status, data }) => {
           if (status === 'success' && data?.[0]?.url) {
-            addUploadedImageUrlToMessage(data[0].url);
+            addUploadedMediaUrlToMessage(data[0].url);
           } else {
             handleUploadError(status);
           }
@@ -148,7 +148,7 @@ export const useChatBottomBar = () => {
           handleUploadError(e);
         })
         .finally(() => {
-          setIsUploadingImage(false);
+          setisUploadingMedia(false);
         });
     };
 
@@ -177,7 +177,7 @@ export const useChatBottomBar = () => {
     messages,
     activeUser,
     openLoginModal,
-    openUploadImageDialog,
-    isUploadingImage,
+    openUploadMediaDialog,
+    isUploadingMedia,
   };
 };

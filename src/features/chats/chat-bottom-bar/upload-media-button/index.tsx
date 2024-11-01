@@ -5,12 +5,12 @@ import { Button } from '@/shared/components/ui/button';
 
 export type UploadImageButtonProps = {
   openUploadMediaDialog: () => void;
-  isUploadingImage: boolean;
+  isUploadingMedia: boolean;
 };
 
 export const UploadImageButton = ({
   openUploadMediaDialog,
-  isUploadingImage,
+  isUploadingMedia,
 }: UploadImageButtonProps) => {
   return (
     <Button
@@ -18,9 +18,9 @@ export const UploadImageButton = ({
       variant="link"
       className="group"
       onClick={openUploadMediaDialog}
-      disabled={isUploadingImage}
+      disabled={isUploadingMedia}
     >
-      {!isUploadingImage ? (
+      {!isUploadingMedia ? (
         <PaperclipIcon
           size={20}
           className="text-muted-foreground group-hover:text-accent-foreground"
