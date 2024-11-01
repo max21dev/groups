@@ -61,6 +61,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.10",
     "react-hook-form": "^7.50.1",
+    "react-player": "^2.16.0",
     "react-resizable-panels": "^1.0.10",
     "react-router-dom": "^6.21.3",
     "react-textarea-autosize": "^8.5.4",

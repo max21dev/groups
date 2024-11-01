@@ -4,12 +4,12 @@ import { Spinner } from '@/shared/components/spinner';
 import { Button } from '@/shared/components/ui/button';
 
 export type UploadImageButtonProps = {
-  openUploadImageDialog: () => void;
+  openUploadMediaDialog: () => void;
   isUploadingImage: boolean;
 };
 
 export const UploadImageButton = ({
-  openUploadImageDialog,
+  openUploadMediaDialog,
   isUploadingImage,
 }: UploadImageButtonProps) => {
   return (
@@ -17,7 +17,7 @@ export const UploadImageButton = ({
       size="icon"
       variant="link"
       className="group"
-      onClick={openUploadImageDialog}
+      onClick={openUploadMediaDialog}
       disabled={isUploadingImage}
     >
       {!isUploadingImage ? (
