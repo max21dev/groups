@@ -26,7 +26,7 @@ This client enables users to participate in groups managed by relays, where acce
   - ✅ React to messages with emojis.
   - ✅ Reply to messages.
   - ✅ Zap to messages sender.
-  - 🚧 Reaction to message (kind:7 in supported relay).
+  - ✅ Reaction to message (kind:7 in supported relay).
   - 🚧 Mention users in messages.
   - 🚧 Pin important messages.
   - 🚧 Receive notifications for new messages.
