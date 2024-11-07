@@ -15,6 +15,7 @@ This client enables users to participate in groups managed by relays, where acce
   - ✅ Real-time updates.
   - ✅ Built-in caching and data persistence.
   - ✅ Image and URL previews.
+  - ✅ Video previews for direct links and YouTube.
   - ✅ Dark mode support.
   - 🚧 Customizable settings.
   - 🚧 Offline support.
