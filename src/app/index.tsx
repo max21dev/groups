@@ -4,20 +4,20 @@ import { useLogin, useSigner } from 'nostr-hooks';
 import { useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
 
-import { router } from '@/pages';
-import { ThemeProvider } from '@/shared/components/theme-provider';
 import { Toaster } from '@/shared/components/ui/toaster';
+
+import { ThemeProvider } from '@/shared/components/theme-provider';
+
 import { useGlobalNdk, useNip29Ndk } from '@/shared/hooks';
 import { useStore } from '@/shared/store';
+
+import { router } from '@/pages';
 
 import './index.css';
 
 export const App = () => {
-  const { setRelayStatus, activeRelayUrl } = useStore((state) => ({
-    relays: state.relays,
-    setRelayStatus: state.setRelayStatus,
-    activeRelayUrl: state.activeRelayUrl,
-  }));
+  const setRelayStatus = useStore((state) => state.setRelayStatus);
+  const activeRelayUrl = useStore((state) => state.activeRelayUrl);
 
   const { globalNdk, setGlobalNdk } = useGlobalNdk();
   const { nip29Ndk, setNip29Ndk } = useNip29Ndk();
