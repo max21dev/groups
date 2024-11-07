@@ -19,17 +19,13 @@ export function HomePage() {
         <Sidebar>
           <div className="flex flex-col w-full h-full">
             <div className="p-2">
-              <div className="flex gap-1">
-                {!isCollapsed && <ModeToggle />}
+              <div className={cn('flex gap-1 w-full', isCollapsed && 'flex-col')}>
+                <ModeToggle />
+
+                {activeUser?.pubkey && <GroupsFilterDropdown />}
 
                 <RelaySelectDropdown />
               </div>
-
-              {activeUser?.pubkey && (
-                <div className="mt-2 flex gap-1">
-                  <GroupsFilterDropdown />
-                </div>
-              )}
             </div>
 
             <div className="p-2">{!isCollapsed && <RelayGroupsCount />}</div>

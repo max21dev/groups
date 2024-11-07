@@ -13,21 +13,14 @@ import {
 import { useGroupFilterDropDown } from './hooks';
 
 export const GroupsFilterDropdown = () => {
-  const { setBelongTo, setManage, setOwn, setNotJoined, groupsFilter, isCollapsed } =
-    useGroupFilterDropDown();
+  const { setBelongTo, setManage, setOwn, setNotJoined, groupsFilter } = useGroupFilterDropDown();
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          {isCollapsed ? (
-            <Button variant="outline">
-              <Filter />
-            </Button>
-          ) : (
-            <Button variant="outline" className="w-full">
-              {'Apply filter for Groups list'}
-            </Button>
-          )}
+          <Button variant="outline">
+            <Filter className="h-4 w-4" />
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-full">
           <DropdownMenuLabel>Show Groups that:</DropdownMenuLabel>

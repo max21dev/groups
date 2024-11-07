@@ -46,7 +46,7 @@ export const RelaySelectDropdown = () => {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger
-          className={cn(relays.find(r => r.url === activeRelayUrl)?.status)}
+          className={cn(relays.find((r) => r.url === activeRelayUrl)?.status)}
           asChild
         >
           {isCollapsed ? (
@@ -54,8 +54,8 @@ export const RelaySelectDropdown = () => {
               <Globe />
             </Button>
           ) : (
-            <Button variant="outline" className="w-full">
-              {activeRelayUrl}
+            <Button variant="outline" className="w-full text-xs font-light">
+              {activeRelayUrl.replace('wss://', '').replace('ws://', '')}
             </Button>
           )}
         </DropdownMenuTrigger>
