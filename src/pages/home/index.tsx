@@ -53,10 +53,7 @@ export function HomePage() {
           <div className="flex flex-col w-full h-full">
             {!activeGroupId ? (
               <div className="flex flex-col justify-center items-center h-full">
-                <h3>Please select a Group from the list on the left </h3>
-                <span className="m-8">Or</span>
-                {/*We need to use relay create form instead of adding new event to cover relay permission functionality */}
-                {/*<CreateGroup />*/}
+                <h2>💬 Groups</h2>
               </div>
             ) : (
               <>
