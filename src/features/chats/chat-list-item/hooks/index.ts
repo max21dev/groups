@@ -1,5 +1,8 @@
+import { NDKKind } from '@nostr-dev-kit/ndk';
 import { useActiveUser, useNewEvent } from 'nostr-hooks';
 import { useMemo } from 'react';
+
+import { useToast } from '@/shared/components/ui/use-toast';
 
 import {
   useActiveGroup,
@@ -15,8 +18,6 @@ import { useStore } from '@/shared/store';
 
 import { ChatListItemProps } from '../types';
 import { categorizeMessageContent, fetchFirstContentImage } from '../utils';
-import { useToast } from '@/shared/components/ui/use-toast';
-import { Kind } from '@/shared/types';
 
 export const useChatListItem = ({
   message,
@@ -74,7 +75,8 @@ export const useChatListItem = ({
     }
 
     const event = createNewEvent();
-    event.kind = Kind.KindSimpleGroupDeleteEvent;
+    // TODO: replace with NDKKind when it's available
+    event.kind = 9005;
     event.tags = [
       ['h', groupId],
       ['e', eventId],
@@ -94,7 +96,7 @@ export const useChatListItem = ({
     }
 
     const event = createNewEvent();
-    event.kind = Kind.KindReaction;
+    event.kind = NDKKind.Reaction;
     event.content = like ? '+' : '-';
     event.tags = [
       ['h', groupId],

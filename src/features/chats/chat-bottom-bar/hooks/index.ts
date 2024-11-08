@@ -1,3 +1,4 @@
+import { NDKKind } from '@nostr-dev-kit/ndk';
 import { useActiveUser, useNewEvent } from 'nostr-hooks';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -13,7 +14,7 @@ import {
   useNip29Ndk,
 } from '@/shared/hooks';
 import { useStore } from '@/shared/store';
-import { GroupMessage, Kind, LimitFilter } from '@/shared/types';
+import { GroupMessage, LimitFilter } from '@/shared/types';
 
 const limitFilter: LimitFilter = { limit: 200 };
 
@@ -78,7 +79,7 @@ export const useChatBottomBar = () => {
     }
 
     const event = createNewEvent();
-    event.kind = Kind.KindSimpleGroupChatMessage;
+    event.kind = NDKKind.GroupChat;
     event.content = message;
     event.tags = [['h', activeGroupId], ...(replyTo?.id ? [['e', replyTo.id, '', 'reply']] : [])];
     event.publish();
@@ -93,7 +94,7 @@ export const useChatBottomBar = () => {
     if (!activeGroupId) return;
 
     const event = createNewEvent();
-    event.kind = Kind.KindSimpleGroupJoinRequest;
+    event.kind = NDKKind.GroupAdminRequestJoin;
     event.tags = [['h', activeGroupId]];
     event.publish();
     //TODO: check if join request was successful

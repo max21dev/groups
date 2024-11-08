@@ -1,5 +1,10 @@
-import { GroupAdminPermission, GroupAdminPermissionEnum, GroupMetadata, GroupStatus, Kind } from '@/shared/types';
-import { NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
+import {
+  GroupAdminPermission,
+  GroupAdminPermissionEnum,
+  GroupMetadata,
+  GroupStatus,
+} from '@/shared/types';
+import { NDKEvent, NDKKind, NDKUser } from '@nostr-dev-kit/ndk';
 
 export const createGroup = (
   activeUser: NDKUser | undefined,
@@ -14,7 +19,7 @@ export const createGroup = (
     return;
   }
   const event = createNewEvent();
-  event.kind = Kind.KindSimpleGroupCreateGroup;
+  event.kind = NDKKind.GroupAdminCreateGroup;
   event.tags = [['h', groupMetadata.id]];
   event.publish().then(
     (r) => {
@@ -37,7 +42,8 @@ export const addGroupPermissions = (
     return;
   }
   const event = createNewEvent();
-  event.kind = Kind.KindSimpleGroupAddPermission;
+  // TODO: should update with new nip29 spec and NDKKind
+  event.kind = 9003;
   event.tags = [
     ['h', groupMetadata.id],
     ['p', activeUser.pubkey],
@@ -69,7 +75,7 @@ export const updateGroupMetadata = (
   }
 
   const event = createNewEvent();
-  event.kind = Kind.KindSimpleGroupEditMetadata;
+  event.kind = NDKKind.GroupAdminEditMetadata;
 
   const tagsArray: [string, string][] = [
     ['h', groupMetadata.id],
@@ -97,7 +103,7 @@ export const updateGroupStatus = (
   }
 
   const event = createNewEvent();
-  event.kind = Kind.KindSimpleGroupEditGroupStatus;
+  event.kind = NDKKind.GroupAdminEditStatus;
 
   event.tags = [
     ['h', groupStatus.id],
@@ -123,7 +129,8 @@ export const deleteGroup = (
     return;
   }
   const event = createNewEvent();
-  event.kind = Kind.KindSimpleGroupDeleteGroup;
+  // TODO: update with new nip29 spec and NDKKind
+  event.kind = 9008;
   event.tags = [['h', groupId]];
   event.publish().then(
     (r) => {
@@ -146,7 +153,8 @@ export const leaveGroup = (
     return;
   }
   const event = createNewEvent();
-  event.kind = Kind.KindSimpleGroupLeaveRequest;
+  // TODO: update with new nip29 spec and NDKKind
+  event.kind = 9022;
   event.tags = [['h', groupId]];
   event.publish().then(
     (r) => {
@@ -170,7 +178,7 @@ export const removeUserFromGroup = (
     return;
   }
   const event = createNewEvent();
-  event.kind = Kind.KindSimpleGroupRemoveUser;
+  event.kind = NDKKind.GroupAdminRemoveUser;
   event.tags = [
     ['h', groupId],
     ['p', pubKey],
@@ -198,7 +206,8 @@ export const addAdminPermissions = (
     return;
   }
   const event = createNewEvent();
-  event.kind = Kind.KindSimpleGroupAddPermission;
+  // TODO: update with new nip29 spec and NDKKind
+  event.kind = 9003;
   event.tags = [
     ['h', groupId],
     ['p', pubKey],
@@ -230,7 +239,8 @@ export const removeAdminPermissions = (
     return;
   }
   const event = createNewEvent();
-  event.kind = Kind.KindSimpleGroupRemovePermission;
+  // TODO: update with new nip29 spec and NDKKind
+  event.kind = 9004;
   event.tags = [
     ['h', groupId],
     ['p', pubKey],
