@@ -97,6 +97,7 @@ export const useChatBottomBar = () => {
     event.tags = [['h', activeGroupId]];
     event.publish();
     //TODO: check if join request was successful
+    toast({ title: 'Join Request Sent', description: 'Your join request has been sent' });
   };
 
   const addUploadedMediaUrlToMessage = (url: string) => {
