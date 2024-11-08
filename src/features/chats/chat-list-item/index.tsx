@@ -1,6 +1,6 @@
 import { ThumbsDown, ThumbsUp, Trash2, Undo, Zap } from 'lucide-react';
 import { useState } from 'react';
-import ReactPlayer from 'react-player'
+import ReactPlayer from 'react-player';
 
 import {
   ContextMenu,
@@ -82,11 +82,15 @@ export const ChatListItem = ({
 
               {message.replyTo && (
                 <div
-                  className="mb-2 text-xs bg-primary/20 cursor-pointer border-l-4 border-primary/25 rounded-lg p-1 flex items-start"
+                  className="mb-2 text-xs bg-primary/20 cursor-pointer border-l-4 border-primary/25 rounded-lg p-1 flex items-start gap-2"
                   onClick={() => scrollToMessage(message.replyTo || '')}
                 >
                   {firstReplyImageUrl && (
-                    <img src={loader(firstReplyImageUrl, { w: 50 })} alt="Reply Message Image" />
+                    <img
+                      className="rounded-sm"
+                      src={loader(firstReplyImageUrl, { w: 50, h: 50 })}
+                      alt="Reply Message Image"
+                    />
                   )}
                   <div>
                     <div className="text-xs font-semibold opacity-60">
@@ -127,11 +131,7 @@ export const ChatListItem = ({
                     } else if (part.category == 'video') {
                       return (
                         <div className="max-w-full rounded-lg mt-2 react-player">
-                        <ReactPlayer
-                          width={500}
-                          url={part.content}
-                          controls={true}
-                        />
+                          <ReactPlayer width={500} url={part.content} controls={true} />
                         </div>
                       );
                     } else if (part.category == 'url') {
