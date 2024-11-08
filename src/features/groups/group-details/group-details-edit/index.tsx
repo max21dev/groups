@@ -1,21 +1,24 @@
 import { Dispatch, SetStateAction, useState } from 'react';
+
 import { Button } from '@/shared/components/ui/button';
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogFooter,
+  DialogHeader,
   DialogTitle,
 } from '@/shared/components/ui/dialog';
+import { Label } from '@/shared/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 
 import { Group } from '@/shared/types';
+
 import { useGroupDetailsEdit } from './hooks';
-import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/shared/components/ui/tabs';
-import { Label } from '@/shared/components/ui/label.tsx';
-import { GroupDetailsEditStatus } from '@/features/groups/group-details/group-details-edit-status';
-import { GroupDetailsEditMetadata } from '@/features/groups/group-details/group-details-edit-metadata';
-import { GroupDetailsEditMembers } from '@/features/groups/group-details/group-details-edit-members';
+
 import { GroupDetailsEditAdmins } from '@/features/groups/group-details/group-details-edit-admins';
+import { GroupDetailsEditMembers } from '@/features/groups/group-details/group-details-edit-members';
+import { GroupDetailsEditMetadata } from '@/features/groups/group-details/group-details-edit-metadata';
+import { GroupDetailsEditStatus } from '@/features/groups/group-details/group-details-edit-status';
 
 type Props = {
   group: Group | undefined;
