@@ -3,6 +3,7 @@ import { useSubscribe } from 'nostr-hooks';
 import { useMemo } from 'react';
 
 import { useNip29Ndk } from '@/shared/hooks';
+import { GroupMember } from '@/shared/types';
 
 export const useGroupMembers = (groupId: string | undefined) => {
   const { nip29Ndk } = useNip29Ndk();
@@ -22,9 +23,12 @@ export const useGroupMembers = (groupId: string | undefined) => {
   const members = useMemo(
     () =>
       events && events.length > 0
-        ? events[events.length - 1].getMatchingTags('p').map((pTag) => ({
-            publicKey: pTag[1],
-          }))
+        ? events[events.length - 1].getMatchingTags('p').map(
+            (pTag) =>
+              ({
+                publicKey: pTag[1],
+              }) as GroupMember,
+          )
         : [],
     [events],
   );

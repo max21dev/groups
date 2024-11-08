@@ -3,7 +3,7 @@ import { useSubscribe } from 'nostr-hooks';
 import { useMemo } from 'react';
 
 import { useNip29Ndk } from '@/shared/hooks';
-import { LimitFilter } from '@/shared/types';
+import { GroupMessage, LimitFilter } from '@/shared/types';
 
 export const useGroupMessages = (
   groupId: string | undefined,
@@ -32,15 +32,18 @@ export const useGroupMessages = (
 
   const messages = useMemo(
     () =>
-      messagesEvents.map((e) => ({
-        id: e.id,
-        authorPublicKey: e.pubkey,
-        groupId: String(e.getMatchingTags('h')[0]?.[1]),
-        createdAt: e.created_at || 1,
-        content: e.content,
-        replyTo: e.getMatchingTags('e')[0] ? String(e.getMatchingTags('e')[0][1]) : null,
-        event: e,
-      })),
+      messagesEvents.map(
+        (e) =>
+          ({
+            id: e.id,
+            authorPublicKey: e.pubkey,
+            groupId: String(e.getMatchingTags('h')[0]?.[1]),
+            createdAt: e.created_at || 1,
+            content: e.content,
+            replyTo: e.getMatchingTags('e')[0] ? String(e.getMatchingTags('e')[0][1]) : null,
+            event: e,
+          }) as GroupMessage,
+      ),
     [messagesEvents],
   );
 

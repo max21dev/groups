@@ -7,8 +7,6 @@ export type Group = {
   about: string;
   privacy: 'public' | 'private';
   type: 'open' | 'closed';
-  admins: GroupAdmin[];
-  members: GroupMember[];
   event: NDKEvent;
 };
 
