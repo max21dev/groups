@@ -14,8 +14,16 @@ import { LimitFilter } from '@/shared/types';
 
 const limitFilter: LimitFilter = { limit: 100 };
 
-export const useGroupsListItem = ({ groupId }: { groupId: string | undefined }) => {
+export const useGroupsListItem = ({
+  groupId,
+  setLastMessageTimestamp,
+}: {
+  groupId: string | undefined;
+  setLastMessageTimestamp: React.Dispatch<React.SetStateAction<Map<string, number>>>;
+}) => {
   const [showGroup, setShowGroup] = useState<boolean>(true);
+
+  const isCollapsed = useStore((state) => state.isCollapsed);
 
   const groupsFilter = useStore((state) => state.groupsFilter);
 
@@ -53,7 +61,18 @@ export const useGroupsListItem = ({ groupId }: { groupId: string | undefined }) 
 
   const { messages } = useGroupMessages(groupId, limitFilter);
 
-  const isCollapsed = useStore((state) => state.isCollapsed);
+  useEffect(() => {
+    if (messages.length > 0) {
+      setLastMessageTimestamp((prev) => {
+        if (!groupId) return prev;
+
+        const newMap = new Map(prev);
+        newMap.set(groupId, messages[0].createdAt);
+
+        return newMap;
+      });
+    }
+  }, [messages, setLastMessageTimestamp, groupId]);
 
   return {
     setActiveGroupId,

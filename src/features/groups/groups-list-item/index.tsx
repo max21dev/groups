@@ -1,15 +1,22 @@
 import { GroupAvatar } from '@/features/groups';
 
-import { Button } from '@/shared/components/ui/button.tsx';
+import { Button } from '@/shared/components/ui/button';
 
 import { cn, ellipsis, displayTime } from '@/shared/utils';
 
 import { useGroupsListItem } from './hooks';
 
-export const GroupsListItem = ({ groupId }: { groupId: string | undefined }) => {
+export const GroupsListItem = ({
+  groupId,
+  setLastMessageTimestamp,
+}: {
+  groupId: string | undefined;
+  setLastMessageTimestamp: React.Dispatch<React.SetStateAction<Map<string, number>>>;
+}) => {
   const { group, isCollapsed, messages, setActiveGroupId, activeGroupId, showGroup } =
     useGroupsListItem({
       groupId,
+      setLastMessageTimestamp,
     });
 
   if (!group || !showGroup) return null;
