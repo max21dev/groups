@@ -33,27 +33,31 @@ export type GroupMember = {
 };
 
 export enum GroupAdminPermissionEnum {
-  AddUser = 'add-user',
-  EditMetadata = 'edit-metadata',
-  DeleteEvent = 'delete-event',
-  RemoveUser = 'remove-user',
-  AddPermission = 'add-permission',
-  RemovePermission = 'remove-permission',
-  EditGroupStatus = 'edit-group-status',
-  CreateGroup = 'create-group',
-  DeleteGroup = 'delete-group',
+  king='king',
+  bishop='bishop',
+  // AddUser = 'add-user',
+  // EditMetadata = 'edit-metadata',
+  // DeleteEvent = 'delete-event',
+  // RemoveUser = 'remove-user',
+  // AddPermission = 'add-permission',
+  // RemovePermission = 'remove-permission',
+  // EditGroupStatus = 'edit-group-status',
+  // CreateGroup = 'create-group',
+  // DeleteGroup = 'delete-group',
 }
 
 export const GroupAdminAvailablePermission: GroupAdminPermission[] = [
-  GroupAdminPermissionEnum.AddUser,
-  GroupAdminPermissionEnum.EditMetadata,
-  GroupAdminPermissionEnum.DeleteEvent,
-  GroupAdminPermissionEnum.RemoveUser,
-  GroupAdminPermissionEnum.AddPermission,
-  GroupAdminPermissionEnum.RemovePermission,
-  GroupAdminPermissionEnum.EditGroupStatus,
-  GroupAdminPermissionEnum.CreateGroup,
-  GroupAdminPermissionEnum.DeleteGroup,
+  GroupAdminPermissionEnum.king,
+  GroupAdminPermissionEnum.bishop,
+  // GroupAdminPermissionEnum.AddUser,
+  // GroupAdminPermissionEnum.EditMetadata,
+  // GroupAdminPermissionEnum.DeleteEvent,
+  // GroupAdminPermissionEnum.RemoveUser,
+  // GroupAdminPermissionEnum.AddPermission,
+  // GroupAdminPermissionEnum.RemovePermission,
+  // GroupAdminPermissionEnum.EditGroupStatus,
+  // GroupAdminPermissionEnum.CreateGroup,
+  // GroupAdminPermissionEnum.DeleteGroup,
 ];
 
 export type GroupAdminPermission = `${GroupAdminPermissionEnum}`;
