@@ -20,7 +20,7 @@ export const useMessageReactions = (
             ? []
             : [
                 {
-                  kinds: [7 as NDKKind],
+                  kinds: [NDKKind.Reaction],
                   '#h': [groupId],
                   '#e': [message.id],
                   ...limitFilter,

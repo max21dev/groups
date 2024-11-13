@@ -2,7 +2,7 @@ import { NDKKind } from '@nostr-dev-kit/ndk';
 import { useEffect, useMemo, useState } from 'react';
 
 import { useNip29Ndk } from '@/shared/hooks';
-import { GroupAdmin, GroupAdminPermission } from '@/shared/types';
+import { GroupAdmin, GroupAdminPermission, GroupAdminPermissionEnum } from '@/shared/types';
 
 export const useGroupAdmin = (groupId: string | undefined, adminPublickey: string | undefined) => {
   const { nip29Ndk } = useNip29Ndk();
@@ -25,29 +25,44 @@ export const useGroupAdmin = (groupId: string | undefined, adminPublickey: strin
 
         setAdmin({
           publicKey: pTag[1],
-          permissions: pTag.slice(3) as GroupAdminPermission[],
+          permissions: pTag.slice(2) as GroupAdminPermission[],
         });
       });
   }, [groupId, adminPublickey, nip29Ndk]);
 
   return {
     admin,
-    canAddUser: useMemo(() => admin?.permissions.includes('add-user') || false, [admin]),
-    canRemoveUser: useMemo(() => admin?.permissions.includes('remove-user') || false, [admin]),
+    canAddUser: useMemo(
+      () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
+      [admin],
+    ),
+    canRemoveUser: useMemo(
+      () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
+      [admin],
+    ),
     canAddPermission: useMemo(
-      () => admin?.permissions.includes('add-permission') || false,
+      () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
       [admin],
     ),
     canRemovePermission: useMemo(
-      () => admin?.permissions.includes('remove-permission') || false,
+      () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
       [admin],
     ),
     canEditGroupStatus: useMemo(
-      () => admin?.permissions.includes('edit-group-status') || false,
+      () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
       [admin],
     ),
-    canEditMetadata: useMemo(() => admin?.permissions.includes('edit-metadata') || false, [admin]),
-    canDeleteEvent: useMemo(() => admin?.permissions.includes('delete-event') || false, [admin]),
-    canDeleteGroup: useMemo(() => admin?.permissions.includes('delete-group') || false, [admin]),
+    canEditMetadata: useMemo(
+      () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
+      [admin],
+    ),
+    canDeleteEvent: useMemo(
+      () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
+      [admin],
+    ),
+    canDeleteGroup: useMemo(
+      () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
+      [admin],
+    ),
   };
 };

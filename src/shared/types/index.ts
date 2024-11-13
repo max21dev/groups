@@ -35,6 +35,8 @@ export type GroupMember = {
 export enum GroupAdminPermissionEnum {
   king='king',
   bishop='bishop',
+  ceo='ceo',
+  secretary='secretary',
   // AddUser = 'add-user',
   // EditMetadata = 'edit-metadata',
   // DeleteEvent = 'delete-event',
@@ -49,6 +51,8 @@ export enum GroupAdminPermissionEnum {
 export const GroupAdminAvailablePermission: GroupAdminPermission[] = [
   GroupAdminPermissionEnum.king,
   GroupAdminPermissionEnum.bishop,
+  GroupAdminPermissionEnum.ceo,
+  GroupAdminPermissionEnum.secretary,
   // GroupAdminPermissionEnum.AddUser,
   // GroupAdminPermissionEnum.EditMetadata,
   // GroupAdminPermissionEnum.DeleteEvent,
