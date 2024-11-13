@@ -46,14 +46,14 @@ export const addGroupPermissions = (
   event.kind = 9003;
   event.tags = [
     ['h', groupMetadata.id],
-    ['p', activeUser.pubkey],
-    ['permission', GroupAdminPermissionEnum.AddUser],
-    ['permission', GroupAdminPermissionEnum.EditMetadata],
-    ['permission', GroupAdminPermissionEnum.DeleteEvent],
-    ['permission', GroupAdminPermissionEnum.RemoveUser],
-    ['permission', GroupAdminPermissionEnum.AddPermission],
-    ['permission', GroupAdminPermissionEnum.RemovePermission],
-    ['permission', GroupAdminPermissionEnum.EditGroupStatus],
+    ['p', activeUser.pubkey, GroupAdminPermissionEnum.king],
+    // ['permission', GroupAdminPermissionEnum.AddUser],
+    // ['permission', GroupAdminPermissionEnum.EditMetadata],
+    // ['permission', GroupAdminPermissionEnum.DeleteEvent],
+    // ['permission', GroupAdminPermissionEnum.RemoveUser],
+    // ['permission', GroupAdminPermissionEnum.AddPermission],
+    // ['permission', GroupAdminPermissionEnum.RemovePermission],
+    // ['permission', GroupAdminPermissionEnum.EditGroupStatus],
     //['permission', 'delete-group'], it is not supported on fiatjaf relay29
   ];
   event.publish().then((r) => {
