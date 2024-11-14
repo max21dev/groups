@@ -7,7 +7,7 @@ import { GroupAdminPermission } from '@/shared/types';
 export const GroupDetailsEditAdmins = () => {
   const { activeGroupId } = useActiveGroup();
   const { admins } = useGroupAdmins(activeGroupId);
-  const { handleRemoveUserFromGroup, handleAddAdminPermissions, handleRemoveAdminPermissions } =
+  const { handleRemoveUserFromGroup, handleAddAdminPermissions } =
     useGroupDetails({
       groupId: activeGroupId,
     });
@@ -29,12 +29,13 @@ export const GroupDetailsEditAdmins = () => {
       // @ts-ignore
       return !newPermissions.includes(permission);
     });
-    if (permissionsToAdd.length > 0) {
-      handleAddAdminPermissions(pubkey, permissionsToAdd);
+    if (permissionsToAdd.length > 0 || permissionsToRemove.length > 0) {
+      //with new changes of kin 9000, all permissions(old and new ones) should be send.
+      handleAddAdminPermissions(pubkey, newPermissions);
     }
-    if (permissionsToRemove.length > 0) {
-      handleRemoveAdminPermissions(pubkey, permissionsToRemove);
-    }
+    // if (permissionsToRemove.length > 0) {
+    //   handleRemoveAdminPermissions(pubkey, permissionsToRemove);
+    // }
   };
 
   const columns = adminsColumns(removeAdmins, updateAdminPermissions);
