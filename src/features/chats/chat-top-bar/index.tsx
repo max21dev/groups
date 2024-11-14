@@ -27,9 +27,9 @@ export const ChatTopBar = () => {
               <GroupAvatar groupId={activeGroupId} />
 
               <div className="flex flex-col">
-                <span className="font-light text-xs">{group?.id}</span>
+                {/* <span className="font-light text-xs">{group?.id}</span> */}
                 <span className="font-bold mt-0 mb-0">{group?.name}</span>
-                <span className="text-xs">
+                <span className="text-xs font-light text-muted-foreground">
                   {group?.privacy} and {group?.type}
                 </span>
               </div>
