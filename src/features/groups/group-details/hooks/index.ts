@@ -14,7 +14,7 @@ import {
   addAdminPermissions,
   deleteGroup,
   leaveGroup,
-  removeAdminPermissions,
+ // removeAdminPermissions,
   removeUserFromGroup,
 } from '@/features/groups/shared/hooks';
 import { useToast } from '@/shared/components/ui/use-toast.ts';
@@ -99,26 +99,26 @@ export const useGroupDetails = ({ groupId }: { groupId: string | undefined }) =>
     );
   };
   //removeAdminPermissions
-  const handleRemoveAdminPermissions = (pubkey: string, permissions: GroupAdminPermission[]) => {
-    if (!groupId || !pubkey || !permissions) return;
-    removeAdminPermissions(
-      activeUser,
-      pubkey,
-      permissions,
-      openLoginModal,
-      createNewEvent,
-      groupId,
-      () => {
-        toast({ title: 'Success', description: 'Permissions removed successfully!' });
-      },
-      () =>
-        toast({
-          title: 'Error',
-          description: 'Failed to remove permissions!',
-          variant: 'destructive',
-        }),
-    );
-  };
+  // const handleRemoveAdminPermissions = (pubkey: string, permissions: GroupAdminPermission[]) => {
+  //   if (!groupId || !pubkey || !permissions) return;
+  //   removeAdminPermissions(
+  //     activeUser,
+  //     pubkey,
+  //     permissions,
+  //     openLoginModal,
+  //     createNewEvent,
+  //     groupId,
+  //     () => {
+  //       toast({ title: 'Success', description: 'Permissions removed successfully!' });
+  //     },
+  //     () =>
+  //       toast({
+  //         title: 'Error',
+  //         description: 'Failed to remove permissions!',
+  //         variant: 'destructive',
+  //       }),
+  //   );
+  // };
   const handleLeaveGroup = (setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>) => {
     if (!groupId) return;
     leaveGroup(
@@ -150,6 +150,6 @@ export const useGroupDetails = ({ groupId }: { groupId: string | undefined }) =>
     handleLeaveGroup,
     handleRemoveUserFromGroup,
     handleAddAdminPermissions,
-    handleRemoveAdminPermissions
+   // handleRemoveAdminPermissions
   };
 };

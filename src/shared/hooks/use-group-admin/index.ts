@@ -30,6 +30,13 @@ export const useGroupAdmin = (groupId: string | undefined, adminPublickey: strin
       });
   }, [groupId, adminPublickey, nip29Ndk]);
 
+  const kingAndCeo = () =>
+    admin?.permissions.some((item) =>
+      [GroupAdminPermissionEnum.king, GroupAdminPermissionEnum.ceo].includes(
+        item as GroupAdminPermissionEnum,
+      ),
+    ) || false;
+
   return {
     admin,
     canAddUser: useMemo(
@@ -40,10 +47,7 @@ export const useGroupAdmin = (groupId: string | undefined, adminPublickey: strin
       () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
       [admin],
     ),
-    canAddPermission: useMemo(
-      () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
-      [admin],
-    ),
+    canAddPermission: useMemo(kingAndCeo, [admin]),
     canRemovePermission: useMemo(
       () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
       [admin],
@@ -52,10 +56,7 @@ export const useGroupAdmin = (groupId: string | undefined, adminPublickey: strin
       () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
       [admin],
     ),
-    canEditMetadata: useMemo(
-      () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
-      [admin],
-    ),
+    canEditMetadata: useMemo(kingAndCeo, [admin]),
     canDeleteEvent: useMemo(
       () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
       [admin],

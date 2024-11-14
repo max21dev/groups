@@ -27,7 +27,7 @@ export const useGroupAdmins = (groupId: string | undefined) => {
             (pTag) =>
               ({
                 publicKey: pTag[1],
-                permissions: pTag.slice(3) as GroupAdminPermission[],
+                permissions: pTag.slice(2) as GroupAdminPermission[],
               }) as GroupAdmin,
           )
         : [],

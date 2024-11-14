@@ -207,14 +207,11 @@ export const addAdminPermissions = (
   }
   const event = createNewEvent();
   // TODO: update with new nip29 spec and NDKKind
-  event.kind = 9003;
+  event.kind = NDKKind.GroupAdminAddUser;
   event.tags = [
     ['h', groupId],
-    ['p', pubKey],
+    ['p', pubKey, ...permissions],
   ];
-  permissions.forEach((permission) => {
-    event.tags.push(['permission', permission]);
-  });
 
   event.publish().then(
     (r) => {
