@@ -109,7 +109,7 @@ export const ChatListItem = ({
                   message.content.length < 80 ? 'items-center' : 'flex-col justify-end',
                 )}
               >
-                <div>
+                <div className="[overflow-wrap:anywhere]">
                   {categorizedMessageContent.map((part, i) => {
                     if (part.category == 'text') {
                       return (
@@ -141,7 +141,7 @@ export const ChatListItem = ({
                           href={part.content}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-xs text-pink-400 underline break-all"
+                          className="text-xs text-pink-400 underline"
                         >
                           {part.content}
                         </a>
