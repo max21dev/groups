@@ -7,7 +7,7 @@ import { GroupAdminPermission } from '@/shared/types';
 export const GroupDetailsEditMembers = () => {
   const { activeGroupId } = useActiveGroup();
   const { members } = useGroupMembers(activeGroupId);
-  const { handleRemoveUserFromGroup, handleAddAdminPermissions } = useGroupDetails({
+  const { handleRemoveUserFromGroup, handleUpdateAdminRoles } = useGroupDetails({
     groupId: activeGroupId,
   });
 
@@ -17,7 +17,7 @@ export const GroupDetailsEditMembers = () => {
 
   const addUserPermissions = (pubkey: string, newPermissions: GroupAdminPermission[] | []) => {
     if (newPermissions.length > 0) {
-      handleAddAdminPermissions(pubkey, newPermissions);
+      handleUpdateAdminRoles(pubkey, newPermissions);
     }
   };
 

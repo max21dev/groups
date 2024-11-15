@@ -11,3 +11,4 @@ export { useLoginModalState } from './use-login-modal-state';
 export { useMessageReactions } from './use-message-reactions';
 export { useNip29Ndk } from './use-nip29-ndk';
 export { useZapModalState } from './use-zap-modal-state';
+export { useGroupRoles } from  './use-group-roles';

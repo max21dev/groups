@@ -25,7 +25,12 @@ export type GroupStatus = {
 
 export type GroupAdmin = {
   publicKey: string;
-  permissions: GroupAdminPermission[];
+  roles: string[];
+};
+
+export type GroupRole = {
+  name: string;
+  description: string;
 };
 
 export type GroupMember = {

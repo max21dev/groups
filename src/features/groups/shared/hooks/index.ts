@@ -191,10 +191,10 @@ export const removeUserFromGroup = (
   );
 };
 
-export const addAdminPermissions = (
+export const updateAdminRoles = (
   activeUser: NDKUser | undefined,
   pubKey: string,
-  permissions: GroupAdminPermission[],
+  roles: string[],
   openLoginModal: () => void,
   createNewEvent: () => NDKEvent,
   groupId: string,
@@ -210,7 +210,7 @@ export const addAdminPermissions = (
   event.kind = NDKKind.GroupAdminAddUser;
   event.tags = [
     ['h', groupId],
-    ['p', pubKey, ...permissions],
+    ['p', pubKey, ...roles],
   ];
 
   event.publish().then(

@@ -3,7 +3,7 @@ import { useSubscribe } from 'nostr-hooks';
 import { useMemo } from 'react';
 
 import { useNip29Ndk } from '@/shared/hooks';
-import { GroupAdmin, GroupAdminPermission } from '@/shared/types';
+import { GroupAdmin } from '@/shared/types';
 
 export const useGroupAdmins = (groupId: string | undefined) => {
   const { nip29Ndk } = useNip29Ndk();
@@ -27,7 +27,7 @@ export const useGroupAdmins = (groupId: string | undefined) => {
             (pTag) =>
               ({
                 publicKey: pTag[1],
-                permissions: pTag.slice(2) as GroupAdminPermission[],
+                roles: pTag.slice(2) as string[],
               }) as GroupAdmin,
           )
         : [],

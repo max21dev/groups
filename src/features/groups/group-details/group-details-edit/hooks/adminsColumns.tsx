@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { ColumnDef } from '@tanstack/react-table';
-import { GroupAdmin, GroupAdminAvailablePermission, GroupAdminPermission } from '@/shared/types';
+import {
+  GroupAdmin,
+  GroupAdminPermission,
+  GroupRole,
+} from '@/shared/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
 
 import { Button } from '@/shared/components/ui/button.tsx';
@@ -11,12 +15,13 @@ import { Checkbox } from '@/shared/components/ui/checkbox.tsx';
 
 export const adminsColumns: (
   removeAdmins: (pubkey: string) => void,
-  updateAdminPermissions: (
+  updateAdminRoles: (
     pubkey: string,
-    oldPermissions: GroupAdminPermission[] | [],
-    newPermissions: GroupAdminPermission[] | [],
+    oldPermissions: string[] | [],
+    newPermissions: string[] | [],
   ) => void,
-) => ColumnDef<GroupAdmin>[] = (removeAdmins, updateAdminPermissions) => [
+  GroupRoles: GroupRole[] | undefined,
+) => ColumnDef<GroupAdmin>[] = (removeAdmins, updateAdminRoles, GroupRoles) => [
   {
     id: 'avatar',
     header: 'Avatar',
@@ -76,11 +81,11 @@ export const adminsColumns: (
     },
   },
   {
-    id: 'permissions',
-    accessorKey: 'permissions',
-    header: 'Permissions',
+    id: 'roles',
+    accessorKey: 'roles',
+    header: 'Roles',
     cell: ({ row }) => {
-      const permissions: GroupAdminPermission[] = row?.getValue('permissions');
+      const permissions: GroupAdminPermission[] = row?.getValue('roles');
       return (
         permissions && (
           <ul>
@@ -102,18 +107,18 @@ export const adminsColumns: (
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const [isRemoveDialogOpen, setRemoveDialogOpen] = useState(false); // Separate state for Remove Dialog
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const [permissions, setPermissions] = useState<GroupAdminPermission[]>(
-        row?.getValue('permissions') || [],
+      const [roles, setRoles] = useState<string[]>(
+        row?.getValue('roles') || [],
       ); // State for permissions
 
       // Handle checkbox change
-      const handleCheckboxChange = (permission: GroupAdminPermission) => {
-        if (permissions.includes(permission)) {
+      const handleCheckboxChange = (role: string) => {
+        if (roles.includes(role)) {
           // If the permission is already included, remove it
-          setPermissions(permissions.filter((p) => p !== permission));
+          setRoles(roles.filter((p) => p !== role));
         } else {
           // Otherwise, add it
-          setPermissions([...permissions, permission]);
+          setRoles([...roles, role]);
         }
       };
 
@@ -122,7 +127,7 @@ export const adminsColumns: (
         setRemoveDialogOpen(false);
       };
       const handleUpdatePermissions = () => {
-        updateAdminPermissions(pubkey, row?.getValue('permissions'), permissions);
+        updateAdminRoles(pubkey, row?.getValue('roles'), roles);
         setSetRolesDialogOpen(false);
       };
       return (
@@ -143,18 +148,18 @@ export const adminsColumns: (
           >
             <p>Change Permission for this user</p>
             <p>{String(row?.getValue('publicKey'))?.slice(0, 10) ?? '-'}...</p>
-            <p>
-              {GroupAdminAvailablePermission.map((permission: GroupAdminPermission) => (
-                <div className="m-2" key={permission}>
+            <div>
+              {GroupRoles && GroupRoles.map((role: GroupRole) => (
+                <div className="m-2" key={role.name}>
                   <Checkbox
-                    checked={permissions.includes(permission)}
-                    onCheckedChange={() => handleCheckboxChange(permission)} // Handle state change
-                    id={permission}
+                    checked={roles.includes(role.name)}
+                    onCheckedChange={() => handleCheckboxChange(role.name)} // Handle state change
+                    id={role.name}
                   />
-                  <span className="ml-2"> {permission}</span>
+                  <span className="ml-2"> <span className="font-bold">{role.name}</span> - {role.description}</span>
                 </div>
               ))}
-            </p>
+            </div>
           </ConfirmDialog>
 
           <ConfirmDialog

@@ -1,13 +1,13 @@
-import { useActiveGroup, useGroupAdmins } from '@/shared/hooks';
+import { useActiveGroup, useGroupAdmins, useGroupRoles } from '@/shared/hooks';
 import { DataTable } from '@/features/groups/group-details/group-details-edit/hooks/data-table.tsx';
 import { useGroupDetails } from '@/features/groups/group-details/hooks';
 import { adminsColumns } from '@/features/groups/group-details/group-details-edit/hooks/adminsColumns.tsx';
-import { GroupAdminPermission } from '@/shared/types';
 
 export const GroupDetailsEditAdmins = () => {
   const { activeGroupId } = useActiveGroup();
   const { admins } = useGroupAdmins(activeGroupId);
-  const { handleRemoveUserFromGroup, handleAddAdminPermissions } =
+  const { roles } = useGroupRoles(activeGroupId);
+  const { handleRemoveUserFromGroup, handleUpdateAdminRoles } =
     useGroupDetails({
       groupId: activeGroupId,
     });
@@ -16,10 +16,10 @@ export const GroupDetailsEditAdmins = () => {
     handleRemoveUserFromGroup(pubkey);
   };
 
-  const updateAdminPermissions = (
+  const updateAdminRoles = (
     pubkey: string,
-    oldPermissions: GroupAdminPermission[] | [],
-    newPermissions: GroupAdminPermission[] | [],
+    oldPermissions: string[] | [],
+    newPermissions: string[] | [],
   ) => {
     const permissionsToAdd = newPermissions.filter((permission) => {
       // @ts-ignore
@@ -31,14 +31,14 @@ export const GroupDetailsEditAdmins = () => {
     });
     if (permissionsToAdd.length > 0 || permissionsToRemove.length > 0) {
       //with new changes of kin 9000, all permissions(old and new ones) should be send.
-      handleAddAdminPermissions(pubkey, newPermissions);
+      handleUpdateAdminRoles(pubkey, newPermissions);
     }
     // if (permissionsToRemove.length > 0) {
     //   handleRemoveAdminPermissions(pubkey, permissionsToRemove);
     // }
   };
 
-  const columns = adminsColumns(removeAdmins, updateAdminPermissions);
+  const columns = adminsColumns(removeAdmins, updateAdminRoles, roles);
 
   return <div>{admins && <DataTable columns={columns} data={admins} />}</div>;
 };

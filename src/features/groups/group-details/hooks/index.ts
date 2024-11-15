@@ -11,14 +11,13 @@ import {
   useNip29Ndk,
 } from '@/shared/hooks';
 import {
-  addAdminPermissions,
   deleteGroup,
   leaveGroup,
- // removeAdminPermissions,
+  // removeAdminPermissions,
   removeUserFromGroup,
+  updateAdminRoles,
 } from '@/features/groups/shared/hooks';
 import { useToast } from '@/shared/components/ui/use-toast.ts';
-import { GroupAdminPermission } from '@/shared/types';
 
 export const useGroupDetails = ({ groupId }: { groupId: string | undefined }) => {
   const { globalNdk } = useGlobalNdk();
@@ -78,12 +77,12 @@ export const useGroupDetails = ({ groupId }: { groupId: string | undefined }) =>
     );
   };
 
-  const handleAddAdminPermissions = (pubkey: string, permissions: GroupAdminPermission[]) => {
-    if (!groupId || !pubkey || !permissions) return;
-    addAdminPermissions(
+  const handleUpdateAdminRoles = (pubkey: string, roles: string[]) => {
+    if (!groupId || !pubkey || !roles) return;
+    updateAdminRoles(
       activeUser,
       pubkey,
-      permissions,
+      roles,
       openLoginModal,
       createNewEvent,
       groupId,
@@ -149,7 +148,6 @@ export const useGroupDetails = ({ groupId }: { groupId: string | undefined }) =>
     handleDeleteGroup,
     handleLeaveGroup,
     handleRemoveUserFromGroup,
-    handleAddAdminPermissions,
-   // handleRemoveAdminPermissions
+    handleUpdateAdminRoles,
   };
 };
