@@ -25,13 +25,13 @@ export const useGroupAdmin = (groupId: string | undefined, adminPublickey: strin
 
         setAdmin({
           publicKey: pTag[1],
-          permissions: pTag.slice(2) as GroupAdminPermission[],
+          roles: pTag.slice(2) as GroupAdminPermission[],
         });
       });
   }, [groupId, adminPublickey, nip29Ndk]);
 
   const kingAndCeo = () =>
-    admin?.permissions.some((item) =>
+    admin?.roles.some((item) =>
       [GroupAdminPermissionEnum.king, GroupAdminPermissionEnum.ceo].includes(
         item as GroupAdminPermissionEnum,
       ),
@@ -40,29 +40,29 @@ export const useGroupAdmin = (groupId: string | undefined, adminPublickey: strin
   return {
     admin,
     canAddUser: useMemo(
-      () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
+      () => admin?.roles.includes(GroupAdminPermissionEnum.king) || false,
       [admin],
     ),
     canRemoveUser: useMemo(
-      () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
+      () => admin?.roles.includes(GroupAdminPermissionEnum.king) || false,
       [admin],
     ),
     canAddPermission: useMemo(kingAndCeo, [admin]),
     canRemovePermission: useMemo(
-      () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
+      () => admin?.roles.includes(GroupAdminPermissionEnum.king) || false,
       [admin],
     ),
     canEditGroupStatus: useMemo(
-      () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
+      () => admin?.roles.includes(GroupAdminPermissionEnum.king) || false,
       [admin],
     ),
     canEditMetadata: useMemo(kingAndCeo, [admin]),
     canDeleteEvent: useMemo(
-      () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
+      () => admin?.roles.includes(GroupAdminPermissionEnum.king) || false,
       [admin],
     ),
     canDeleteGroup: useMemo(
-      () => admin?.permissions.includes(GroupAdminPermissionEnum.king) || false,
+      () => admin?.roles.includes(GroupAdminPermissionEnum.king) || false,
       [admin],
     ),
   };
