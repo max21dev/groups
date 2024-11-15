@@ -1,7 +1,7 @@
 import { GroupAvatar } from '@/features/groups';
 import { UserInfoRow } from '@/features/users';
 
-import { Group, GroupAdminPermission } from '@/shared/types';
+import { Group } from '@/shared/types';
 
 export const GroupDetailsView = ({
   group,
@@ -12,7 +12,7 @@ export const GroupDetailsView = ({
   admins:
     | {
         publicKey: string;
-        permissions: GroupAdminPermission[];
+        roles: string[];
       }[]
     | undefined;
   members:
