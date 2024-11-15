@@ -33,9 +33,6 @@ export const GroupDetailsEditAdmins = () => {
       //with new changes of kin 9000, all permissions(old and new ones) should be send.
       handleUpdateAdminRoles(pubkey, newPermissions);
     }
-    // if (permissionsToRemove.length > 0) {
-    //   handleRemoveAdminPermissions(pubkey, permissionsToRemove);
-    // }
   };
 
   const columns = adminsColumns(removeAdmins, updateAdminRoles, roles);
