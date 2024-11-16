@@ -1,4 +1,5 @@
 export { useActiveGroup } from './use-active-group';
+export { useActiveRelay } from './use-active-relay';
 export { useGlobalNdk } from './use-global-ndk';
 export { useGlobalProfile } from './use-global-profile';
 export { useGroup } from './use-group';
@@ -6,9 +7,9 @@ export { useGroupAdmin } from './use-group-admin';
 export { useGroupAdmins } from './use-group-admins';
 export { useGroupMembers } from './use-group-members';
 export { useGroupMessages } from './use-group-messages';
+export { useGroupRoles } from './use-group-roles';
 export { useGroups } from './use-groups';
 export { useLoginModalState } from './use-login-modal-state';
 export { useMessageReactions } from './use-message-reactions';
 export { useNip29Ndk } from './use-nip29-ndk';
 export { useZapModalState } from './use-zap-modal-state';
-export { useGroupRoles } from  './use-group-roles';
