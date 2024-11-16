@@ -22,9 +22,10 @@ import {
 } from '@/shared/components/ui/dropdown-menu';
 import { Input } from '@/shared/components/ui/input';
 
+import { cn } from '@/shared/utils';
+
 import { MANDATORY_RELAYS } from './config';
 import { useRelaySelectDropDown } from './hooks';
-import { cn } from '@/shared/utils';
 
 export const RelaySelectDropdown = () => {
   const {
@@ -34,19 +35,18 @@ export const RelaySelectDropdown = () => {
     setDialogOpen,
     error,
     relays,
-    activeRelayUrl,
+    activeRelay,
     handleAddNewRelay,
     handleDeleteRelay,
     isCollapsed,
-    setActiveRelayUrl,
-    setActiveGroupId,
+    setActiveRelay,
   } = useRelaySelectDropDown();
 
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger
-          className={cn(relays.find((r) => r.url === activeRelayUrl)?.status)}
+          className={cn(relays.find((r) => r.url === activeRelay)?.status)}
           asChild
         >
           {isCollapsed ? (
@@ -55,7 +55,7 @@ export const RelaySelectDropdown = () => {
             </Button>
           ) : (
             <Button variant="outline" className="w-full text-xs font-light">
-              {activeRelayUrl.replace('wss://', '').replace('ws://', '')}
+              {activeRelay?.replace('wss://', '') || 'Select a relay'}
             </Button>
           )}
         </DropdownMenuTrigger>
@@ -63,10 +63,9 @@ export const RelaySelectDropdown = () => {
           <DropdownMenuLabel>Select a relay</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuRadioGroup
-            value={activeRelayUrl.toString()}
+            value={activeRelay?.toString()}
             onValueChange={(value) => {
-              setActiveRelayUrl(value);
-              setActiveGroupId(undefined);
+              setActiveRelay(value);
             }}
           >
             {relays.map((relay) => (
