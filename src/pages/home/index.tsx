@@ -1,10 +1,11 @@
 import { ChatBottomBar, ChatList, ChatTopBar } from '@/features/chats';
 import { GroupsFilterDropdown, GroupsList } from '@/features/groups';
 import { RelayGroupsCount, RelaySelectDropdown } from '@/features/relays';
-import { ActiveUserInfo } from '@/features/users';
+import { ActiveUserInfo, UserLoginModal } from '@/features/users';
 
 import { ModeToggle } from '@/shared/components/mode-toggle';
 import { Sidebar } from '@/shared/components/sidebar';
+import { ZapModal } from '@/shared/components/zap-modal';
 
 import { cn } from '@/shared/utils';
 
@@ -64,6 +65,9 @@ export function HomePage() {
           </div>
         </div>
       </div>
+
+      <UserLoginModal />
+      <ZapModal />
     </>
   );
 }

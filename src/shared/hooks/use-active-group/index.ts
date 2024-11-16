@@ -1,8 +1,17 @@
-import { useStore } from '@/shared/store';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const useActiveGroup = () => {
-  const activeGroupId = useStore((state) => state.activeGroupId);
-  const setActiveGroupId = useStore((state) => state.setActiveGroupId);
+  const { relay, groupId } = useParams();
 
-  return { activeGroupId, setActiveGroupId };
+  const navigate = useNavigate();
+
+  const setActiveGroupId = (groupId: string | undefined) => {
+    if (groupId) {
+      navigate(`/${relay}/${groupId}`);
+    } else {
+      navigate(`/${relay}`);
+    }
+  };
+
+  return { activeGroupId: groupId, setActiveGroupId };
 };

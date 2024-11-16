@@ -44,13 +44,11 @@ type NdkActions = {
 };
 
 type ChatState = {
-  activeGroupId: string | undefined;
   replyTo: GroupMessage | undefined;
   isGroupDetailsOpen: boolean;
 };
 
 type ChatActions = {
-  setActiveGroupId: (activeGroupId: string | undefined) => void;
   setReplyTo: (replyTo: GroupMessage | undefined) => void;
   toggleGroupDetails: () => void;
 };
@@ -65,13 +63,11 @@ type GroupsActions = {
 
 type RelaysState = {
   relays: { url: string; status: string }[];
-  activeRelayUrl: string;
 };
 
 type RelaysActions = {
   addRelay: (relay: string) => void;
   safeRemoveRelay: (relay: string) => void;
-  setActiveRelayUrl: (activeRelayUrl: string) => void;
   setRelayStatus: (relay: string, status: string) => void;
 };
 
@@ -137,13 +133,9 @@ export const useStore = create<
 
       // Chat State
 
-      activeGroupId: undefined,
-
       replyTo: undefined,
 
       isGroupDetailsOpen: false,
-
-      setActiveGroupId: (activeGroupId) => set({ activeGroupId }),
 
       setReplyTo: (replyTo) => set({ replyTo }),
 
@@ -155,8 +147,6 @@ export const useStore = create<
         { url: 'wss://groups.fiatjaf.com', status: 'DISCONNECTED' },
         { url: 'wss://relay.groups.nip29.com', status: 'DISCONNECTED' },
       ],
-
-      activeRelayUrl: 'wss://relay.groups.nip29.com',
 
       addRelay: (relay) => {
         relay = relay.trim();
@@ -175,7 +165,6 @@ export const useStore = create<
         }
 
         set({
-          activeRelayUrl: relays[0].url,
           relays: relays.filter((r) => r.url !== relay),
         });
       },
@@ -187,15 +176,12 @@ export const useStore = create<
         });
       },
 
-      setActiveRelayUrl: (activeRelayUrl) => set({ activeRelayUrl }),
-
       groupsFilter: { belongTo: true, manage: true, own: true, notJoined: true },
       setGroupsFilter: (groupsFilter) => set({ groupsFilter }),
     }),
     {
       name: 'app-storage',
       partialize: (state) => ({
-        activeRelayUrl: state.activeRelayUrl,
         relays: state.relays
           .filter((relay) => relay && typeof relay?.url === 'string') // Skip problematic objects
           .filter(
