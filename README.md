@@ -28,10 +28,10 @@ This client enables users to participate in groups managed by relays, where acce
   - ✅ Reply to messages.
   - ✅ Zap to messages sender.
   - ✅ Reaction to message (kind:7 in supported relay).
+  - ✅ upload images.
   - 🚧 Mention users in messages.
   - 🚧 Pin important messages.
   - 🚧 Receive notifications for new messages.
-  - ✅ upload images.
   - 🚧 Attach files.
   - 🚧 Create and manage threads.
   - 🚧 Create and manage polls.
