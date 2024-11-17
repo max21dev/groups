@@ -10,9 +10,12 @@ import { ZapModal } from '@/shared/components/zap-modal';
 import { cn } from '@/shared/utils';
 
 import { useHomePage } from './hooks';
+import { RelayList } from '@/features/relays/relay-list';
+import { useActiveRelay } from '@/shared/hooks';
 
 export function HomePage() {
   const { isCollapsed, activeGroupId, activeUser } = useHomePage();
+  const { activeRelay } = useActiveRelay();
 
   return (
     <>
@@ -50,7 +53,7 @@ export function HomePage() {
           <div className="flex flex-col w-full h-full">
             {!activeGroupId ? (
               <div className="flex flex-col justify-center items-center h-full">
-                <h2>💬 Groups</h2>
+                {!activeRelay ? <RelayList /> : <h2>💬 Please select a group from the side list</h2>}
               </div>
             ) : (
               <>
