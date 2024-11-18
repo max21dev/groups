@@ -155,11 +155,11 @@ export const ChatListItem = ({
                   })}
                 </div>
 
-                <div className="ml-auto flex gap-2 items-center text-end text-xs font-light cursor-default opacity-60">
+                <div className="ml-auto flex gap-2 items-center text-end text-xs font-light cursor-default">
                   {reactions && reactions.groupedReactions && (
                     reactions.groupedReactions.map((reaction, index) => (
                       <div key={index} className="flex items-center">
-                        <span className="mr-1">{reaction?.pubkeys.length}</span>
+                        {reaction?.pubkeys.length>1 && <span className="mr-1">{reaction?.pubkeys.length}</span>}
                         {reaction?.content}
                       </div>
                     ))
