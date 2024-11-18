@@ -7,11 +7,14 @@ import {
 } from '@/shared/components/ui/card.tsx';
 import { Badge } from '@/shared/components/ui/badge.tsx';
 import { useActiveRelay } from '@/shared/hooks';
+import { Button } from '@/shared/components/ui/button.tsx';
 
 export const RelayWidget = ({ relay }: { relay: { url: string; status: string } }) => {
   const { setActiveRelay } = useActiveRelay();
   return (
-    <Card key={relay.url} className="shadow-md">
+    <Card key={relay.url} className="shadow-md cursor-pointer"
+          onClick={() => setActiveRelay(relay.url)}
+    >
       <CardHeader>
         <CardTitle className="text-lg font-semibold">{relay.url}</CardTitle>
       </CardHeader>
@@ -38,12 +41,12 @@ export const RelayWidget = ({ relay }: { relay: { url: string; status: string } 
         </div>
       </CardContent>
       <CardFooter>
-        <button
+        <Button
+          variant='outline'
           onClick={() => setActiveRelay(relay.url)}
-          className="px-4 py-2 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600"
         >
           Select as Active Relay
-        </button>
+        </Button>
       </CardFooter>
     </Card>
   );
