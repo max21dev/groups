@@ -156,20 +156,14 @@ export const ChatListItem = ({
                 </div>
 
                 <div className="ml-auto flex gap-2 items-center text-end text-xs font-light cursor-default opacity-60">
-                  {reactions && reactions.like > 0 && (
-                    <div className="flex items-center">
-                      <span className="mr-1">{reactions.like}</span>
-                      <ThumbsUp className="h-3 w-3" />
-                    </div>
+                  {reactions && reactions.groupedReactions && (
+                    reactions.groupedReactions.map((reaction, index) => (
+                      <div key={index} className="flex items-center">
+                        <span className="mr-1">{reaction?.pubkeys.length}</span>
+                        {reaction?.content}
+                      </div>
+                    ))
                   )}
-
-                  {reactions && reactions.disLike > 0 && (
-                    <div className="flex items-center">
-                      <span className="mr-1">{reactions.disLike}</span>
-                      <ThumbsDown className="h-3 w-3" />
-                    </div>
-                  )}
-
                   <span>{format(new Date(message.createdAt * 1000), 'HH:mm')}</span>
                 </div>
               </div>

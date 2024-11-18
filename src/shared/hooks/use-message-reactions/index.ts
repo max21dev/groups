@@ -32,15 +32,21 @@ export const useMessageReactions = (
       [message, groupId, limitFilter, nip29Ndk],
     ),
   );
-
-  const reactions = useMemo(
-    () => ({
+  const reactions = useMemo(() => {
+    const groupedReactions: { content: string; pubkeys: string[] }[] = [];
+    reactionsEvents.forEach((e) => {
+      const reaction = groupedReactions.find((r) => r.content === e.content);
+      if (reaction) {
+        reaction.pubkeys.push(e.pubkey);
+      } else {
+        groupedReactions.push({ content: e.content, pubkeys: [e.pubkey] });
+      }
+    });
+    return {
       messageId: message?.id,
-      like: reactionsEvents.filter((e) => e.content === '+').length,
-      disLike: reactionsEvents.filter((e) => e.content === '-').length,
-    }),
-    [message?.id, reactionsEvents],
-  );
+      groupedReactions:groupedReactions,
+    };
+  }, [message?.id, reactionsEvents]);
 
   return { reactions };
 };
