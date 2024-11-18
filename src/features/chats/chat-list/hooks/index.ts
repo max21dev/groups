@@ -11,6 +11,7 @@ export const useChatList = () => {
   const messageRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const [deletedMessages, setDeletedMessages] = useState<string[]>([]);
+  const [visibleCount, setVisibleCount] = useState(10);
 
   const { globalNdk } = useGlobalNdk();
   const { activeGroupId } = useActiveGroup();
@@ -22,13 +23,21 @@ export const useChatList = () => {
     () =>
       messages
         .filter((message) => !deletedMessages.includes(message.id))
-        .sort((a, b) => a.createdAt - b.createdAt),
-    [messages, deletedMessages],
+        .sort((a, b) => a.createdAt - b.createdAt)
+        .slice(-visibleCount),
+    [messages, deletedMessages, visibleCount],
   );
 
   useEffect(() => {
     if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+      const container = messagesContainerRef.current;
+
+      const isUserScrolledUp =
+        container.scrollTop + container.clientHeight < container.scrollHeight - 100;
+
+      if (!isUserScrolledUp) {
+        container.scrollTop = container.scrollHeight;
+      }
     }
   }, [processedMessages]);
 
@@ -42,6 +51,12 @@ export const useChatList = () => {
     }
   };
 
+  const loadMore = () => {
+    setVisibleCount((prev) => prev + 10);
+  };
+
+  const hasMore = messages.length > processedMessages.length;
+
   return {
     messagesContainerRef,
     messageRefs,
@@ -49,5 +64,7 @@ export const useChatList = () => {
     activeUser,
     processedMessages,
     scrollToMessage,
+    loadMore,
+    hasMore,
   };
 };

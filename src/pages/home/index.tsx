@@ -53,12 +53,16 @@ export function HomePage() {
           <div className="flex flex-col w-full h-full">
             {!activeGroupId ? (
               <div className="flex flex-col justify-center items-center h-full">
-                {!activeRelay ? <RelayList /> : <h2>💬 Please select a group from the side list</h2>}
+                {!activeRelay ? (
+                  <RelayList />
+                ) : (
+                  <h2>💬 Please select a group from the side list</h2>
+                )}
               </div>
             ) : (
               <>
                 <ChatTopBar />
-                <ChatList />
+                <ChatList key={`${activeRelay}-${activeGroupId}`} />
 
                 <div className="flex flex-col w-full items-center gap-2 p-2">
                   <ChatBottomBar />
