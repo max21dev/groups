@@ -1,5 +1,6 @@
 export { useActiveGroup } from './use-active-group';
 export { useActiveRelay } from './use-active-relay';
+export { useCopyToClipboard } from './use-copy-to-clipboard';
 export { useGlobalNdk } from './use-global-ndk';
 export { useGlobalProfile } from './use-global-profile';
 export { useGroup } from './use-group';

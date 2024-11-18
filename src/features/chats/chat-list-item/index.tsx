@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { ThumbsDown, ThumbsUp, Trash2, Undo, Zap } from 'lucide-react';
 import { useState } from 'react';
 import ReactPlayer from 'react-player';
@@ -10,11 +11,12 @@ import {
 } from '@/shared/components/ui/context-menu.tsx';
 
 import { UserAvatar } from '@/features/users/user-avatar';
+import { UserProfileModal } from '@/features/users/user-profile-modal';
+
 import { cn, ellipsis, loader } from '@/shared/utils';
 
 import { useChatListItem } from './hooks';
 import { ChatListItemProps } from './types';
-import { format } from 'date-fns';
 
 export const ChatListItem = ({
   message,
@@ -44,6 +46,7 @@ export const ChatListItem = ({
   } = useChatListItem({ itemIndex, messages, message });
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
 
   if (!message) return null;
 
@@ -53,7 +56,9 @@ export const ChatListItem = ({
         <>
           {isLastMessage || !sameAuthorAsNextMessage ? (
             <div className="mt-auto">
-              <UserAvatar pubkey={message.authorPublicKey} />
+              <div className="cursor-pointer" onClick={() => setIsProfileModalOpen(true)}>
+                <UserAvatar pubkey={message.authorPublicKey} />
+              </div>
             </div>
           ) : (
             <div className="w-10" />
@@ -217,6 +222,15 @@ export const ChatListItem = ({
         >
           <img src={selectedImage} alt="Enlarged message" className="h-auto rounded-lg" />
         </div>
+      )}
+
+      {/* User Profile Modal */}
+      {isProfileModalOpen && (
+        <UserProfileModal
+          pubkey={message.authorPublicKey}
+          isOpen={isProfileModalOpen}
+          onClose={() => setIsProfileModalOpen(false)}
+        />
       )}
     </div>
   );
