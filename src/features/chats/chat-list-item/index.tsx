@@ -157,12 +157,24 @@ export const ChatListItem = ({
 
                 <div className="ml-auto flex gap-2 items-center text-end text-xs font-light cursor-default">
                   {reactions && reactions.groupedReactions && (
-                    reactions.groupedReactions.map((reaction, index) => (
-                      <div key={index} className="flex items-center">
-                        {reaction?.pubkeys.length>1 && <span className="mr-1">{reaction?.pubkeys.length}</span>}
-                        {reaction?.content}
-                      </div>
-                    ))
+                    <div className="flex gap-1">
+                      {reactions.groupedReactions.map((reaction, index) => (
+                        <div key={index} className="flex items-center bg-gray-100 p-1 rounded-2xl">
+                          {reaction.pubkeys.length < 3 ? (
+                            reaction.pubkeys.map((pubkey, index) => (
+                              <div key={index} className="-mr-1 w-5 h-5 [&_*]:h-full [&_*]:w-full">
+                                <UserAvatar pubkey={pubkey} />
+                              </div>
+                            ))
+                          ) : (
+                            <span className="font-medium ml-1 -mr-1">
+                              {reaction.pubkeys.length}
+                            </span>
+                          )}
+                          <span className="ml-2">{reaction.content}</span>
+                        </div>
+                      ))}
+                    </div>
                   )}
                   <span>{format(new Date(message.createdAt * 1000), 'HH:mm')}</span>
                 </div>
