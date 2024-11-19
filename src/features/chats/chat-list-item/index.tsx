@@ -112,6 +112,7 @@ export const ChatListItem = ({
                 className={cn(
                   'flex gap-2',
                   message.content.length < 80 ? 'items-center' : 'flex-col justify-end',
+                  reactions?.groupedReactions?.length > 0 && 'flex-col',
                 )}
               >
                 <div className="[overflow-wrap:anywhere]">
@@ -159,10 +160,13 @@ export const ChatListItem = ({
                   {reactions && reactions.groupedReactions && (
                     <div className="flex gap-1">
                       {reactions.groupedReactions.map((reaction, index) => (
-                        <div key={index} className="flex items-center bg-gray-100 p-1 rounded-2xl">
+                        <div
+                          key={index}
+                          className="flex items-center bg-gray-100 dark:bg-slate-900 p-1 rounded-2xl"
+                        >
                           {reaction.pubkeys.length < 3 ? (
                             reaction.pubkeys.map((pubkey, index) => (
-                              <div key={index} className="-mr-1 w-5 h-5 [&_*]:h-full [&_*]:w-full">
+                              <div key={index} className="-mr-1 w-4 h-4 [&_*]:h-full [&_*]:w-full">
                                 <UserAvatar pubkey={pubkey} />
                               </div>
                             ))
