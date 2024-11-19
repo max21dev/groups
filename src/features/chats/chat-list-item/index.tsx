@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { ThumbsDown, ThumbsUp, Trash2, Undo, Zap } from 'lucide-react';
+import { SmilePlusIcon, ThumbsDown, Trash2, Undo, Zap } from 'lucide-react';
 import { useState } from 'react';
 import ReactPlayer from 'react-player';
 
@@ -43,6 +43,7 @@ export const ChatListItem = ({
     activeUser,
     likeMessage,
     reactions,
+    addReaction,
   } = useChatListItem({ itemIndex, messages, message });
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -202,11 +203,11 @@ export const ChatListItem = ({
                 <Undo className="h-4 w-4 mr-3" />
                 Reply
               </ContextMenuItem>
-              <ContextMenuItem onClick={() => likeMessage(message.id, message.groupId, true)}>
-                <ThumbsUp className="h-4 w-4 mr-3" />
-                Like
+              <ContextMenuItem onClick={() => addReaction(message.id, message.groupId, '👍')}>
+                <SmilePlusIcon className="h-4 w-4 mr-3" />
+                React
               </ContextMenuItem>
-              <ContextMenuItem onClick={() => likeMessage(message.id, message.groupId, false)}>
+              <ContextMenuItem onClick={() => likeMessage(message.id, message.groupId, '👎')}>
                 <ThumbsDown className="h-4 w-4 mr-3" />
                 Dislike
               </ContextMenuItem>

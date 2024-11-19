@@ -89,7 +89,7 @@ export const useChatListItem = ({
     );
   }
 
-  function likeMessage(eventId: string, groupId: string, like: boolean) {
+  function likeMessage(eventId: string, groupId: string, content:string) {
     if (!activeUser) {
       openLoginModal();
       return;
@@ -97,7 +97,24 @@ export const useChatListItem = ({
 
     const event = createNewEvent();
     event.kind = NDKKind.Reaction;
-    event.content = like ? '+' : '-';
+    event.content = content;
+    event.tags = [
+      ['h', groupId],
+      ['e', eventId],
+      ['p', activeUser.pubkey],
+    ];
+    event.publish();
+  }
+
+  function addReaction(eventId: string, groupId: string, reaction: string) {
+    if (!activeUser) {
+      openLoginModal();
+      return;
+    }
+
+    const event = createNewEvent();
+    event.kind = NDKKind.Reaction;
+    event.content = reaction;
     event.tags = [
       ['h', groupId],
       ['e', eventId],
@@ -124,5 +141,6 @@ export const useChatListItem = ({
     activeUser,
     likeMessage,
     reactions,
+    addReaction
   };
 };
