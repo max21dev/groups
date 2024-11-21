@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { SmilePlusIcon, ThumbsDown, Trash2, Undo, Zap } from 'lucide-react';
+import { SmilePlusIcon, Trash2, Undo, Zap } from 'lucide-react';
 import { useState } from 'react';
 import ReactPlayer from 'react-player';
 
@@ -10,6 +10,7 @@ import {
   ContextMenuTrigger,
 } from '@/shared/components/ui/context-menu.tsx';
 
+import { ChatListItemReactions } from '@/features/chats';
 import { UserAvatar } from '@/features/users/user-avatar';
 import { UserProfileModal } from '@/features/users/user-profile-modal';
 
@@ -19,12 +20,12 @@ import { useChatListItem } from './hooks';
 import { ChatListItemProps } from './types';
 
 export const ChatListItem = ({
-  message,
-  itemIndex,
-  messages,
-  scrollToMessage,
-  setDeletedMessages,
-}: ChatListItemProps) => {
+                               message,
+                               itemIndex,
+                               messages,
+                               scrollToMessage,
+                               setDeletedMessages,
+                             }: ChatListItemProps) => {
   const {
     profile,
     deleteMessage,
@@ -41,18 +42,20 @@ export const ChatListItem = ({
     setZapTarget,
     openZapModal,
     activeUser,
-    likeMessage,
     reactions,
     addReaction,
   } = useChatListItem({ itemIndex, messages, message });
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
 
   if (!message) return null;
 
   return (
-    <div className={cn('flex ml-3 gap-3', !sameAuthorAsNextMessage ? 'mb-4' : 'mb-0')}>
+    <div
+      className={cn('flex ml-3 gap-3 relative group', !sameAuthorAsNextMessage ? 'mb-4' : 'mb-0')}
+    >
       {!sameAsCurrentUser && (
         <>
           {isLastMessage || !sameAuthorAsNextMessage ? (
@@ -203,13 +206,9 @@ export const ChatListItem = ({
                 <Undo className="h-4 w-4 mr-3" />
                 Reply
               </ContextMenuItem>
-              <ContextMenuItem onClick={() => addReaction(message.id, message.groupId, '👍')}>
+              <ContextMenuItem onClick={() => setIsEmojiPickerOpen(true)}>
                 <SmilePlusIcon className="h-4 w-4 mr-3" />
                 React
-              </ContextMenuItem>
-              <ContextMenuItem onClick={() => likeMessage(message.id, message.groupId, '👎')}>
-                <ThumbsDown className="h-4 w-4 mr-3" />
-                Dislike
               </ContextMenuItem>
               <ContextMenuItem
                 onClick={() => {
@@ -233,6 +232,22 @@ export const ChatListItem = ({
         >
           <img src={selectedImage} alt="Enlarged message" className="h-auto rounded-lg" />
         </div>
+      )}
+
+      <SmilePlusIcon
+        className="h-5 w-5 -ml-2 cursor-pointer hidden group-hover:block self-end"
+        onClick={() => setIsEmojiPickerOpen(true)}
+      />
+
+      {/* Chat List Item Reactions */}
+      {isEmojiPickerOpen && (
+        <ChatListItemReactions
+          isOpen={isEmojiPickerOpen}
+          onClose={() => setIsEmojiPickerOpen(false)}
+          onReaction={(emoji: string) => addReaction(message.id, message.groupId, emoji)}
+          message={message.content}
+          userName={profile?.displayName || profile?.name || ''}
+        />
       )}
 
       {/* User Profile Modal */}
