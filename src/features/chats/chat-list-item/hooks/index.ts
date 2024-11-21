@@ -89,23 +89,6 @@ export const useChatListItem = ({
     );
   }
 
-  function likeMessage(eventId: string, groupId: string, content:string) {
-    if (!activeUser) {
-      openLoginModal();
-      return;
-    }
-
-    const event = createNewEvent();
-    event.kind = NDKKind.Reaction;
-    event.content = content;
-    event.tags = [
-      ['h', groupId],
-      ['e', eventId],
-      ['p', activeUser.pubkey],
-    ];
-    event.publish();
-  }
-
   function addReaction(eventId: string, groupId: string, reaction: string) {
     if (!activeUser) {
       openLoginModal();
@@ -139,7 +122,6 @@ export const useChatListItem = ({
     setZapTarget,
     openZapModal,
     activeUser,
-    likeMessage,
     reactions,
     addReaction
   };
