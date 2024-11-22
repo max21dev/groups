@@ -1,5 +1,5 @@
 import { ChatBottomBar, ChatList, ChatTopBar } from '@/features/chats';
-import { GroupsFilterDropdown, GroupsList } from '@/features/groups';
+import { GroupsFilterDropdown, GroupsList} from '@/features/groups';
 import { RelayGroupsCount, RelaySelectDropdown } from '@/features/relays';
 import { ActiveUserInfo, UserLoginModal } from '@/features/users';
 
@@ -12,6 +12,7 @@ import { cn } from '@/shared/utils';
 import { useHomePage } from './hooks';
 import { RelayList } from '@/features/relays/relay-list';
 import { useActiveRelay } from '@/shared/hooks';
+import { GroupsListWidget } from '@/features/groups/groups-list-widget';
 
 export function HomePage() {
   const { isCollapsed, activeGroupId, activeUser } = useHomePage();
@@ -56,7 +57,7 @@ export function HomePage() {
                 {!activeRelay ? (
                   <RelayList />
                 ) : (
-                  <h2>💬 Please select a group from the side list</h2>
+                  <GroupsListWidget />
                 )}
               </div>
             ) : (
