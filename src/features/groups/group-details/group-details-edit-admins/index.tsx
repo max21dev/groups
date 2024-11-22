@@ -30,7 +30,7 @@ export const GroupDetailsEditAdmins = () => {
       return !newPermissions.includes(permission);
     });
     if (permissionsToAdd.length > 0 || permissionsToRemove.length > 0) {
-      //with new changes of kin 9000, all permissions(old and new ones) should be send.
+      //With new changes of kin 9000, all permissions(old and new ones) should be send.
       handleUpdateAdminRoles(pubkey, newPermissions);
     }
   };
