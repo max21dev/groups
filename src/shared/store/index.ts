@@ -146,6 +146,7 @@ export const useStore = create<
       relays: [
         { url: 'wss://groups.fiatjaf.com', status: 'DISCONNECTED' },
         { url: 'wss://relay.groups.nip29.com', status: 'DISCONNECTED' },
+        { url: 'wss://groups.0xchat.com', status: 'DISCONNECTED' },
       ],
 
       addRelay: (relay) => {

@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { ThumbsDown, ThumbsUp, Trash2, Undo, Zap } from 'lucide-react';
+import { SmilePlusIcon, Trash2, Undo, Zap } from 'lucide-react';
 import { useState } from 'react';
 import ReactPlayer from 'react-player';
 
@@ -10,6 +10,7 @@ import {
   ContextMenuTrigger,
 } from '@/shared/components/ui/context-menu.tsx';
 
+import { ChatListItemReactions } from '@/features/chats';
 import { UserAvatar } from '@/features/users/user-avatar';
 import { UserProfileModal } from '@/features/users/user-profile-modal';
 
@@ -19,12 +20,12 @@ import { useChatListItem } from './hooks';
 import { ChatListItemProps } from './types';
 
 export const ChatListItem = ({
-  message,
-  itemIndex,
-  messages,
-  scrollToMessage,
-  setDeletedMessages,
-}: ChatListItemProps) => {
+                               message,
+                               itemIndex,
+                               messages,
+                               scrollToMessage,
+                               setDeletedMessages,
+                             }: ChatListItemProps) => {
   const {
     profile,
     deleteMessage,
@@ -41,17 +42,20 @@ export const ChatListItem = ({
     setZapTarget,
     openZapModal,
     activeUser,
-    likeMessage,
     reactions,
+    addReaction,
   } = useChatListItem({ itemIndex, messages, message });
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
 
   if (!message) return null;
 
   return (
-    <div className={cn('flex ml-3 gap-3', !sameAuthorAsNextMessage ? 'mb-4' : 'mb-0')}>
+    <div
+      className={cn('flex ml-3 gap-3 relative group', !sameAuthorAsNextMessage ? 'mb-4' : 'mb-0')}
+    >
       {!sameAsCurrentUser && (
         <>
           {isLastMessage || !sameAuthorAsNextMessage ? (
@@ -112,6 +116,7 @@ export const ChatListItem = ({
                 className={cn(
                   'flex gap-2',
                   message.content.length < 80 ? 'items-center' : 'flex-col justify-end',
+                  reactions?.groupedReactions?.length > 0 && 'flex-col',
                 )}
               >
                 <div className="[overflow-wrap:anywhere]">
@@ -157,12 +162,27 @@ export const ChatListItem = ({
 
                 <div className="ml-auto flex gap-2 items-center text-end text-xs font-light cursor-default">
                   {reactions && reactions.groupedReactions && (
-                    reactions.groupedReactions.map((reaction, index) => (
-                      <div key={index} className="flex items-center">
-                        {reaction?.pubkeys.length>1 && <span className="mr-1">{reaction?.pubkeys.length}</span>}
-                        {reaction?.content}
-                      </div>
-                    ))
+                    <div className="flex gap-1">
+                      {reactions.groupedReactions.map((reaction, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center bg-gray-100 dark:bg-slate-900 p-1 rounded-2xl"
+                        >
+                          {reaction.pubkeys.length < 3 ? (
+                            reaction.pubkeys.map((pubkey, index) => (
+                              <div key={index} className="-mr-1 w-4 h-4 [&_*]:h-full [&_*]:w-full">
+                                <UserAvatar pubkey={pubkey} />
+                              </div>
+                            ))
+                          ) : (
+                            <span className="font-medium ml-1 -mr-1">
+                              {reaction.pubkeys.length}
+                            </span>
+                          )}
+                          <span className="ml-2">{reaction.content}</span>
+                        </div>
+                      ))}
+                    </div>
                   )}
                   <span>{format(new Date(message.createdAt * 1000), 'HH:mm')}</span>
                 </div>
@@ -186,13 +206,9 @@ export const ChatListItem = ({
                 <Undo className="h-4 w-4 mr-3" />
                 Reply
               </ContextMenuItem>
-              <ContextMenuItem onClick={() => likeMessage(message.id, message.groupId, true)}>
-                <ThumbsUp className="h-4 w-4 mr-3" />
-                Like
-              </ContextMenuItem>
-              <ContextMenuItem onClick={() => likeMessage(message.id, message.groupId, false)}>
-                <ThumbsDown className="h-4 w-4 mr-3" />
-                Dislike
+              <ContextMenuItem onClick={() => setIsEmojiPickerOpen(true)}>
+                <SmilePlusIcon className="h-4 w-4 mr-3" />
+                React
               </ContextMenuItem>
               <ContextMenuItem
                 onClick={() => {
@@ -216,6 +232,22 @@ export const ChatListItem = ({
         >
           <img src={selectedImage} alt="Enlarged message" className="h-auto rounded-lg" />
         </div>
+      )}
+
+      <SmilePlusIcon
+        className="h-5 w-5 -ml-2 cursor-pointer hidden group-hover:block self-end"
+        onClick={() => setIsEmojiPickerOpen(true)}
+      />
+
+      {/* Chat List Item Reactions */}
+      {isEmojiPickerOpen && (
+        <ChatListItemReactions
+          isOpen={isEmojiPickerOpen}
+          onClose={() => setIsEmojiPickerOpen(false)}
+          onReaction={(emoji: string) => addReaction(message.id, message.groupId, emoji)}
+          message={message.content}
+          userName={profile?.displayName || profile?.name || ''}
+        />
       )}
 
       {/* User Profile Modal */}

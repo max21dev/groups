@@ -54,7 +54,7 @@ export function UserProfileModal({ pubkey, isOpen, onClose }: UserProfileModalPr
                 </a>
               </>
             )}
-            <p className="text-gray-500 w-full">{profile?.about}</p>
+            <p className="text-gray-500 w-full [overflow-wrap:anywhere]">{profile?.about}</p>
           </div>
         </div>
       </DialogContent>
