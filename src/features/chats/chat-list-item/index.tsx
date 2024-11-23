@@ -20,12 +20,12 @@ import { useChatListItem } from './hooks';
 import { ChatListItemProps } from './types';
 
 export const ChatListItem = ({
-                               message,
-                               itemIndex,
-                               messages,
-                               scrollToMessage,
-                               setDeletedMessages,
-                             }: ChatListItemProps) => {
+  message,
+  itemIndex,
+  messages,
+  scrollToMessage,
+  setDeletedMessages,
+}: ChatListItemProps) => {
   const {
     profile,
     deleteMessage,
@@ -235,7 +235,7 @@ export const ChatListItem = ({
       )}
 
       <SmilePlusIcon
-        className="h-5 w-5 -ml-2 cursor-pointer hidden group-hover:block self-end"
+        className="h-5 w-5 -ml-2 hidden group-hover:block self-end hover:cursor-pointer"
         onClick={() => setIsEmojiPickerOpen(true)}
       />
 
