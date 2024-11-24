@@ -1,4 +1,5 @@
 import { GroupAvatar } from '@/features/groups';
+import { UserAvatar } from '@/features/users';
 
 import { Badge } from '@/shared/components/ui/badge.tsx';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card.tsx';
@@ -27,21 +28,27 @@ export const GroupWidget = ({ group }: GroupWidgetProps) => {
         <GroupAvatar groupId={group.id} />
         <CardTitle className="text-sm font-bold">{group.name}</CardTitle>
       </CardHeader>
-      <CardContent className="p-4 pt-0">
+      <CardContent className="p-4 pt-0 h-2/3 flex flex-col justify-between">
         <div>
-          <span className="font-medium">
-            <Badge>NIP29 Group</Badge> <Badge>{group?.privacy}</Badge> <Badge>{group?.type}</Badge>
-          </span>
-        </div>
-        {group?.about && (
-          <div className="flex items-start text-sm mt-2 [overflow-wrap:anywhere]">
-            <span>{ellipsis(group?.about, 60)}</span>
+          <div>
+            <span className="font-medium">
+              <Badge>NIP29 Group</Badge> <Badge>{group?.privacy}</Badge>{' '}
+              <Badge>{group?.type}</Badge>
+            </span>
           </div>
-        )}
+          {group?.about && (
+            <div className="flex items-start text-sm mt-2 [overflow-wrap:anywhere]">
+              <span>{ellipsis(group?.about, 40)}</span>
+            </div>
+          )}
+        </div>
         {lastMessage && (
-          <div className="flex justify-between mt-4 text-xs text-gray-500">
-            <div>{ellipsis(lastMessage.content, 20)}</div>
-            <div>{displayTime(lastMessage.createdAt)}</div>
+          <div className="flex items-center text-xs mt-2 mb-1 text-gray-500">
+            <div className="w-4 h-4 mr-1 [&_*]:h-full [&_*]:w-full">
+              <UserAvatar pubkey={lastMessage.authorPublicKey} />
+            </div>
+            <div>{ellipsis(lastMessage.content, 15)}</div>
+            <div className="ml-auto">{displayTime(lastMessage.createdAt)}</div>
           </div>
         )}
       </CardContent>
