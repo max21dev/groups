@@ -1,12 +1,10 @@
 import { useActiveUser } from 'nostr-hooks';
 
-import { useActiveGroup, useGlobalProfile, useLoginModalState, useGlobalNdk } from '@/shared/hooks';
+import { useActiveGroup, useGlobalProfile, useLoginModalState } from '@/shared/hooks';
 import { useStore } from '@/shared/store';
 
 export const useActiveUserInfo = () => {
-  const { globalNdk } = useGlobalNdk();
-
-  const { activeUser } = useActiveUser({ customNdk: globalNdk });
+  const { activeUser } = useActiveUser();
 
   const { activeGroupId } = useActiveGroup();
   const { profile } = useGlobalProfile({ pubkey: activeUser?.pubkey });

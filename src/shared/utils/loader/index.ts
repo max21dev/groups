@@ -1,4 +1,6 @@
 export const loader = (src: string, opt?: { w?: number; h?: number }) => {
+  if (src) return src;
+
   if (src.endsWith('.gif')) {
     return src;
   }
@@ -15,11 +17,6 @@ export const loader = (src: string, opt?: { w?: number; h?: number }) => {
   }
 
   return `${import.meta.env.VITE_IMAGE_PROXY_API_ENDPOINT}${encodeURIComponent(
-    btoa(
-      String.fromCharCode(
-        ...new TextEncoder()
-          .encode(src)
-      )
-    ) ,
+    btoa(String.fromCharCode(...new TextEncoder().encode(src))),
   )}${queries}`;
 };
