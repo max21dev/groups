@@ -18,8 +18,8 @@ export const UserLoginModal = () => {
     setNsecInput,
     handleRemoteSigner,
     handleExtensionSigner,
-    handleSecretKeySigner,
-    handleSecretKeyGenerate,
+    handlePrivateKeySigner,
+    handlePrivateKeyGenerate,
     isLoginModalOpen,
     setIsLoginModalOpen,
   } = useLoginModal();
@@ -116,10 +116,10 @@ export const UserLoginModal = () => {
                   placeholder="nsec..."
                   value={nsecInput}
                   onChange={(e) => setNsecInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSecretKeySigner()}
+                  onKeyUp={(e) => e.key === 'Enter' && handlePrivateKeySigner()}
                 />
 
-                <Button className="mt-4 w-full" disabled={loading} onClick={handleSecretKeySigner}>
+                <Button className="mt-4 w-full" disabled={loading} onClick={handlePrivateKeySigner}>
                   {loading ? <Loader2 className="animate-spin" /> : `Login With Secret Key`}
                 </Button>
 
@@ -130,7 +130,7 @@ export const UserLoginModal = () => {
                     <Button
                       variant="link"
                       className="p-0 text-blue-600"
-                      onClick={handleSecretKeyGenerate}
+                      onClick={handlePrivateKeyGenerate}
                     >
                       Generate a new secret key
                     </Button>

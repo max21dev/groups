@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip';
 
-import { cn, loader, getAvatarFallbackColor } from '@/shared/utils';
+import { cn, getAvatarFallbackColor, loader } from '@/shared/utils';
 
 import { useUserAvatar } from './hooks';
 

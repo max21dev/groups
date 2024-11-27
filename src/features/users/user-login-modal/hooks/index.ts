@@ -1,25 +1,20 @@
-import { useLogin } from 'nostr-hooks';
 import { nsecEncode } from 'nostr-tools/nip19';
 import { generateSecretKey } from 'nostr-tools/pure';
 import { useState } from 'react';
 
 import { useToast } from '@/shared/components/ui/use-toast';
 
-import { useLoginModalState, useGlobalNdk } from '@/shared/hooks';
+import { useLoginModalState } from '@/shared/hooks';
+import { useLogin } from 'nostr-hooks';
 
 export const useLoginModal = () => {
   const [nip46Input, setNip46Input] = useState('');
   const [nsecInput, setNsecInput] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const { loginWithPrivateKey, loginWithExtension, loginWithRemoteSigner } = useLogin();
+
   const { isLoginModalOpen, closeLoginModal, setIsLoginModalOpen } = useLoginModalState();
-
-  const { globalNdk, setGlobalNdk } = useGlobalNdk();
-
-  const { loginWithExtension, loginWithRemoteSigner, loginWithSecretKey } = useLogin({
-    customNdk: globalNdk,
-    setCustomNdk: setGlobalNdk,
-  });
 
   const { toast } = useToast();
 
@@ -56,11 +51,11 @@ export const useLoginModal = () => {
     });
   };
 
-  const handleSecretKeySigner = () => {
+  const handlePrivateKeySigner = () => {
     setLoading(true);
 
-    loginWithSecretKey({
-      secretKey: nsecInput,
+    loginWithPrivateKey({
+      privateKey: nsecInput,
       onError: (e) => {
         console.error(e);
         toast({ title: 'Error', description: String(e), variant: 'destructive' });
@@ -74,7 +69,7 @@ export const useLoginModal = () => {
     });
   };
 
-  const handleSecretKeyGenerate = () => {
+  const handlePrivateKeyGenerate = () => {
     const sk = generateSecretKey();
     const nsec = nsecEncode(sk);
     setNsecInput(nsec);
@@ -88,8 +83,8 @@ export const useLoginModal = () => {
     setNsecInput,
     handleRemoteSigner,
     handleExtensionSigner,
-    handleSecretKeySigner,
-    handleSecretKeyGenerate,
+    handlePrivateKeySigner,
+    handlePrivateKeyGenerate,
     isLoginModalOpen,
     setIsLoginModalOpen,
   };
