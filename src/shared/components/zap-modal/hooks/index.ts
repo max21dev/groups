@@ -1,4 +1,5 @@
 import { NDKEvent, NDKTag } from '@nostr-dev-kit/ndk';
+import { useNdk } from 'nostr-hooks';
 import { useState } from 'react';
 
 import { useToast } from '@/shared/components/ui/use-toast';
@@ -20,7 +21,7 @@ export const useZapModal = () => {
 
   const { toast } = useToast();
 
-  const { globalNdk } = useGlobalNdk();
+  const { ndk } = useNdk();
 
   const { openLoginModal } = useLoginModalState();
   const { zapTarget, setZapTarget, isZapModalOpen, setIsZapModalOpen } = useZapModalState();
@@ -32,7 +33,7 @@ export const useZapModal = () => {
 
     setProcessing(true);
 
-    if (!globalNdk.signer) {
+    if (!ndk?.signer) {
       toast({ description: 'You need to login first!' });
       openLoginModal();
       setProcessing(false);
@@ -42,7 +43,7 @@ export const useZapModal = () => {
     const extraTags: NDKTag[] | undefined =
       zapTarget instanceof NDKEvent ? [['e', zapTarget.id]] : undefined;
 
-    const ndkUser = globalNdk.getUser({ pubkey: zapTarget.pubkey });
+    const ndkUser = ndk?.getUser({ pubkey: zapTarget.pubkey });
     ndkUser.zap(selectedAmount.amount * 1000, comment, extraTags).then((invoice) => {
       if (typeof invoice === 'string') {
         payInvoiceByWebln(invoice)

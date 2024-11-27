@@ -1,79 +1,55 @@
-import NDK, { NDKRelayAuthPolicies } from '@nostr-dev-kit/ndk';
-import NDKCacheAdapterDexie from '@nostr-dev-kit/ndk-cache-dexie';
-import { useLogin, useSigner } from 'nostr-hooks';
 import { useEffect } from 'react';
 import { Outlet, createBrowserRouter } from 'react-router-dom';
 
-import { useActiveRelay, useGlobalNdk, useNip29Ndk } from '@/shared/hooks';
-import { useStore } from '@/shared/store';
+import { useLogin, useNdk } from 'nostr-hooks';
 
 const Layout = () => {
-  const setRelayStatus = useStore((state) => state.setRelayStatus);
+  // const setRelayStatus = useStore((state) => state.setRelayStatus);
 
-  const { activeRelay } = useActiveRelay();
+  // const { activeRelay } = useActiveRelay();
 
-  const { globalNdk, setGlobalNdk } = useGlobalNdk();
-  const { nip29Ndk, setNip29Ndk } = useNip29Ndk();
+  const { initNdk, ndk } = useNdk();
+  const { loginFromLocalStorage } = useLogin();
 
-  const { setSigner: setGlobalSigner } = useSigner({
-    customNdk: globalNdk,
-    setCustomNdk: setGlobalNdk,
-  });
-  const { setSigner: setNip29Signer } = useSigner({
-    customNdk: nip29Ndk,
-    setCustomNdk: setNip29Ndk,
-  });
-  const { loginFromLocalStorage } = useLogin({ customNdk: globalNdk, setCustomNdk: setGlobalNdk });
+  // const removeTrailingSlash = (url: string): string => (url.endsWith('/') ? url.slice(0, -1) : url);
 
-  const removeTrailingSlash = (url: string): string => (url.endsWith('/') ? url.slice(0, -1) : url);
-
-  const handleRelayStatus = (status: string) => (relay: { url: string }) => {
-    const relayUrl = removeTrailingSlash(relay.url);
-    setRelayStatus(relayUrl, status);
-    console.log(`${status} to relay`, relayUrl);
-  };
+  // const handleRelayStatus = (status: string) => (relay: { url: string }) => {
+  //   const relayUrl = removeTrailingSlash(relay.url);
+  //   setRelayStatus(relayUrl, status);
+  //   console.log(`${status} to relay`, relayUrl);
+  // };
 
   useEffect(() => {
-    globalNdk.connect();
-  }, [globalNdk]);
+    ndk?.connect();
+  }, [ndk]);
 
   useEffect(() => {
-    nip29Ndk.connect();
+    // if (!activeRelay) return;
 
-    const pool = nip29Ndk.pool;
-    if (pool) {
-      pool.on('relay:connecting', handleRelayStatus('CONNECTING'));
-      pool.on('relay:connect', handleRelayStatus('CONNECTED'));
-      pool.on('relay:disconnect', handleRelayStatus('DISCONNECTED'));
-    }
-  }, [nip29Ndk]);
-
-  useEffect(() => {
-    if (!activeRelay) {
-      return;
-    }
-
-    const ndk = new NDK({
-      explicitRelayUrls: [activeRelay],
-      autoConnectUserRelays: false,
+    initNdk({
+      explicitRelayUrls: ['wss://relay.primal.net'],
+      autoConnectUserRelays: true,
       autoFetchUserMutelist: false,
-      cacheAdapter: new NDKCacheAdapterDexie({ dbName: `db-${activeRelay}` }),
-      signer: globalNdk.signer,
-      relayAuthDefaultPolicy: undefined, // Placeholder for now, we'll set it after initialization
+      // signer: globalNdk?.signer,
+      // cacheAdapter: new NDKCacheAdapterDexie({ dbName: `ndk-db` }),
+      // relayAuthDefaultPolicy: NDKRelayAuthPolicies.signIn({ signer: globalNdk?.signer }),
     });
+  }, [initNdk]);
 
-    ndk.relayAuthDefaultPolicy = NDKRelayAuthPolicies.signIn({ ndk, signer: globalNdk.signer });
-    setNip29Ndk(ndk);
-  }, [activeRelay, globalNdk.signer, setNip29Ndk]);
+  // useEffect(() => {
+  //   nip29Ndk?.connect();
+
+  //   const pool = nip29Ndk?.pool;
+  //   if (pool) {
+  //     pool.on('relay:connecting', handleRelayStatus('CONNECTING'));
+  //     pool.on('relay:connect', () => handleRelayStatus('CONNECTED'));
+  //     pool.on('relay:disconnect', handleRelayStatus('DISCONNECTED'));
+  //   }
+  // }, [nip29Ndk]);
 
   useEffect(() => {
-    loginFromLocalStorage({
-      onSuccess: (signer) => {
-        setGlobalSigner(signer);
-        setNip29Signer(signer);
-      },
-    });
-  }, [loginFromLocalStorage, setGlobalSigner, setNip29Signer]);
+    loginFromLocalStorage();
+  }, [loginFromLocalStorage]);
 
   return (
     <>

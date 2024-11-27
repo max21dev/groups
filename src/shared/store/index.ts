@@ -33,16 +33,6 @@ type AppActions = {
   setZapTarget: (target: NDKEvent | NDKUser | undefined) => void;
 };
 
-type NdkState = {
-  globalNdk: NDK;
-  nip29Ndk: NDK;
-};
-
-type NdkActions = {
-  setGlobalNdk: (globalNdk: NDK) => void;
-  setNip29Ndk: (nip29Ndk: NDK) => void;
-};
-
 type ChatState = {
   replyTo: GroupMessage | undefined;
   isGroupDetailsOpen: boolean;
@@ -74,8 +64,6 @@ type RelaysActions = {
 export const useStore = create<
   AppState &
     AppActions &
-    NdkState &
-    NdkActions &
     ChatState &
     ChatActions &
     RelaysState &
@@ -110,26 +98,6 @@ export const useStore = create<
       setIsZapModalOpen: (isOpen) => set({ isZapModalOpen: isOpen }),
 
       setZapTarget: (target) => set({ zapTarget: target }),
-
-      // NDK State
-
-      globalNdk: new NDK({
-        explicitRelayUrls: ['wss://nos.lol'],
-        autoConnectUserRelays: true,
-        autoFetchUserMutelist: false,
-        cacheAdapter: new NDKCacheAdapterDexie({ dbName: `db-global` }),
-      }),
-
-      setGlobalNdk: (globalNdk) => set({ globalNdk }),
-
-      nip29Ndk: new NDK({
-        explicitRelayUrls: [],
-        autoConnectUserRelays: false,
-        autoFetchUserMutelist: false,
-        cacheAdapter: undefined,
-      }),
-
-      setNip29Ndk: (nip29Ndk) => set({ nip29Ndk }),
 
       // Chat State
 
