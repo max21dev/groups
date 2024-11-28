@@ -1,15 +1,10 @@
 import { NDKEvent, NDKTag } from '@nostr-dev-kit/ndk';
-import { useNdk } from 'nostr-hooks';
+import { useNdk, useProfile } from 'nostr-hooks';
 import { useState } from 'react';
 
 import { useToast } from '@/shared/components/ui/use-toast';
 
-import {
-  useGlobalProfile,
-  useLoginModalState,
-  useZapModalState,
-  useGlobalNdk,
-} from '@/shared/hooks';
+import { useLoginModalState, useZapModalState } from '@/shared/hooks';
 
 import { ZAP_AMOUNTS } from '../config';
 import { payInvoiceByWebln } from '../utils';
@@ -26,7 +21,7 @@ export const useZapModal = () => {
   const { openLoginModal } = useLoginModalState();
   const { zapTarget, setZapTarget, isZapModalOpen, setIsZapModalOpen } = useZapModalState();
 
-  const { profile } = useGlobalProfile({ pubkey: zapTarget?.pubkey });
+  const { profile } = useProfile({ pubkey: zapTarget?.pubkey });
 
   const process = () => {
     if (!zapTarget) return;
