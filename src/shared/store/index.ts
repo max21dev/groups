@@ -1,9 +1,8 @@
-import NDK, { NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
-import NDKCacheAdapterDexie from '@nostr-dev-kit/ndk-cache-dexie';
+import { NDKEvent, NDKUser } from '@nostr-dev-kit/ndk';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { GroupMessage, GroupsFilter } from '../types';
+import { GroupsFilter } from '../types';
 
 type AppState = {
   sidebarWidth: number;
@@ -34,12 +33,12 @@ type AppActions = {
 };
 
 type ChatState = {
-  replyTo: GroupMessage | undefined;
+  replyTo: string | undefined;
   isGroupDetailsOpen: boolean;
 };
 
 type ChatActions = {
-  setReplyTo: (replyTo: GroupMessage | undefined) => void;
+  setReplyTo: (replyTo: string | undefined) => void;
   toggleGroupDetails: () => void;
 };
 
