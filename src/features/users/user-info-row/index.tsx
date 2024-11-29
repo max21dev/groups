@@ -12,7 +12,7 @@ import { Badge } from '@/shared/components/ui/badge';
 
 import { ellipsis } from '@/shared/utils';
 
-export function UserInfoRow({ pubkey }: { pubkey: string | undefined; roles?: string[] }) {
+export function UserInfoRow({ pubkey, roles }: { pubkey: string | undefined; roles?: string[] }) {
   const { profile } = useProfile({ pubkey });
 
   if (!profile) return null;
