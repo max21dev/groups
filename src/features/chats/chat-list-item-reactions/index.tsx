@@ -7,17 +7,17 @@ type ChatListItemReactionsProps = {
   isOpen: boolean;
   onClose: () => void;
   onReaction: (emoji: string) => void;
-  message: string;
+  chat: string;
   userName: string;
 };
 
 export const ChatListItemReactions = ({
-                                        isOpen,
-                                        onClose,
-                                        onReaction,
-                                        message,
-                                        userName,
-                                      }: ChatListItemReactionsProps) => {
+  isOpen,
+  onClose,
+  onReaction,
+  chat,
+  userName,
+}: ChatListItemReactionsProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogTitle className="sr-only">Emoji Picker Modal</DialogTitle>
@@ -25,7 +25,7 @@ export const ChatListItemReactions = ({
         <div className="w-full flex justify-center items-center p-4">
           <div className="bg-white dark:bg-slate-600 p-4 rounded-lg w-80">
             <span className="font-bold text-blue-500">{userName}</span>
-            <p className="[overflow-wrap:anywhere]">{ellipsis(message, 75)}</p>
+            <p className="[overflow-wrap:anywhere]">{ellipsis(chat, 75)}</p>
           </div>
         </div>
         <EmojiPicker

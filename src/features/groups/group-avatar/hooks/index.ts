@@ -1,7 +1,11 @@
-import { useGroup } from '@/shared/hooks/use-group';
+import { useGroupMetadata } from 'nostr-hooks/nip29';
 
-export const useGroupAvatar = (groupId: string | undefined) => {
-  const { group } = useGroup(groupId);
+export const useGroupAvatar = (relay: string | undefined, groupId: string | undefined) => {
+  const { metadata, isLoadingMetadata } = useGroupMetadata(relay, groupId);
 
-  return { picture: group?.picture, name: group?.name };
+  return {
+    picture: metadata?.picture,
+    name: metadata?.name,
+    isLoadingGroupAvatar: isLoadingMetadata,
+  };
 };

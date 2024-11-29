@@ -1,6 +1,6 @@
-import { CategorizedMessageContent } from '../types';
+import { CategorizedChatContent } from '../types';
 
-export const categorizeMessageContent = (content: string): CategorizedMessageContent[] => {
+export const categorizeChatContent = (content: string): CategorizedChatContent[] => {
   // Regular expression to match URLs and image URLs
   const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
   const imageRegex = /\.(jpg|jpeg|png|gif|bmp|svg|webp)$/i;
@@ -15,7 +15,7 @@ export const categorizeMessageContent = (content: string): CategorizedMessageCon
         return { category: 'image', content: part };
       } else if (videoRegex.test(part) || youtubeRegex.test(part)) {
         return { category: 'video', content: part };
-      }else {
+      } else {
         return { category: 'url', content: part };
       }
     } else {

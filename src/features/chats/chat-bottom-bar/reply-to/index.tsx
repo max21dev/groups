@@ -1,12 +1,12 @@
-import { GroupMessage } from '@/shared/types';
+import { Nip29GroupChat } from 'nostr-hooks/nip29';
 
 export type ReplyToProps = {
-  replyTo?: GroupMessage;
-  setReplyTo: (replyTo: GroupMessage | undefined) => void;
-  messages?: GroupMessage[];
+  replyTo?: string | undefined;
+  setReplyTo: (replyTo: string | undefined) => void;
+  chats?: Nip29GroupChat[];
 };
 
-export const ReplyTo = ({ replyTo, setReplyTo, messages }: ReplyToProps) => {
+export const ReplyTo = ({ replyTo, setReplyTo, chats }: ReplyToProps) => {
   if (!replyTo) {
     return null;
   }
@@ -14,7 +14,7 @@ export const ReplyTo = ({ replyTo, setReplyTo, messages }: ReplyToProps) => {
   return (
     <div className="p-2 bg-accent border-t w-full flex justify-between items-center">
       <span className="text-sm text-gray-500">
-        Replying to: {messages?.find((msg) => msg.id === replyTo.id)?.content || 'Deleted message'}
+        Replying to: {chats?.find((msg) => msg.id === replyTo)?.content || 'Deleted message'}
       </span>
       <button onClick={() => setReplyTo(undefined)} className="text-sm ml-2">
         Cancel

@@ -1,18 +1,21 @@
+import { NDKEvent } from '@nostr-dev-kit/ndk';
+import { Nip29GroupChat } from 'nostr-hooks/nip29';
 import React from 'react';
 
-import { GroupMessage } from '@/shared/types';
-
 export type ChatListItemProps = {
-  itemIndex: number;
-  message?: GroupMessage;
-  messages: GroupMessage[];
-  scrollToMessage: (messageId: string) => void;
-  setDeletedMessages: React.Dispatch<React.SetStateAction<string[]>>;
+  chat?: Nip29GroupChat;
+  chats: Nip29GroupChat[];
+  chatsEvents: NDKEvent[] | undefined;
+  topChat: Nip29GroupChat | undefined;
+  bottomChat: Nip29GroupChat | undefined;
+  nextChat: Nip29GroupChat | undefined;
+  scrollToChat: (chatId: string) => void;
+  setDeletedChats: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-export type MessageContentCategory = 'text' | 'image' | 'video' | 'url';
+export type ChatContentCategory = 'text' | 'image' | 'video' | 'url';
 
-export type CategorizedMessageContent = {
-  category: MessageContentCategory;
+export type CategorizedChatContent = {
+  category: ChatContentCategory;
   content: string;
 };

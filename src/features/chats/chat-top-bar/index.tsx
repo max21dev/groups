@@ -1,4 +1,4 @@
-import { Info, Loader2 } from 'lucide-react';
+import { Info } from 'lucide-react';
 
 import { GroupAvatar, GroupDetails } from '@/features/groups';
 
@@ -15,26 +15,22 @@ import {
 import { useChatTopBar } from './hooks';
 
 export const ChatTopBar = () => {
-  const { group, isGroupDetailsOpen, status, toggleGroupDetails, activeGroupId } = useChatTopBar();
+  const { metadata, isGroupDetailsOpen, toggleGroupDetails, activeGroupId, activeRelay } =
+    useChatTopBar();
 
   return (
     <div className="w-full border-b">
       <div className="flex justify-between items-center px-4 py-2">
         <div className="flex items-center gap-2">
-          {status == 'loading' && <Loader2 className="w-6 h-6 animate-spin" />}
-          {status == 'success' && (
-            <>
-              <GroupAvatar groupId={activeGroupId} />
+          <GroupAvatar relay={activeRelay} groupId={activeGroupId} />
 
-              <div className="flex flex-col">
-                {/* <span className="font-light text-xs">{group?.id}</span> */}
-                <span className="font-bold mt-0 mb-0">{group?.name}</span>
-                <span className="text-xs font-light text-muted-foreground">
-                  {group?.privacy} and {group?.type}
-                </span>
-              </div>
-            </>
-          )}
+          <div className="flex flex-col">
+            {/* <span className="font-light text-xs">{group?.id}</span> */}
+            <span className="font-bold mt-0 mb-0">{metadata?.name}</span>
+            <span className="text-xs font-light text-muted-foreground">
+              {metadata?.isPublic ? 'Public' : 'Private'} and {metadata?.isOpen ? 'Open' : 'Closed'}
+            </span>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <Sheet onOpenChange={() => toggleGroupDetails()}>
@@ -50,7 +46,7 @@ export const ChatTopBar = () => {
               </SheetHeader>
               {isGroupDetailsOpen && activeGroupId && (
                 <div className="grid gap-4 py-4">
-                  <GroupDetails groupId={activeGroupId} />
+                  <GroupDetails relay={activeRelay} groupId={activeGroupId} />
                 </div>
               )}
             </SheetContent>

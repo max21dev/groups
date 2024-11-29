@@ -13,37 +13,42 @@ import { useChatList } from './hooks';
 
 export function ChatList() {
   const {
-    messagesContainerRef,
-    messageRefs,
-    setDeletedMessages,
-    scrollToMessage,
+    chatsContainerRef,
+    chatRefs,
+    setDeletedChats,
+    scrollToChat,
     activeUser,
-    processedMessages,
+    processedChats,
     loadMore,
     hasMore,
+    chatsEvents,
+    topChat,
+    bottomChat,
   } = useChatList();
+
+  if (!processedChats) return null;
 
   return (
     <div className="w-full overflow-x-hidden h-full flex flex-col">
       <div
-        ref={messagesContainerRef}
+        ref={chatsContainerRef}
         id="scrollableDiv"
         className="w-full overflow-y-auto overflow-x-hidden h-full flex flex-col-reverse bg-background"
       >
         {/* <AnimatePresence> */}
         <InfiniteScroll
-          dataLength={processedMessages.length}
+          dataLength={processedChats.length}
           next={loadMore}
           className="flex flex-col"
           inverse={true}
-          hasMore={hasMore}
+          hasMore={!!hasMore}
           loader={<Muted>Loading...</Muted>}
           scrollThreshold={'300px'}
           scrollableTarget="scrollableDiv"
         >
-          {processedMessages.map((message, i, arr) => (
+          {processedChats.map((chat, i, arr) => (
             <div
-              key={message.id}
+              key={chat.id}
               // layout
               // initial={{ opacity: 0, scale: 1, y: 50, x: 0 }}
               // animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
@@ -53,7 +58,7 @@ export function ChatList() {
               //   layout: {
               //     type: 'spring',
               //     bounce: 0.3,
-              //     duration: processedMessages.indexOf(message) * 0.05 + 0.2,
+              //     duration: processedChats.indexOf(chat) * 0.05 + 0.2,
               //   },
               // }}
               // style={{
@@ -62,21 +67,24 @@ export function ChatList() {
               // }}
               className={cn(
                 'flex flex-col gap-2 whitespace-pre-wrap',
-                message.authorPublicKey !== activeUser?.pubkey ? 'items-start' : 'items-end mr-2',
+                chat.pubkey !== activeUser?.pubkey ? 'items-start' : 'items-end mr-2',
               )}
               ref={(el) => {
-                messageRefs.current[message.id] = el;
+                chatRefs.current[chat.id] = el;
               }}
             >
-              {(i == 0 || !sameDay(message.createdAt, processedMessages[i - 1].createdAt)) && (
-                <ChatListDateBadge date={new Date(message.createdAt * 1000)} />
+              {(i == 0 || !sameDay(chat.timestamp, arr[i - 1].timestamp)) && (
+                <ChatListDateBadge date={new Date(chat.timestamp * 1000)} />
               )}
               <ChatListItem
-                message={message}
-                setDeletedMessages={setDeletedMessages}
-                scrollToMessage={scrollToMessage}
-                itemIndex={i}
-                messages={arr}
+                chat={chat}
+                setDeletedChats={setDeletedChats}
+                scrollToChat={scrollToChat}
+                chats={processedChats}
+                chatsEvents={chatsEvents}
+                topChat={topChat}
+                bottomChat={bottomChat}
+                nextChat={arr[i + 1]}
               />
             </div>
           ))}

@@ -1,36 +1,37 @@
 import { useActiveUser } from 'nostr-hooks';
+import { useGroupChats } from 'nostr-hooks/nip29';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { useActiveGroup, useGlobalNdk, useGroupMessages } from '@/shared/hooks';
-import { LimitFilter } from '@/shared/types';
-
-const limitFilter: LimitFilter = { limit: 50 };
+import { useActiveGroup, useActiveRelay } from '@/shared/hooks';
 
 export const useChatList = () => {
-  const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const messageRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const chatsContainerRef = useRef<HTMLDivElement>(null);
+  const chatRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  const [deletedMessages, setDeletedMessages] = useState<string[]>([]);
-  const [visibleCount, setVisibleCount] = useState(10);
+  const [deletedChats, setDeletedChats] = useState<string[]>([]);
 
-  const { globalNdk } = useGlobalNdk();
   const { activeGroupId } = useActiveGroup();
-  const { messages } = useGroupMessages(activeGroupId, limitFilter);
+  const { activeRelay } = useActiveRelay();
 
-  const { activeUser } = useActiveUser({ customNdk: globalNdk });
-
-  const processedMessages = useMemo(
-    () =>
-      messages
-        .filter((message) => !deletedMessages.includes(message.id))
-        .sort((a, b) => a.createdAt - b.createdAt)
-        .slice(-visibleCount),
-    [messages, deletedMessages, visibleCount],
+  const { chats, chatsEvents, hasMoreChats, loadMoreChats } = useGroupChats(
+    activeRelay,
+    activeGroupId,
+    { limit: 100 },
   );
 
+  const { activeUser } = useActiveUser();
+
+  const processedChats = useMemo(
+    () => chats?.filter((chat) => !deletedChats.includes(chat.id)),
+    [chats, deletedChats],
+  );
+
+  const topChat = useMemo(() => processedChats?.[0], [processedChats]);
+  const bottomChat = useMemo(() => processedChats?.[processedChats.length - 1], [processedChats]);
+
   useEffect(() => {
-    if (messagesContainerRef.current) {
-      const container = messagesContainerRef.current;
+    if (chatsContainerRef.current) {
+      const container = chatsContainerRef.current;
 
       const isUserScrolledUp =
         container.scrollTop + container.clientHeight < container.scrollHeight - 100;
@@ -39,32 +40,29 @@ export const useChatList = () => {
         container.scrollTop = container.scrollHeight;
       }
     }
-  }, [processedMessages]);
+  }, [processedChats]);
 
-  const scrollToMessage = (messageId: string) => {
-    const messageElement = messageRefs.current[messageId];
-    if (messageElement && messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTo({
-        top: messageElement.offsetTop - messagesContainerRef.current.offsetTop,
+  const scrollToChat = (chatId: string) => {
+    const chatElement = chatRefs.current[chatId];
+    if (chatElement && chatsContainerRef.current) {
+      chatsContainerRef.current.scrollTo({
+        top: chatElement.offsetTop - chatsContainerRef.current.offsetTop,
         behavior: 'smooth',
       });
     }
   };
 
-  const loadMore = () => {
-    setVisibleCount((prev) => prev + 10);
-  };
-
-  const hasMore = messages.length > processedMessages.length;
-
   return {
-    messagesContainerRef,
-    messageRefs,
-    setDeletedMessages,
+    chatsContainerRef,
+    chatRefs,
+    setDeletedChats,
     activeUser,
-    processedMessages,
-    scrollToMessage,
-    loadMore,
-    hasMore,
+    processedChats,
+    chatsEvents,
+    scrollToChat,
+    loadMore: loadMoreChats,
+    hasMore: hasMoreChats,
+    topChat,
+    bottomChat,
   };
 };

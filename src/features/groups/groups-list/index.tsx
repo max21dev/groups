@@ -1,29 +1,42 @@
+import { useAllGroupsMetadataRecords } from 'nostr-hooks/nip29';
 import { useMemo, useState } from 'react';
+
+import { Spinner } from '@/shared/components/spinner';
 
 import { GroupsListItem } from '@/features/groups';
 
-import { useGroupsList } from './hooks';
+import { useActiveRelay } from '@/shared/hooks';
 
 export const GroupsList = () => {
-  const { groups } = useGroupsList();
+  const [lastChatTimestampPerGroup, setLastChatTimestampPerGroup] = useState<
+    Record<string, number>
+  >({});
 
-  const [lastMessageTimestamp, setLastMessageTimestamp] = useState<Map<string, number>>(new Map());
+  const { activeRelay } = useActiveRelay();
 
-  const sortedGroups = useMemo(
+  const { metadataRecords, isLoadingMetadata } = useAllGroupsMetadataRecords(activeRelay);
+
+  const sortedGroupIds = useMemo(
     () =>
-      groups.sort((a, b) => {
-        const lastMessageA = lastMessageTimestamp.get(a.id) || 0;
-        const lastMessageB = lastMessageTimestamp.get(b.id) || 0;
-        return lastMessageB - lastMessageA;
-      }),
-    [groups, lastMessageTimestamp],
+      metadataRecords
+        ? Object.keys(metadataRecords).sort(
+            (a, b) => lastChatTimestampPerGroup[b] - lastChatTimestampPerGroup[a],
+          )
+        : [],
+    [metadataRecords, lastChatTimestampPerGroup],
   );
 
-  return sortedGroups.map((group) => (
+  console.log('sortedGroupIds', sortedGroupIds);
+
+  if (isLoadingMetadata) return <Spinner />;
+
+  if (!sortedGroupIds.length) return null;
+
+  return sortedGroupIds.map((groupId) => (
     <GroupsListItem
-      key={group.id}
-      groupId={group.id}
-      setLastMessageTimestamp={setLastMessageTimestamp}
+      key={groupId}
+      groupId={groupId}
+      setLastChatTimestampPerGroup={setLastChatTimestampPerGroup}
     />
   ));
 };

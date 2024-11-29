@@ -1,128 +1,136 @@
-import { NDKKind } from '@nostr-dev-kit/ndk';
-import { useActiveUser, useNewEvent } from 'nostr-hooks';
-import { useMemo } from 'react';
+import { useActiveUser, useProfile } from 'nostr-hooks';
+import {
+  deleteGroupEvent,
+  Nip29GroupChat,
+  Nip29GroupReaction,
+  sendGroupReaction,
+  useGroupReactions,
+} from 'nostr-hooks/nip29';
+import { useCallback, useMemo } from 'react';
 
 import { useToast } from '@/shared/components/ui/use-toast';
 
-import {
-  useActiveGroup,
-  useGlobalNdk,
-  useGlobalProfile,
-  useGroupAdmin,
-  useLoginModalState,
-  useMessageReactions,
-  useNip29Ndk,
-  useZapModalState,
-} from '@/shared/hooks';
+import { useActiveGroup, useActiveRelay, useZapModalState } from '@/shared/hooks';
+
 import { useStore } from '@/shared/store';
 
 import { ChatListItemProps } from '../types';
-import { categorizeMessageContent, fetchFirstContentImage } from '../utils';
+import { categorizeChatContent, fetchFirstContentImage } from '../utils';
 
 export const useChatListItem = ({
-  message,
-  itemIndex,
-  messages,
-}: Pick<ChatListItemProps, 'message' | 'itemIndex' | 'messages'>) => {
+  chat,
+  topChat,
+  bottomChat,
+  nextChat,
+  chats,
+  setDeletedChats,
+  chatsEvents,
+}: Partial<ChatListItemProps>) => {
   const setReplyTo = useStore((state) => state.setReplyTo);
 
-  const { openLoginModal } = useLoginModalState();
   const { setZapTarget, openZapModal } = useZapModalState();
 
-  const { globalNdk } = useGlobalNdk();
-  const { nip29Ndk } = useNip29Ndk();
-
-  const { createNewEvent } = useNewEvent({ customNdk: nip29Ndk });
-  const { activeUser } = useActiveUser({ customNdk: globalNdk });
+  const { activeRelay } = useActiveRelay();
   const { activeGroupId } = useActiveGroup();
-  const { canDeleteEvent } = useGroupAdmin(activeGroupId, activeUser?.pubkey);
-  const { reactions } = useMessageReactions(activeGroupId, message);
 
-  const { profile } = useGlobalProfile({ pubkey: message?.authorPublicKey });
+  const { activeUser } = useActiveUser();
 
-  const sameAsCurrentUser = message?.authorPublicKey === activeUser?.pubkey;
+  const { reactions } = useGroupReactions(activeRelay, activeGroupId, {
+    byTargetId: { id: chat?.id, waitForId: true },
+  });
 
-  const isLastMessage = messages.length === itemIndex + 1;
-  const sameAuthorAsNextMessage =
-    !isLastMessage &&
-    messages[itemIndex].authorPublicKey === messages[itemIndex + 1].authorPublicKey;
-  const firstMessageAuthor =
-    itemIndex === 0 || messages[itemIndex - 1].authorPublicKey !== message?.authorPublicKey;
-  const categorizedMessageContent = useMemo(
-    () => categorizeMessageContent(message?.content || ''),
-    [message?.content],
+  const { profile } = useProfile({ pubkey: chat?.pubkey });
+
+  const categorizedReactions = useMemo(() => {
+    return reactions?.reduce(
+      (acc, reaction) => {
+        acc[reaction.content] = acc[reaction.content] || [];
+        acc[reaction.content].push(reaction);
+        return acc;
+      },
+
+      {} as Record<string, Nip29GroupReaction[]>,
+    );
+  }, [reactions]);
+
+  const sameAsCurrentUser = chat?.pubkey === activeUser?.pubkey;
+
+  const isLastChat = chat?.id === bottomChat?.id;
+
+  const sameAuthorAsNextChat = chats && chat && nextChat && chat.pubkey === nextChat.pubkey;
+
+  const topChatAuthor = topChat?.pubkey;
+
+  const categorizedChatContent = useMemo(
+    () => categorizeChatContent(chat?.content || ''),
+    [chat?.content],
   );
 
-  const reply = messages.find((e) => e.id === message?.replyTo);
-  const { profile: replyAuthorProfile } = useGlobalProfile({ pubkey: reply?.authorPublicKey });
+  // TODO: refactor replies to new component
+  const reply = chats?.find((e) => e.id === chat?.parentId);
+  const { profile: replyAuthorProfile } = useProfile({ pubkey: reply?.pubkey });
   const firstReplyImageUrl = useMemo(
     () => fetchFirstContentImage(reply?.content || ''),
     [reply?.content],
   );
+
   const { toast } = useToast();
-  const onSuccess = () => toast({ title: 'Success', description: 'Message deleted successfully!' });
-  const onError = () =>
-    toast({
-      title: 'Error',
-      description: 'Failed to delete message!',
-      variant: 'destructive',
-    });
 
-  function deleteMessage(eventId: string, groupId: string) {
-    if (!activeUser) {
-      openLoginModal();
-      return;
+  const sendReaction = useCallback(
+    (content: string, targetId: string) =>
+      activeGroupId &&
+      sendGroupReaction({
+        groupId: activeGroupId,
+        reaction: { content, targetId },
+        onError: () => {
+          toast({ title: 'Error', description: 'Failed to send reaction', variant: 'destructive' });
+        },
+      }),
+    [activeGroupId, toast],
+  );
+
+  const deleteChat = useCallback((chat: Nip29GroupChat) => {
+    if (chat.pubkey === activeUser?.pubkey) {
+      chatsEvents
+        ?.find((e) => e.id === chat.id)
+        ?.delete()
+        .then(() => {
+          setDeletedChats?.((prev) => [...prev, chat.id]);
+        })
+        .catch(() => {
+          toast({ title: 'Error', description: 'Failed to delete chat', variant: 'destructive' });
+        });
+    } else {
+      activeGroupId &&
+        deleteGroupEvent({
+          groupId: activeGroupId,
+          eventId: chat.id,
+          onSuccess: () => {
+            setDeletedChats?.((prev) => [...prev, chat.id]);
+          },
+          onError() {
+            toast({ title: 'Error', description: 'Failed to delete chat', variant: 'destructive' });
+          },
+        });
     }
-
-    const event = createNewEvent();
-    // TODO: replace with NDKKind when it's available
-    event.kind = 9005;
-    event.tags = [
-      ['h', groupId],
-      ['e', eventId],
-    ];
-    event.publish().then(
-      (r) => {
-        r.size > 0 ? onSuccess() : onError();
-      },
-      () => onError?.(),
-    );
-  }
-
-  function addReaction(eventId: string, groupId: string, reaction: string) {
-    if (!activeUser) {
-      openLoginModal();
-      return;
-    }
-
-    const event = createNewEvent();
-    event.kind = NDKKind.Reaction;
-    event.content = reaction;
-    event.tags = [
-      ['h', groupId],
-      ['e', eventId],
-      ['p', activeUser.pubkey],
-    ];
-    event.publish();
-  }
+  }, []);
 
   return {
-    isLastMessage,
-    sameAuthorAsNextMessage,
-    firstMessageAuthor,
+    isLastChat,
+    sameAuthorAsNextChat,
+    topChatAuthor,
     profile,
-    deleteMessage,
+    deleteChat,
     sameAsCurrentUser,
-    canDeleteEvent,
     setReplyTo,
-    categorizedMessageContent,
+    categorizedChatContent,
     firstReplyImageUrl,
     replyAuthorProfile,
     reply,
     setZapTarget,
     openZapModal,
     activeUser,
-    reactions,
-    addReaction
+    sendReaction,
+    categorizedReactions,
   };
 };

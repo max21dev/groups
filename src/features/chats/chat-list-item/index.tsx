@@ -8,11 +8,10 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
-} from '@/shared/components/ui/context-menu.tsx';
+} from '@/shared/components/ui/context-menu';
 
 import { ChatListItemReactions } from '@/features/chats';
-import { UserAvatar } from '@/features/users/user-avatar';
-import { UserProfileModal } from '@/features/users/user-profile-modal';
+import { UserAvatar, UserProfileModal } from '@/features/users';
 
 import { cn, ellipsis, loader } from '@/shared/utils';
 
@@ -20,48 +19,48 @@ import { useChatListItem } from './hooks';
 import { ChatListItemProps } from './types';
 
 export const ChatListItem = ({
-  message,
-  itemIndex,
-  messages,
-  scrollToMessage,
-  setDeletedMessages,
+  chat,
+  chats,
+  scrollToChat,
+  setDeletedChats,
+  chatsEvents,
+  topChat,
+  bottomChat,
+  nextChat,
 }: ChatListItemProps) => {
   const {
     profile,
-    deleteMessage,
-    firstMessageAuthor,
-    isLastMessage,
-    sameAuthorAsNextMessage,
+    topChatAuthor,
+    isLastChat,
+    sameAuthorAsNextChat,
     sameAsCurrentUser,
-    canDeleteEvent,
     setReplyTo,
-    categorizedMessageContent,
+    categorizedChatContent,
     firstReplyImageUrl,
     replyAuthorProfile,
     reply,
     setZapTarget,
     openZapModal,
     activeUser,
-    reactions,
-    addReaction,
-  } = useChatListItem({ itemIndex, messages, message });
+    sendReaction,
+    deleteChat,
+    categorizedReactions,
+  } = useChatListItem({ topChat, bottomChat, nextChat, chats, chat, setDeletedChats });
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
 
-  if (!message) return null;
+  if (!chat) return null;
 
   return (
-    <div
-      className={cn('flex ml-3 gap-3 relative group', !sameAuthorAsNextMessage ? 'mb-4' : 'mb-0')}
-    >
+    <div className={cn('flex ml-3 gap-3 relative group', !sameAuthorAsNextChat ? 'mb-4' : 'mb-0')}>
       {!sameAsCurrentUser && (
         <>
-          {isLastMessage || !sameAuthorAsNextMessage ? (
+          {isLastChat || !sameAuthorAsNextChat ? (
             <div className="mt-auto">
               <div className="cursor-pointer" onClick={() => setIsProfileModalOpen(true)}>
-                <UserAvatar pubkey={message.authorPublicKey} />
+                <UserAvatar pubkey={chat.pubkey} />
               </div>
             </div>
           ) : (
@@ -81,31 +80,29 @@ export const ChatListItem = ({
                   : 'bg-secondary text-secondary-foreground',
               )}
             >
-              {firstMessageAuthor && !sameAsCurrentUser && (
+              {topChatAuthor && !sameAsCurrentUser && (
                 <div className="mb-1 text-xs font-semibold opacity-50">
-                  {profile?.displayName
-                    ? profile.displayName
-                    : message.authorPublicKey.slice(0, 5) + '...'}
+                  {profile?.displayName || chat.pubkey.slice(0, 5) + '...'}
                 </div>
               )}
 
-              {message.replyTo && (
+              {chat.parentId && (
                 <div
                   className="mb-2 text-xs bg-primary/20 cursor-pointer border-l-4 border-primary/25 rounded-lg p-1 flex items-start gap-2"
-                  onClick={() => scrollToMessage(message.replyTo || '')}
+                  onClick={() => scrollToChat(chat.parentId || '')}
                 >
                   {firstReplyImageUrl && (
                     <img
                       className="rounded-sm"
                       src={loader(firstReplyImageUrl, { w: 50, h: 50 })}
-                      alt="Reply Message Image"
+                      alt="Reply Chat Image"
                     />
                   )}
                   <div>
                     <div className="text-xs font-semibold opacity-60">
                       {replyAuthorProfile?.displayName
                         ? replyAuthorProfile.displayName
-                        : reply?.authorPublicKey?.slice(0, 5) + '...'}
+                        : reply?.pubkey?.slice(0, 5) + '...'}
                     </div>
                     <div>{ellipsis(reply?.content || '', 50)}</div>
                   </div>
@@ -115,12 +112,12 @@ export const ChatListItem = ({
               <div
                 className={cn(
                   'flex gap-2',
-                  message.content.length < 80 ? 'items-center' : 'flex-col justify-end',
-                  reactions?.groupedReactions?.length > 0 && 'flex-col',
+                  chat.content.length < 80 ? 'items-center' : 'flex-col justify-end',
+                  categorizedReactions && 'flex-col',
                 )}
               >
                 <div className="[overflow-wrap:anywhere]">
-                  {categorizedMessageContent.map((part, i) => {
+                  {categorizedChatContent.map((part, i) => {
                     if (part.category == 'text') {
                       return (
                         <p key={i} className="text-sm">
@@ -132,7 +129,7 @@ export const ChatListItem = ({
                         <img
                           key={i}
                           src={loader(part.content, { w: 200 })}
-                          alt="message"
+                          alt="chat"
                           className="max-w-full h-40 rounded-lg mt-2 cursor-pointer"
                           max-width="200"
                           onClick={() => setSelectedImage(part.content)}
@@ -161,48 +158,50 @@ export const ChatListItem = ({
                 </div>
 
                 <div className="ml-auto flex gap-2 items-center text-end text-xs font-light cursor-default">
-                  {reactions && reactions.groupedReactions && (
+                  {categorizedReactions && (
                     <div className="flex gap-1">
-                      {reactions.groupedReactions.map((reaction, index) => (
+                      {Object.entries(categorizedReactions).map(([content, reactions]) => (
                         <div
-                          key={index}
+                          key={reactions
+                            .map((r) => r.id)
+                            .join('-')
+                            .substring(0, 10)}
                           className="flex items-center bg-gray-100 dark:bg-slate-900 p-1 rounded-2xl"
                         >
-                          {reaction.pubkeys.length < 3 ? (
-                            reaction.pubkeys.map((pubkey, index) => (
-                              <div key={index} className="-mr-1 w-4 h-4 [&_*]:h-full [&_*]:w-full">
-                                <UserAvatar pubkey={pubkey} />
+                          {reactions.length < 3 ? (
+                            reactions.map((reaction) => (
+                              <div
+                                key={reaction.id}
+                                className="-mr-1 w-4 h-4 [&_*]:h-full [&_*]:w-full"
+                              >
+                                <UserAvatar pubkey={reaction.pubkey} />
                               </div>
                             ))
                           ) : (
-                            <span className="font-medium ml-1 -mr-1">
-                              {reaction.pubkeys.length}
-                            </span>
+                            <span className="font-medium ml-1 -mr-1">{reactions.length}</span>
                           )}
-                          <span className="ml-2">{reaction.content}</span>
+                          <span className="ml-2">{content}</span>
                         </div>
                       ))}
                     </div>
                   )}
-                  <span>{format(new Date(message.createdAt * 1000), 'HH:mm')}</span>
+                  <span>{format(new Date(chat.timestamp * 1000), 'HH:mm')}</span>
                 </div>
               </div>
             </div>
           </ContextMenuTrigger>
           {activeUser && (
             <ContextMenuContent>
-              {canDeleteEvent && (
-                <ContextMenuItem
-                  onClick={() => {
-                    deleteMessage(message.id, message.groupId);
-                    setDeletedMessages((prev) => [...(prev || []), message.id]);
-                  }}
-                >
-                  <Trash2 className="h-4 w-4 mr-3" />
-                  Delete
-                </ContextMenuItem>
-              )}
-              <ContextMenuItem onClick={() => setReplyTo(message)}>
+              <ContextMenuItem
+                onClick={() => {
+                  deleteChat(chat);
+                }}
+              >
+                <Trash2 className="h-4 w-4 mr-3" />
+                Delete
+              </ContextMenuItem>
+
+              <ContextMenuItem onClick={() => setReplyTo(chat.id)}>
                 <Undo className="h-4 w-4 mr-3" />
                 Reply
               </ContextMenuItem>
@@ -212,7 +211,7 @@ export const ChatListItem = ({
               </ContextMenuItem>
               <ContextMenuItem
                 onClick={() => {
-                  setZapTarget(message.event);
+                  setZapTarget(chatsEvents?.find((e) => e.id === chat.id));
                   openZapModal();
                 }}
               >
@@ -230,7 +229,7 @@ export const ChatListItem = ({
           className="fixed max-w-full p-20 inset-0 z-50 flex items-center justify-center bg-black/80"
           onClick={() => setSelectedImage(null)}
         >
-          <img src={selectedImage} alt="Enlarged message" className="h-auto rounded-lg" />
+          <img src={selectedImage} alt="Enlarged chat" className="h-auto rounded-lg" />
         </div>
       )}
 
@@ -244,8 +243,8 @@ export const ChatListItem = ({
         <ChatListItemReactions
           isOpen={isEmojiPickerOpen}
           onClose={() => setIsEmojiPickerOpen(false)}
-          onReaction={(emoji: string) => addReaction(message.id, message.groupId, emoji)}
-          message={message.content}
+          onReaction={(emoji: string) => sendReaction(emoji, chat.id)}
+          chat={chat.content}
           userName={profile?.displayName || profile?.name || ''}
         />
       )}
@@ -253,7 +252,7 @@ export const ChatListItem = ({
       {/* User Profile Modal */}
       {isProfileModalOpen && (
         <UserProfileModal
-          pubkey={message.authorPublicKey}
+          pubkey={chat.pubkey}
           isOpen={isProfileModalOpen}
           onClose={() => setIsProfileModalOpen(false)}
         />

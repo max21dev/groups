@@ -1,25 +1,22 @@
-import { GroupAvatar } from '@/features/groups';
-
 import { Button } from '@/shared/components/ui/button';
 
-import { cn, ellipsis, displayTime } from '@/shared/utils';
+import { GroupAvatar } from '@/features/groups';
+
+import { cn, displayTime, ellipsis } from '@/shared/utils';
 
 import { useGroupsListItem } from './hooks';
 
 export const GroupsListItem = ({
   groupId,
-  setLastMessageTimestamp,
+  setLastChatTimestampPerGroup,
 }: {
-  groupId: string | undefined;
-  setLastMessageTimestamp: React.Dispatch<React.SetStateAction<Map<string, number>>>;
+  groupId: string;
+  setLastChatTimestampPerGroup: React.Dispatch<React.SetStateAction<Record<string, number>>>;
 }) => {
-  const { group, isCollapsed, messages, setActiveGroupId, activeGroupId, showGroup } =
-    useGroupsListItem({
-      groupId,
-      setLastMessageTimestamp,
-    });
+  const { metadata, isCollapsed, chats, setActiveGroupId, activeGroupId, showGroup, activeRelay } =
+    useGroupsListItem({ groupId, setLastChatTimestampPerGroup });
 
-  if (!group || !showGroup) return null;
+  if (!metadata || !showGroup) return null;
 
   return (
     <Button
@@ -32,26 +29,26 @@ export const GroupsListItem = ({
       )}
       onClick={() => setActiveGroupId(groupId)}
     >
-      <GroupAvatar groupId={groupId} />
+      <GroupAvatar relay={activeRelay} groupId={groupId} />
 
       {!isCollapsed && (
         <div className="flex flex-col items-start w-full min-w-0">
           <div className="w-full flex items-center">
-            <div className="truncate">{group.name}</div>
+            <div className="truncate">{metadata?.name}</div>
 
-            {messages.length > 0 && (
+            {chats && chats.length > 0 && (
               <div className="ml-auto shrink-0 text-gray-300 text-xs">
-                {displayTime(messages[0].createdAt)}
+                {displayTime(chats[0].timestamp)}
               </div>
             )}
           </div>
 
-          <span className="text-gray-400 truncate">{ellipsis(group.about, 20)} </span>
+          <span className="text-gray-400 truncate">
+            {metadata && ellipsis(metadata.about, 20)}{' '}
+          </span>
 
-          {messages.length > 0 && (
-            <span className="text-xs text-gray-300 truncate">
-              {ellipsis(messages[0].content, 20)}
-            </span>
+          {chats && chats.length > 0 && (
+            <span className="text-xs text-gray-300 truncate">{ellipsis(chats[0].content, 20)}</span>
           )}
         </div>
       )}

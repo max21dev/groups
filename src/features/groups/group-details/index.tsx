@@ -1,30 +1,71 @@
-import { useGroupDetails } from './hooks';
-import { GroupDetailsView } from '@/features/groups/group-details/group-details-view';
-import { useState } from 'react';
-import { GroupDetailsEdit } from '@/features/groups/group-details/group-details-edit';
 import { Edit, Undo2 } from 'lucide-react';
-import { Button } from '@/shared/components/ui/button';
-import { DeleteGroup } from '@/features/groups/group-details/group-delete/inxdex.tsx';
-import { LeaveGroup } from '@/features/groups/group-details/group-leave/inxdex.tsx';
+import { useGroupAdmins, useGroupMembers, useGroupMetadata } from 'nostr-hooks/nip29';
+import { useState } from 'react';
 
-export const GroupDetails = ({ groupId }: { groupId: string }) => {
-  const { admins, group, members, canEditMetadata, canDeleteGroup } = useGroupDetails({ groupId });
+import { Button } from '@/shared/components/ui/button';
+
+import { GroupAvatar, GroupDeleteButton, GroupLeaveButton } from '@/features/groups';
+import { UserInfoRow } from '@/features/users';
+
+import { GroupMetadataForm } from '../group-metadata-form';
+
+export const GroupDetails = ({
+  relay,
+  groupId,
+}: {
+  relay: string | undefined;
+  groupId: string | undefined;
+}) => {
+  const { metadata } = useGroupMetadata(relay, groupId);
+  const { admins } = useGroupAdmins(relay, groupId);
+  const { members } = useGroupMembers(relay, groupId);
+
   const [editMode, setEditMode] = useState(false);
 
   return (
     <div>
-      {canEditMetadata && (
-        <Button variant="outline" onClick={() => setEditMode(!editMode)}>
-          {editMode ? <Undo2 className="mr-2 h-4 w-4" /> : <Edit className="mr-2 h-4 w-4" />}
-          {editMode ? 'Back to view mode' : 'Edit'}
-        </Button>
-      )}
-      <LeaveGroup groupId={group?.id} />
-      {canDeleteGroup && <DeleteGroup groupId={group?.id} />}
-      {editMode ? (
-        <GroupDetailsEdit setEditMode={setEditMode} group={group} />
+      <Button variant="outline" onClick={() => setEditMode(!editMode)}>
+        {editMode ? <Undo2 className="mr-2 h-4 w-4" /> : <Edit className="mr-2 h-4 w-4" />}
+        {editMode ? 'Back to view mode' : 'Edit'}
+      </Button>
+
+      <GroupLeaveButton groupId={groupId} />
+
+      <GroupDeleteButton groupId={groupId} />
+
+      {editMode && metadata ? (
+        <GroupMetadataForm groupId={groupId} initialMetadata={metadata} />
       ) : (
-        <GroupDetailsView group={group} admins={admins} members={members} />
+        <div className="h-full overflow-y-auto mt-4">
+          <div className="flex flex-col items-center min-h-3">
+            <GroupAvatar key={groupId} relay={relay} groupId={groupId} />
+            <div className="text-sm font-light mt-2">{groupId}</div>
+            <div className="text-lg font-medium">{metadata?.name}</div>
+            <div className="text-sm text-gray-600 mb-4">{metadata?.about}</div>
+          </div>
+          <div className="m-0">
+            {admins && (
+              <div>
+                <h5 className="font-medium pb-2 m-4 border-b-2 border-b-blue-100">
+                  Admins ({admins.length})
+                </h5>
+                {admins.map((admin) => (
+                  <UserInfoRow key={admin.pubkey} pubkey={admin.pubkey} roles={admin.roles} />
+                ))}
+              </div>
+            )}
+            {members && (
+              <div>
+                <h5 className="font-medium pb-2 m-4 border-b-2 border-b-blue-100">
+                  Members ({members.length}){' '}
+                </h5>
+                {members.map((member) => (
+                  <UserInfoRow key={member.pubkey} pubkey={member.pubkey} />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );

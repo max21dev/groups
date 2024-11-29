@@ -1,25 +1,21 @@
 import { useActiveUser } from 'nostr-hooks';
+import {
+  useGroupAdmins,
+  useGroupChats,
+  useGroupMembers,
+  useGroupMetadata,
+} from 'nostr-hooks/nip29';
 import { useEffect, useState } from 'react';
 
-import {
-  useActiveGroup,
-  useGlobalNdk,
-  useGroup,
-  useGroupAdmins,
-  useGroupMembers,
-  useGroupMessages,
-} from '@/shared/hooks';
+import { useActiveGroup, useActiveRelay } from '@/shared/hooks';
 import { useStore } from '@/shared/store';
-import { LimitFilter } from '@/shared/types';
-
-const limitFilter: LimitFilter = { limit: 100 };
 
 export const useGroupsListItem = ({
   groupId,
-  setLastMessageTimestamp,
+  setLastChatTimestampPerGroup,
 }: {
-  groupId: string | undefined;
-  setLastMessageTimestamp: React.Dispatch<React.SetStateAction<Map<string, number>>>;
+  groupId: string;
+  setLastChatTimestampPerGroup: React.Dispatch<React.SetStateAction<Record<string, number>>>;
 }) => {
   const [showGroup, setShowGroup] = useState<boolean>(true);
 
@@ -27,22 +23,27 @@ export const useGroupsListItem = ({
 
   const groupsFilter = useStore((state) => state.groupsFilter);
 
-  const { setActiveGroupId, activeGroupId } = useActiveGroup();
-  const { globalNdk } = useGlobalNdk();
-  const { group } = useGroup(groupId);
-  const { admins } = useGroupAdmins(groupId);
-  const { members } = useGroupMembers(groupId);
+  const { activeUser } = useActiveUser();
 
-  const { activeUser } = useActiveUser({ customNdk: globalNdk });
+  const { activeRelay } = useActiveRelay();
+
+  const { setActiveGroupId, activeGroupId } = useActiveGroup();
+
+  const { metadata } = useGroupMetadata(activeRelay, groupId);
+  const { admins } = useGroupAdmins(activeRelay, groupId);
+  const { members } = useGroupMembers(activeRelay, groupId);
+  const { chats } = useGroupChats(activeRelay, groupId, { limit: 1 });
 
   useEffect(() => {
     const hasFilter = groupsFilter && Object.values(groupsFilter).some((value) => !value);
     if (hasFilter && activeUser?.pubkey) {
       setShowGroup(false);
-      const isMember =
-        members.length > 0 && members.some((member) => member.publicKey === activeUser?.pubkey);
-      const isAdmin =
-        admins.length > 0 && admins.some((admin) => admin.publicKey === activeUser?.pubkey);
+      const isMember = members
+        ? members.length > 0 && members.some((member) => member.pubkey === activeUser?.pubkey)
+        : false;
+      const isAdmin = admins
+        ? admins.length > 0 && admins.some((admin) => admin.pubkey === activeUser?.pubkey)
+        : false;
       if (groupsFilter.belongTo && isMember) {
         setShowGroup(true);
       }
@@ -59,26 +60,21 @@ export const useGroupsListItem = ({
     }
   }, [members, admins, activeUser, groupsFilter]);
 
-  const { messages } = useGroupMessages(groupId, limitFilter);
-
   useEffect(() => {
-    if (messages.length > 0) {
-      setLastMessageTimestamp((prev) => {
-        if (!groupId) return prev;
+    if (!groupId) return;
 
-        const newMap = new Map(prev);
-        newMap.set(groupId, messages[0].createdAt);
-
-        return newMap;
-      });
-    }
-  }, [messages, setLastMessageTimestamp, groupId]);
+    setLastChatTimestampPerGroup((prev) => ({
+      ...prev,
+      [groupId]: chats && chats.length ? chats[chats.length - 1].timestamp : 0,
+    }));
+  }, [groupId, chats, setLastChatTimestampPerGroup]);
 
   return {
     setActiveGroupId,
-    group,
-    messages,
+    metadata,
+    chats,
     isCollapsed,
+    activeRelay,
     activeGroupId,
     showGroup,
   };

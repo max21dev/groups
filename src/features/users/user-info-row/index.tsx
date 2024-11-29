@@ -8,10 +8,11 @@ import {
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip';
 
+import { Badge } from '@/shared/components/ui/badge';
 
 import { ellipsis } from '@/shared/utils';
 
-export function UserInfoRow({ pubkey }: { pubkey: string | undefined }) {
+export function UserInfoRow({ pubkey }: { pubkey: string | undefined; roles?: string[] }) {
   const { profile } = useProfile({ pubkey });
 
   if (!profile) return null;
@@ -39,6 +40,13 @@ export function UserInfoRow({ pubkey }: { pubkey: string | undefined }) {
         <span className="text-sm">{profile.nip05}</span>
         {!profile.name && !profile.nip05 && pubkey && (
           <span className="text-sm text-gray-500">{ellipsis(pubkey, 10)}</span>
+        )}
+        {roles && (
+          <div className="flex gap-2 flex-wrap">
+            {roles.map((role) => (
+              <Badge key={role}>{role}</Badge>
+            ))}
+          </div>
         )}
       </div>
     </div>

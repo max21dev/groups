@@ -21,12 +21,12 @@ export const ChatBottomBar = () => {
     handleThumbsUp,
     handleSend,
     handleKeyPress,
-    sendJoinRequest,
     activeUser,
-    messages,
+    chats,
     openUploadMediaDialog,
     isUploadingMedia,
     openLoginModal,
+    activeGroupId,
   } = useChatBottomBar();
 
   if (!activeUser) {
@@ -34,12 +34,12 @@ export const ChatBottomBar = () => {
   }
 
   if (!isMember && !isAdmin) {
-    return <JoinRequestButton sendJoinRequest={sendJoinRequest} />;
+    return <JoinRequestButton groupId={activeGroupId} />;
   }
 
   return (
     <>
-      <ReplyTo setReplyTo={setReplyTo} messages={messages} replyTo={replyTo} />
+      <ReplyTo setReplyTo={setReplyTo} chats={chats} replyTo={replyTo} />
 
       <div className="w-full h-full flex items-center gap-2">
         <UploadImageButton

@@ -1,13 +1,13 @@
 import { Button } from '@/shared/components/ui/button';
 
-export type JoinRequestButtonProps = {
-  sendJoinRequest: () => void;
-};
+import { useJoinRequestButton } from './hooks';
 
-export const JoinRequestButton = ({ sendJoinRequest }: JoinRequestButtonProps) => {
+export const JoinRequestButton = ({ groupId }: { groupId: string | undefined }) => {
+  const { sendJoinRequest } = useJoinRequestButton({ groupId });
+
   return (
-    <Button variant="outline" size="lg" onClick={sendJoinRequest}>
-      Send Join Request
+    <Button size="lg" onClick={() => sendJoinRequest()}>
+      Join Request
     </Button>
   );
 };
