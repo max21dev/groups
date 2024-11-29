@@ -1,14 +1,12 @@
 import { NDKUser } from '@nostr-dev-kit/ndk';
 import { CheckIcon, Copy, ExternalLink } from 'lucide-react';
-import { useNdk } from 'nostr-hooks';
+import { useNdk, useProfile } from 'nostr-hooks';
 import { useEffect, useState } from 'react';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
 import { Input } from '@/shared/components/ui/input';
 
 import { useCopyToClipboard } from '@/shared/hooks';
-
-import { useUserPofileModal } from './hooks';
 
 type UserProfileModalProps = {
   pubkey: string;
@@ -19,7 +17,7 @@ type UserProfileModalProps = {
 export function UserProfileModal({ pubkey, isOpen, onClose }: UserProfileModalProps) {
   const [user, setUser] = useState<NDKUser>();
 
-  const { profile } = useUserPofileModal({ pubkey });
+  const { profile } = useProfile({ pubkey });
 
   const { ndk } = useNdk();
 

@@ -1,4 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar.tsx';
+import { useProfile } from 'nostr-hooks';
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
 import {
   Tooltip,
   TooltipContent,
@@ -8,10 +10,8 @@ import {
 
 import { cn, getAvatarFallbackColor, loader } from '@/shared/utils';
 
-import { useUserAvatar } from './hooks';
-
 export function UserAvatar({ pubkey }: { pubkey: string }) {
-  const { profile } = useUserAvatar({ pubkey });
+  const { profile } = useProfile({ pubkey });
 
   return (
     <TooltipProvider>
