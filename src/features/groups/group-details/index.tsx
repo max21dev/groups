@@ -29,12 +29,12 @@ export const GroupDetails = ({
         {editMode ? 'Back to view mode' : 'Edit'}
       </Button>
 
-      <GroupLeaveButton groupId={groupId} />
+      <GroupLeaveButton relay={relay} groupId={groupId} />
 
-      <GroupDeleteButton groupId={groupId} />
+      <GroupDeleteButton relay={relay} groupId={groupId} />
 
       {editMode && metadata ? (
-        <GroupMetadataForm groupId={groupId} initialMetadata={metadata} />
+        <GroupMetadataForm relay={relay} groupId={groupId} initialMetadata={metadata} />
       ) : (
         <div className="h-full overflow-y-auto mt-4">
           <div className="flex flex-col items-center min-h-3">

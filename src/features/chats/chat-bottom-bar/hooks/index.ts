@@ -61,7 +61,7 @@ export const useChatBottomBar = () => {
 
   const sendMessage = useCallback(
     (message: string, replyTo?: string) => {
-      if (!activeGroupId || !message) return;
+      if (!activeGroupId || !activeRelay || !message) return;
 
       if (!activeUser) {
         openLoginModal();
@@ -69,6 +69,7 @@ export const useChatBottomBar = () => {
       }
 
       sendGroupChat({
+        relay: activeRelay,
         groupId: activeGroupId,
         chat: {
           content: message,
@@ -79,7 +80,7 @@ export const useChatBottomBar = () => {
         },
       });
     },
-    [activeGroupId, activeUser, openLoginModal, toast],
+    [activeGroupId, activeRelay, activeUser, openLoginModal, toast],
   );
 
   const addUploadedMediaUrlToMessage = (url: string) => {
@@ -161,6 +162,7 @@ export const useChatBottomBar = () => {
     openLoginModal,
     openUploadMediaDialog,
     isUploadingMedia,
+    activeRelay,
     activeGroupId,
   };
 };

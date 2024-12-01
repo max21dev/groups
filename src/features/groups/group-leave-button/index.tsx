@@ -7,14 +7,22 @@ import { useToast } from '@/shared/components/ui/use-toast';
 
 import { ConfirmDialog } from '@/shared/components/confirm-dialog';
 
-export const GroupLeaveButton = ({ groupId }: { groupId: string | undefined }) => {
+export const GroupLeaveButton = ({
+  relay,
+  groupId,
+}: {
+  relay: string | undefined;
+  groupId: string | undefined;
+}) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { toast } = useToast();
 
   const handleLeaveGroup = () => {
-    groupId &&
+    relay &&
+      groupId &&
       sendGroupLeaveRequest({
+        relay,
         groupId,
         leaveRequest: {
           reason: '',

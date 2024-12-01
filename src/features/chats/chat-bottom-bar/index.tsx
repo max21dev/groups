@@ -26,6 +26,7 @@ export const ChatBottomBar = () => {
     openUploadMediaDialog,
     isUploadingMedia,
     openLoginModal,
+    activeRelay,
     activeGroupId,
   } = useChatBottomBar();
 
@@ -34,7 +35,7 @@ export const ChatBottomBar = () => {
   }
 
   if (!isMember && !isAdmin) {
-    return <JoinRequestButton groupId={activeGroupId} />;
+    return <JoinRequestButton relay={activeRelay} groupId={activeGroupId} />;
   }
 
   return (

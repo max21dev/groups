@@ -8,11 +8,12 @@ import { Label } from '@/shared/components/ui/label';
 import { useToast } from '@/shared/components/ui/use-toast';
 
 export type GroupMetadataFormProps = {
+  relay: string | undefined;
   groupId: string | undefined;
   initialMetadata?: Partial<Nip29GroupMetadata>;
 };
 
-export const GroupMetadataForm = ({ initialMetadata, groupId }: GroupMetadataFormProps) => {
+export const GroupMetadataForm = ({ initialMetadata, relay, groupId }: GroupMetadataFormProps) => {
   const [name, setName] = useState(initialMetadata?.name ?? '');
   const [picture, setPicture] = useState(initialMetadata?.picture ?? '');
   const [about, setAbout] = useState(initialMetadata?.about ?? '');
@@ -22,8 +23,10 @@ export const GroupMetadataForm = ({ initialMetadata, groupId }: GroupMetadataFor
   const { toast } = useToast();
 
   const handleSubmit = useCallback(() => {
-    groupId &&
+    relay &&
+      groupId &&
       editGroupMetadata({
+        relay,
         groupId,
         metadata: { about, isOpen, isPublic, name, picture },
         onSuccess: () => {
