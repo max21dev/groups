@@ -36,7 +36,7 @@ export const useChatListItem = ({
   const { activeUser } = useActiveUser();
 
   const { reactions } = useGroupReactions(activeRelay, activeGroupId, {
-    byTargetId: { id: chat?.id, waitForId: true },
+    byTargetId: { targetId: chat?.id, waitForTargetId: true },
   });
 
   const { profile } = useProfile({ pubkey: chat?.pubkey });
@@ -79,41 +79,52 @@ export const useChatListItem = ({
   const sendReaction = useCallback(
     (content: string, targetId: string) =>
       activeGroupId &&
+      activeRelay &&
       sendGroupReaction({
+        relay: activeRelay,
         groupId: activeGroupId,
         reaction: { content, targetId },
         onError: () => {
           toast({ title: 'Error', description: 'Failed to send reaction', variant: 'destructive' });
         },
       }),
-    [activeGroupId, toast],
+    [activeGroupId, activeRelay, toast],
   );
 
-  const deleteChat = useCallback((chat: Nip29GroupChat) => {
-    if (chat.pubkey === activeUser?.pubkey) {
-      chatsEvents
-        ?.find((e) => e.id === chat.id)
-        ?.delete()
-        .then(() => {
-          setDeletedChats?.((prev) => [...prev, chat.id]);
-        })
-        .catch(() => {
-          toast({ title: 'Error', description: 'Failed to delete chat', variant: 'destructive' });
-        });
-    } else {
-      activeGroupId &&
-        deleteGroupEvent({
-          groupId: activeGroupId,
-          eventId: chat.id,
-          onSuccess: () => {
+  const deleteChat = useCallback(
+    (chat: Nip29GroupChat) => {
+      if (chat.pubkey === activeUser?.pubkey) {
+        chatsEvents
+          ?.find((e) => e.id === chat.id)
+          ?.delete()
+          .then(() => {
             setDeletedChats?.((prev) => [...prev, chat.id]);
-          },
-          onError() {
+          })
+          .catch(() => {
             toast({ title: 'Error', description: 'Failed to delete chat', variant: 'destructive' });
-          },
-        });
-    }
-  }, []);
+          });
+      } else {
+        activeGroupId &&
+          activeRelay &&
+          deleteGroupEvent({
+            relay: activeRelay,
+            groupId: activeGroupId,
+            eventId: chat.id,
+            onSuccess: () => {
+              setDeletedChats?.((prev) => [...prev, chat.id]);
+            },
+            onError() {
+              toast({
+                title: 'Error',
+                description: 'Failed to delete chat',
+                variant: 'destructive',
+              });
+            },
+          });
+      }
+    },
+    [activeUser, activeGroupId, activeRelay, chatsEvents, setDeletedChats, toast],
+  );
 
   return {
     isLastChat,

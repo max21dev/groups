@@ -3,10 +3,9 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { Muted } from '@/shared/components/ui/typography/muted';
 
-import { ChatListDateBadge, ChatListItem } from '@/features/chats';
-
 import { cn, sameDay } from '@/shared/utils';
 
+import { ChatListDateBadge, ChatListItem } from './components';
 import { useChatList } from './hooks';
 
 // TODO: Fix Animate Bugs

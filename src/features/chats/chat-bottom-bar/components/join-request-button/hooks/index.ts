@@ -6,7 +6,7 @@ import { useToast } from '@/shared/components/ui/use-toast';
 
 import { useLoginModalState } from '@/shared/hooks';
 
-export const useJoinRequestButton = ({ groupId }: { groupId: string | undefined }) => {
+export const useJoinRequestButton = (relay: string | undefined, groupId: string | undefined) => {
   const { toast } = useToast();
 
   const { activeUser } = useActiveUser();
@@ -15,7 +15,7 @@ export const useJoinRequestButton = ({ groupId }: { groupId: string | undefined 
 
   const sendJoinRequest = useCallback(
     (code?: string, reason?: string) => {
-      if (!groupId) return;
+      if (!relay || !groupId) return;
 
       if (!activeUser) {
         openLoginModal();
@@ -23,7 +23,8 @@ export const useJoinRequestButton = ({ groupId }: { groupId: string | undefined 
       }
 
       sendGroupJoinRequest({
-        groupId: groupId,
+        relay,
+        groupId,
         joinRequest: {
           code,
           reason,

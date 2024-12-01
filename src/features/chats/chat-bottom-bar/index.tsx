@@ -1,13 +1,15 @@
 import { useChatBottomBar } from './hooks';
 
-import { EmojiButton } from './emoji-button';
-import { InputMessage } from './input-message';
-import { JoinRequestButton } from './join-request-button';
-import { LoginButton } from './login-button';
-import { ReplyTo } from './reply-to';
-import { SendButton } from './send-button';
-import { ThumbsUpButton } from './thumbs-up-button';
-import { UploadImageButton } from './upload-media-button';
+import {
+  EmojiButton,
+  InputMessage,
+  JoinRequestButton,
+  LoginButton,
+  ReplyTo,
+  SendButton,
+  ThumbsUpButton,
+  UploadImageButton,
+} from './components';
 
 export const ChatBottomBar = () => {
   const {

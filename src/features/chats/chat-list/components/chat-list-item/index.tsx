@@ -10,11 +10,11 @@ import {
   ContextMenuTrigger,
 } from '@/shared/components/ui/context-menu';
 
-import { ChatListItemReactions } from '@/features/chats';
 import { UserAvatar, UserProfileModal } from '@/features/users';
 
 import { cn, ellipsis, loader } from '@/shared/utils';
 
+import { ChatListItemReactions } from './components';
 import { useChatListItem } from './hooks';
 import { ChatListItemProps } from './types';
 
@@ -45,7 +45,7 @@ export const ChatListItem = ({
     sendReaction,
     deleteChat,
     categorizedReactions,
-  } = useChatListItem({ topChat, bottomChat, nextChat, chats, chat, setDeletedChats });
+  } = useChatListItem({ topChat, bottomChat, nextChat, chats, chat, setDeletedChats, chatsEvents });
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
@@ -69,7 +69,7 @@ export const ChatListItem = ({
         </>
       )}
 
-      <div className={cn('flex gap-3', sameAsCurrentUser && 'flex-row-reverse')}>
+      <div className={cn('flex gap-1', sameAsCurrentUser && 'flex-row-reverse')}>
         <div className="flex flex-col">
           <ContextMenu>
             <ContextMenuTrigger>
@@ -94,7 +94,7 @@ export const ChatListItem = ({
                   >
                     {firstReplyImageUrl && (
                       <img
-                        className="rounded-sm"
+                        className="rounded-sm w-8 h-8"
                         src={loader(firstReplyImageUrl, { w: 50, h: 50 })}
                         alt="Reply Chat Image"
                       />
@@ -225,7 +225,7 @@ export const ChatListItem = ({
         </div>
 
         <SmilePlusIcon
-          className="h-5 w-5 -ml-2 hidden group-hover:block self-end hover:cursor-pointer"
+          className="h-5 w-5 hidden group-hover:block self-end hover:cursor-pointer"
           onClick={() => setIsEmojiPickerOpen(true)}
         />
       </div>
