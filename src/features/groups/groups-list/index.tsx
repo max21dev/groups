@@ -26,8 +26,6 @@ export const GroupsList = () => {
     [metadataRecords, lastChatTimestampPerGroup],
   );
 
-  console.log('sortedGroupIds', sortedGroupIds);
-
   if (isLoadingMetadata) return <Spinner />;
 
   if (!sortedGroupIds.length) return null;
