@@ -1,3 +1,4 @@
+import { useLogin } from 'nostr-hooks';
 import { nsecEncode } from 'nostr-tools/nip19';
 import { generateSecretKey } from 'nostr-tools/pure';
 import { useState } from 'react';
@@ -5,7 +6,6 @@ import { useState } from 'react';
 import { useToast } from '@/shared/components/ui/use-toast';
 
 import { useLoginModalState } from '@/shared/hooks';
-import { useLogin } from 'nostr-hooks';
 
 export const useLoginModal = () => {
   const [nip46Input, setNip46Input] = useState('');
