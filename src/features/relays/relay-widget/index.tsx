@@ -23,7 +23,7 @@ export const RelayWidget = ({ relay }: { relay: { url: string; status: string } 
           <span>Status:</span>
           <Badge className={relay.url ? 'bg-green-500' : 'bg-red-500'}>
             {/*TODO: get online relay status*/}
-            {relay?.status}
+            {/*{relay?.status} */ 'CONNECTED'}
           </Badge>
         </div>
         <div className="mt-2">
