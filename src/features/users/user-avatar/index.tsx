@@ -18,15 +18,13 @@ export function UserAvatar({ pubkey }: { pubkey: string }) {
       <Tooltip>
         <TooltipTrigger asChild>
           <Avatar>
-            {!profile || !profile.image ? (
-              <AvatarFallback
-                className={cn('text-primary-foreground', getAvatarFallbackColor(pubkey))}
-              >
-                {pubkey.slice(0, 2).toUpperCase()}
-              </AvatarFallback>
-            ) : (
-              <AvatarImage src={loader(profile?.image, { w: 50, h: 50 })} alt={profile?.name} />
-            )}
+            <AvatarImage src={loader(profile?.image || '', { w: 50, h: 50 })} alt={profile?.name} />
+
+            <AvatarFallback
+              className={cn('text-primary-foreground', getAvatarFallbackColor(pubkey))}
+            >
+              {pubkey.slice(0, 2).toUpperCase()}
+            </AvatarFallback>
           </Avatar>
         </TooltipTrigger>
         <TooltipContent>
