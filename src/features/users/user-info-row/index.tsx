@@ -1,6 +1,6 @@
 import { useProfile } from 'nostr-hooks';
+import { nip19 } from 'nostr-tools';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
 import {
   Tooltip,
   TooltipContent,
@@ -10,36 +10,34 @@ import {
 
 import { Badge } from '@/shared/components/ui/badge';
 
+import { UserAvatar } from '@/features/users';
+
 import { ellipsis } from '@/shared/utils';
 
 export function UserInfoRow({ pubkey, roles }: { pubkey: string | undefined; roles?: string[] }) {
   const { profile } = useProfile({ pubkey });
 
-  if (!profile) return null;
+  if (!pubkey) return null;
+
+  const npub = nip19.npubEncode(pubkey);
 
   return (
     <div className="flex items-center gap-4 p-2">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Avatar className="flex justify-center items-center">
-              {!profile.image ? (
-                <AvatarFallback>{pubkey?.slice(0, 2).toUpperCase()}</AvatarFallback>
-              ) : (
-                <AvatarImage src={profile.image} alt={profile.name || 'profile'} />
-              )}
-            </Avatar>
+            <UserAvatar pubkey={pubkey} />
           </TooltipTrigger>
           <TooltipContent>
-            <p>{profile.name || pubkey}</p>
+            <p>{profile?.name || ellipsis(npub, 10)}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
       <div className="flex flex-col justify-center">
-        <span className="text-sm">{profile.name}</span>
-        <span className="text-sm">{profile.nip05}</span>
-        {!profile.name && !profile.nip05 && pubkey && (
-          <span className="text-sm text-gray-500">{ellipsis(pubkey, 10)}</span>
+        <span className="text-sm">{profile?.name}</span>
+        <span className="text-sm">{profile?.nip05}</span>
+        {!profile?.name && !profile?.nip05 && pubkey && (
+          <span className="text-sm text-gray-500">{ellipsis(npub, 10)}</span>
         )}
         {roles && (
           <div className="flex gap-2 flex-wrap">
