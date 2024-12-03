@@ -4,7 +4,13 @@ import { cn } from '@/shared/utils/cn';
 
 import { useSidebar } from './hooks';
 
-export const Sidebar = ({ children }: { children: React.ReactNode }) => {
+export const Sidebar = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
   const {
     setIsCollapsed,
     sidebarWidth,
@@ -12,6 +18,7 @@ export const Sidebar = ({ children }: { children: React.ReactNode }) => {
     setHasCustomSidebarWidth,
     transition,
     setTransition,
+    isMobile,
   } = useSidebar();
 
   return (
@@ -20,37 +27,44 @@ export const Sidebar = ({ children }: { children: React.ReactNode }) => {
         className={cn(
           'overflow-hidden border-r min-w-20 max-w-[70%]',
           transition && 'transition-all duration-75 ease-in-out',
+          className,
         )}
-        size={{ width: sidebarWidth }}
-        onResizeStart={() => setTransition(false)}
+        size={{ width: isMobile ? window.innerWidth : sidebarWidth }}
+        onResizeStart={() => {
+          if (!isMobile) setTransition(false);
+        }}
         onResize={(_, __, ___, d) => {
-          const dWidth = d.width;
-          const newWidth = sidebarWidth + dWidth;
+          if (!isMobile) {
+            const dWidth = d.width;
+            const newWidth = sidebarWidth + dWidth;
 
-          if (newWidth > 340) {
-            setIsCollapsed(false);
-          } else if (newWidth < 120) {
-            setIsCollapsed(true);
-          } else if (dWidth > 0 && newWidth > 120) {
-            setIsCollapsed(false);
-          } else if (dWidth < 0 && newWidth < 300) {
-            setIsCollapsed(true);
+            if (newWidth > 340) {
+              setIsCollapsed(false);
+            } else if (newWidth < 120) {
+              setIsCollapsed(true);
+            } else if (dWidth > 0 && newWidth > 120) {
+              setIsCollapsed(false);
+            } else if (dWidth < 0 && newWidth < 300) {
+              setIsCollapsed(true);
+            }
           }
         }}
         onResizeStop={(_, __, ___, d) => {
-          setTransition(true);
-          setHasCustomSidebarWidth(true);
+          if (!isMobile) {
+            setTransition(true);
+            setHasCustomSidebarWidth(true);
 
-          const dWidth = d.width;
-          const newWidth = sidebarWidth + dWidth;
+            const dWidth = d.width;
+            const newWidth = sidebarWidth + dWidth;
 
-          if (newWidth > 340) {
-            setSidebarWidth(newWidth);
-          } else {
-            if (dWidth > 0 && dWidth > 40) {
-              setSidebarWidth(340);
-            } else if (dWidth < 0 && dWidth < -40) {
-              setSidebarWidth(80);
+            if (newWidth > 340) {
+              setSidebarWidth(newWidth);
+            } else {
+              if (dWidth > 0 && dWidth > 40) {
+                setSidebarWidth(340);
+              } else if (dWidth < 0 && dWidth < -40) {
+                setSidebarWidth(80);
+              }
             }
           }
         }}

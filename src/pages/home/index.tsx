@@ -19,7 +19,7 @@ export function HomePage() {
   return (
     <>
       <div className="flex w-full h-full">
-        <Sidebar>
+        <Sidebar className={cn('sm:block max-w-full w-full', activeGroupId && 'max-sm:hidden')}>
           <div className="flex flex-col w-full h-full">
             <div className="p-2">
               <div className={cn('flex gap-1 w-full', isCollapsed && 'flex-col')}>
@@ -33,11 +33,14 @@ export function HomePage() {
 
             <div
               className={cn(
-                'p-2 flex flex-col h-full gap-4 overflow-y-hidden hover:overflow-y-auto',
-                isCollapsed && 'justify-center',
+                'p-2 flex flex-col h-full gap-4 overflow-y-hidden hover:overflow-y-auto max-sm:overflow-y-auto',
               )}
             >
               <GroupsList />
+
+              {!activeRelay && (
+                <RelayList className="sm:hidden sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1" />
+              )}
             </div>
 
             <div className="mt-auto w-full">
@@ -46,7 +49,7 @@ export function HomePage() {
           </div>
         </Sidebar>
 
-        <div className="w-full">
+        <div className={cn('w-full', 'sm:block', !activeGroupId && 'max-sm:hidden')}>
           <div className="flex flex-col w-full h-full">
             {!activeGroupId ? (
               <div className="flex flex-col justify-center items-center h-full">

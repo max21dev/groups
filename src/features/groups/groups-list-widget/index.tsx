@@ -13,7 +13,7 @@ export const GroupsListWidget = () => {
   if (Object.keys(metadataRecords).length == 0) return null;
 
   return (
-    <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2 p-4 overflow-x-auto">
+    <div className="w-full grid sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-5 gap-2 p-4 overflow-x-auto">
       {Object.keys(metadataRecords).map((groupId) => (
         <GroupWidget key={groupId} groupId={groupId} />
       ))}

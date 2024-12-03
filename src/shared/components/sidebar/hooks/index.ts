@@ -4,6 +4,7 @@ import { useStore } from '@/shared/store';
 
 export const useSidebar = () => {
   const [transition, setTransition] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const isGroupDetailsOpen = useStore((state) => state.isGroupDetailsOpen);
   const sidebarWidth = useStore((state) => state.sidebarWidth);
@@ -15,6 +16,9 @@ export const useSidebar = () => {
 
   useEffect(() => {
     const checkScreenWidth = () => {
+      const isMobileView = window.innerWidth < 640;
+      setIsMobile(isMobileView);
+
       if (hasCustomSidebarWidth) return;
 
       // Set the sidebar width based on the screen width if the user hasn't set a custom width
@@ -43,5 +47,6 @@ export const useSidebar = () => {
     setSidebarWidth,
     sidebarWidth,
     setHasCustomSidebarWidth,
+    isMobile,
   };
 };

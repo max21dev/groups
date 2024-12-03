@@ -1,4 +1,5 @@
-import { Info } from 'lucide-react';
+import { ArrowLeft, Info } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 import { GroupAvatar, GroupDetails } from '@/features/groups';
 
@@ -18,10 +19,17 @@ export const ChatTopBar = () => {
   const { metadata, isGroupDetailsOpen, toggleGroupDetails, activeGroupId, activeRelay } =
     useChatTopBar();
 
+  const navigate = useNavigate();
+
   return (
     <div className="w-full border-b">
       <div className="flex justify-between items-center px-4 py-2">
         <div className="flex items-center gap-2">
+          <ArrowLeft
+            className="sm:hidden hover:cursor-pointer"
+            onClick={() => navigate(`/${activeRelay?.replace(/^wss:\/\//, '')}`)}
+          />
+
           <GroupAvatar relay={activeRelay} groupId={activeGroupId} />
 
           <div className="flex flex-col">

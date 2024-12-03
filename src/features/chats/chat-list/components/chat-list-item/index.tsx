@@ -75,7 +75,7 @@ export const ChatListItem = ({
             <ContextMenuTrigger>
               <div
                 className={cn(
-                  'p-2 mt-1 rounded-lg max-w-xl whitespace-pre-wrap',
+                  'p-2 mt-1 rounded-lg max-w-xl max-sm:max-w-72 whitespace-pre-wrap',
                   sameAsCurrentUser
                     ? 'mr-2 bg-blue text-blue-foreground'
                     : 'bg-secondary text-secondary-foreground',
@@ -105,7 +105,9 @@ export const ChatListItem = ({
                           ? replyAuthorProfile.displayName
                           : reply?.pubkey?.slice(0, 5) + '...'}
                       </div>
-                      <div>{ellipsis(reply?.content || '', 50)}</div>
+                      <div className="[overflow-wrap:anywhere]">
+                        {ellipsis(reply?.content || '', 50)}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -117,7 +119,7 @@ export const ChatListItem = ({
                     categorizedReactions && 'flex-col',
                   )}
                 >
-                  <div className="[overflow-wrap:anywhere]">
+                  <div className="[overflow-wrap:anywhere] self-start">
                     {categorizedChatContent.map((part, i) => {
                       if (part.category == 'text') {
                         return (
@@ -139,7 +141,7 @@ export const ChatListItem = ({
                       } else if (part.category == 'video') {
                         return (
                           <div className="max-w-full rounded-lg mt-2 react-player">
-                            <ReactPlayer width={500} url={part.content} controls={true} />
+                            <ReactPlayer width="100%" url={part.content} controls={true} />
                           </div>
                         );
                       } else if (part.category == 'url') {
