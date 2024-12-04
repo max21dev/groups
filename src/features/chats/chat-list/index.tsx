@@ -1,5 +1,9 @@
 // import { AnimatePresence, motion } from 'framer-motion';
+import { Nip29GroupChat } from 'nostr-hooks/nip29';
+
 import InfiniteScroll from 'react-infinite-scroll-component';
+
+import UserJoinLeaveBadge from '@/features/users/user-join-leave-badge';
 
 import { Muted } from '@/shared/components/ui/typography/muted';
 
@@ -23,9 +27,29 @@ export function ChatList() {
     chatsEvents,
     topChat,
     bottomChat,
+    joinRequests,
+    leaveRequests,
   } = useChatList();
 
-  if (!processedChats) return null;
+  const combinedList = [
+    ...(processedChats || []).map((chat) => ({
+      content: chat,
+      type: 'chat',
+      timestamp: chat.timestamp,
+    })),
+    ...(joinRequests ?? []).map((join) => ({
+      content: join,
+      type: 'join',
+      timestamp: join.timestamp,
+    })),
+    ...(leaveRequests ?? []).map((leave) => ({
+      content: leave,
+      type: 'leave',
+      timestamp: leave.timestamp,
+    })),
+  ].sort((a, b) => a.timestamp - b.timestamp);
+
+  if (!combinedList) return null;
 
   return (
     <div className="w-full overflow-x-hidden h-full flex flex-col">
@@ -36,7 +60,7 @@ export function ChatList() {
       >
         {/* <AnimatePresence> */}
         <InfiniteScroll
-          dataLength={processedChats.length}
+          dataLength={combinedList.length}
           next={loadMore}
           className="flex flex-col"
           inverse={true}
@@ -45,9 +69,9 @@ export function ChatList() {
           scrollThreshold={'300px'}
           scrollableTarget="scrollableDiv"
         >
-          {processedChats.map((chat, i, arr) => (
+          {combinedList.map((item, i, arr) => (
             <div
-              key={chat.id}
+              key={item.content.id}
               // layout
               // initial={{ opacity: 0, scale: 1, y: 50, x: 0 }}
               // animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
@@ -66,29 +90,35 @@ export function ChatList() {
               // }}
               className={cn(
                 'flex flex-col gap-2 whitespace-pre-wrap',
-                chat.pubkey !== activeUser?.pubkey ? 'items-start' : 'items-end mr-2',
+                item.content.pubkey !== activeUser?.pubkey ? 'items-start' : 'items-end mr-2',
               )}
               ref={(el) => {
-                chatRefs.current[chat.id] = el;
+                chatRefs.current[item.content.id] = el;
               }}
             >
-              {(i == 0 || !sameDay(chat.timestamp, arr[i - 1].timestamp)) && (
-                <ChatListDateBadge date={new Date(chat.timestamp * 1000)} />
+              {(i == 0 || !sameDay(item.content.timestamp, arr[i - 1].timestamp)) && (
+                <ChatListDateBadge date={new Date(item.content.timestamp * 1000)} />
               )}
-              <ChatListItem
-                chat={chat}
-                setDeletedChats={setDeletedChats}
-                scrollToChat={scrollToChat}
-                chats={processedChats}
-                chatsEvents={chatsEvents}
-                topChat={topChat}
-                bottomChat={bottomChat}
-                nextChat={arr[i + 1]}
-              />
+              {item.type === 'chat' && (
+                <ChatListItem
+                  chat={item.type === 'chat' ? (item.content as Nip29GroupChat) : undefined}
+                  setDeletedChats={setDeletedChats}
+                  scrollToChat={scrollToChat}
+                  chats={processedChats || []}
+                  chatsEvents={chatsEvents}
+                  topChat={topChat}
+                  bottomChat={bottomChat}
+                  nextChat={
+                    arr[i + 1]?.type === 'chat' ? (arr[i + 1].content as Nip29GroupChat) : undefined
+                  }
+                />
+              )}
+
+              {item.type === 'join' && <UserJoinLeaveBadge request={item.content} type="join" />}
+              {item.type === 'leave' && <UserJoinLeaveBadge request={item.content} type="leave" />}
             </div>
           ))}
         </InfiniteScroll>
-
         {/* </AnimatePresence> */}
       </div>
     </div>

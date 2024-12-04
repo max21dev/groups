@@ -12,8 +12,8 @@ import { Badge } from '@/shared/components/ui/badge';
 
 import { UserAvatar } from '@/features/users';
 
-import { ellipsis } from '@/shared/utils';
 import { UserAssignRoleDialog } from '@/features/users/user-assign-role-dialog';
+import { ellipsis } from '@/shared/utils';
 
 export function UserInfoRow({ pubkey, roles }: { pubkey: string | undefined; roles?: string[] }) {
   const { profile } = useProfile({ pubkey });
@@ -23,7 +23,7 @@ export function UserInfoRow({ pubkey, roles }: { pubkey: string | undefined; rol
   const npub = nip19.npubEncode(pubkey);
 
   return (
-    <div className="flex justify-between hover:bg-amber-50">
+    <div className="flex justify-between items-center pe-2 hover:bg-gray-100 rounded-sm">
       <div className="flex items-center gap-4 p-2">
         <TooltipProvider>
           <Tooltip>

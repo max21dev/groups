@@ -1,5 +1,5 @@
 import { useActiveUser } from 'nostr-hooks';
-import { useGroupChats } from 'nostr-hooks/nip29';
+import { useGroupChats, useGroupJoinRequests, useGroupLeaveRequests } from 'nostr-hooks/nip29';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useActiveGroup, useActiveRelay } from '@/shared/hooks';
@@ -52,6 +52,9 @@ export const useChatList = () => {
     }
   };
 
+  const { joinRequests } = useGroupJoinRequests(activeRelay, activeGroupId);
+  const { leaveRequests } = useGroupLeaveRequests(activeRelay, activeGroupId);
+
   return {
     chatsContainerRef,
     chatRefs,
@@ -64,5 +67,7 @@ export const useChatList = () => {
     hasMore: hasMoreChats,
     topChat,
     bottomChat,
+    joinRequests,
+    leaveRequests,
   };
 };
