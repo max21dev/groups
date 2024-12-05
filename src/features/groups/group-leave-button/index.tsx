@@ -47,7 +47,7 @@ export const GroupLeaveButton = ({
         </Button>
       }
       title="Confirm Delete"
-      confirmButtonLabel="Yes, Delete Group"
+      confirmButtonLabel="Yes, Leave Group"
       confirmButtonVariant="destructive"
       confirmAction={handleLeaveGroup}
       open={isDialogOpen}
