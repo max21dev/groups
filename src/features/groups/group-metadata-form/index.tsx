@@ -1,11 +1,13 @@
 import { EyeClosedIcon, EyeIcon, LockIcon, LockOpenIcon } from 'lucide-react';
 import { editGroupMetadata, Nip29GroupMetadata } from 'nostr-hooks/nip29';
 import { useCallback, useState } from 'react';
-
+import { UploadImageButton } from '@/features/chats/chat-bottom-bar/components';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import { Label } from '@/shared/components/ui/label';
+import { Textarea } from '@/shared/components/ui/textarea';
 import { useToast } from '@/shared/components/ui/use-toast';
+import { useGroupMetadataForm } from './hooks';
 
 export type GroupMetadataFormProps = {
   relay: string | undefined;
@@ -19,9 +21,9 @@ export const GroupMetadataForm = ({ initialMetadata, relay, groupId }: GroupMeta
   const [about, setAbout] = useState(initialMetadata?.about ?? '');
   const [isPublic, setIsPublic] = useState(initialMetadata?.isPublic ?? true);
   const [isOpen, setIsOpen] = useState(initialMetadata?.isOpen ?? true);
-
   const { toast } = useToast();
-
+  const { groupImageUrlInputRef, openUploadImageDialog, isUploadingGroupImage } =
+    useGroupMetadataForm(setPicture);
   const handleSubmit = useCallback(() => {
     relay &&
       groupId &&
@@ -58,22 +60,31 @@ export const GroupMetadataForm = ({ initialMetadata, relay, groupId }: GroupMeta
 
         <div>
           <Label htmlFor="group-picture">Picture (URL):</Label>
-          <Input
-            id="group-picture"
-            type="text"
-            placeholder="https://example.com/picture.jpg"
-            value={picture}
-            onChange={(e) => setPicture(e.target.value)}
-          />
+          <div className="relative">
+            <Input
+              ref={groupImageUrlInputRef}
+              id="group-picture"
+              className="pr-10"
+              type="text"
+              placeholder="https://example.com/picture.jpg"
+              value={picture}
+              onChange={(e) => setPicture(e.target.value)}
+            />
+            <span className="[&_.animate-spin]:h-6 [&_.animate-spin]:w-6 bg-gray-200 dark:bg-gray-900 rounded-md rounded-s-none absolute top-0 end-0">
+              <UploadImageButton
+                isUploadingMedia={isUploadingGroupImage}
+                openUploadMediaDialog={openUploadImageDialog}
+              />
+            </span>
+          </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4">
         <div>
           <Label htmlFor="group-about">About:</Label>
-          <Input
+          <Textarea
             id="group-about"
-            type="text"
             placeholder="We are the cool folks!"
             value={about}
             onChange={(e) => setAbout(e.target.value)}
