@@ -24,19 +24,20 @@ export const GroupDetails = ({
 
   return (
     <div>
-      <Button variant="outline" onClick={() => setEditMode(!editMode)}>
-        {editMode ? <Undo2 className="mr-2 h-4 w-4" /> : <Edit className="mr-2 h-4 w-4" />}
-        {editMode ? 'Back to view mode' : 'Edit'}
-      </Button>
+      <div className="flex flex-wrap gap-2">
+        <Button variant="outline" onClick={() => setEditMode(!editMode)}>
+          {editMode ? <Undo2 className="mr-2 h-4 w-4" /> : <Edit className="mr-2 h-4 w-4" />}
+          {editMode ? 'Back to view mode' : 'Edit'}
+        </Button>
 
-      <GroupLeaveButton relay={relay} groupId={groupId} />
+        <GroupLeaveButton relay={relay} groupId={groupId} />
 
-      <GroupDeleteButton relay={relay} groupId={groupId} />
-
+        <GroupDeleteButton relay={relay} groupId={groupId} />
+      </div>
       {editMode && metadata ? (
         <GroupMetadataForm relay={relay} groupId={groupId} initialMetadata={metadata} />
       ) : (
-        <div className="h-full overflow-y-auto mt-4">
+        <div className="h-full overflow-y-auto mt-4 [overflow-wrap:anywhere]">
           <div className="flex flex-col items-center min-h-3">
             <GroupAvatar key={groupId} relay={relay} groupId={groupId} />
             <div className="text-sm font-light mt-2">{groupId}</div>

@@ -41,7 +41,7 @@ export const GroupLeaveButton = ({
   return (
     <ConfirmDialog
       triggerButton={
-        <Button className="ml-2" variant="destructive">
+        <Button variant="destructive">
           <Trash className="h-3 w-3 m-2" />
           Leave Group
         </Button>
