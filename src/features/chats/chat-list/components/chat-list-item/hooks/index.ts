@@ -8,6 +8,9 @@ import {
 } from 'nostr-hooks/nip29';
 import { useCallback, useMemo } from 'react';
 
+import { useJoinRequestButton } from '@/features/chats/chat-bottom-bar/components/join-request-button/hooks';
+import { useChatBottomBar } from '@/features/chats/chat-bottom-bar/hooks';
+
 import { useToast } from '@/shared/components/ui/use-toast';
 
 import { useActiveGroup, useActiveRelay, useZapModalState } from '@/shared/hooks';
@@ -40,6 +43,9 @@ export const useChatListItem = ({
   });
 
   const { profile } = useProfile({ pubkey: chat?.pubkey });
+
+  const { isAdmin, isMember } = useChatBottomBar();
+  const { sendJoinRequest } = useJoinRequestButton(activeRelay, activeGroupId);
 
   const categorizedReactions = useMemo(() => {
     return reactions?.reduce(
@@ -77,9 +83,13 @@ export const useChatListItem = ({
   const { toast } = useToast();
 
   const sendReaction = useCallback(
-    (content: string, targetId: string) =>
-      activeGroupId &&
-      activeRelay &&
+    (content: string, targetId: string) => {
+      if (!activeGroupId || !activeRelay) return;
+
+      if (!isAdmin && !isMember) {
+        sendJoinRequest();
+      }
+
       sendGroupReaction({
         relay: activeRelay,
         groupId: activeGroupId,
@@ -87,8 +97,9 @@ export const useChatListItem = ({
         onError: () => {
           toast({ title: 'Error', description: 'Failed to send reaction', variant: 'destructive' });
         },
-      }),
-    [activeGroupId, activeRelay, toast],
+      });
+    },
+    [activeGroupId, activeRelay, isAdmin, isMember, sendJoinRequest, toast],
   );
 
   const deleteChat = useCallback(
