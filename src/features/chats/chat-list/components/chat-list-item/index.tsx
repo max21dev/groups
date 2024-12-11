@@ -11,6 +11,8 @@ import {
 } from '@/shared/components/ui/context-menu';
 
 import { UserAvatar, UserProfileModal } from '@/features/users';
+import { UserMention } from '@/features/users/user-mention';
+import { useUserProfileModal } from '@/features/users/user-profile-modal/hooks';
 
 import { cn, ellipsis, loader } from '@/shared/utils';
 
@@ -19,15 +21,15 @@ import { useChatListItem } from './hooks';
 import { ChatListItemProps } from './types';
 
 export const ChatListItem = ({
-  chat,
-  chats,
-  scrollToChat,
-  setDeletedChats,
-  chatsEvents,
-  topChat,
-  bottomChat,
-  nextChat,
-}: ChatListItemProps) => {
+                               chat,
+                               chats,
+                               scrollToChat,
+                               setDeletedChats,
+                               chatsEvents,
+                               topChat,
+                               bottomChat,
+                               nextChat,
+                             }: ChatListItemProps) => {
   const {
     profile,
     topChatAuthor,
@@ -47,26 +49,74 @@ export const ChatListItem = ({
     categorizedReactions,
   } = useChatListItem({ topChat, bottomChat, nextChat, chats, chat, setDeletedChats, chatsEvents });
 
+  const { isOpen, openModal, closeModal } = useUserProfileModal();
+
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
 
   if (!chat) return null;
 
+  const renderChatContent = () => {
+    return categorizedChatContent.map((part, i) => {
+      switch (part.category) {
+        case 'text':
+          return (
+            <p key={i} className="text-sm">
+              {part.content}
+            </p>
+          );
+        case 'image':
+          return (
+            <img
+              key={i}
+              src={loader(part.content, { w: 200 })}
+              alt="chat"
+              className="max-w-full h-40 rounded-lg mt-2 cursor-pointer"
+              onClick={() => setSelectedImage(part.content)}
+            />
+          );
+        case 'video':
+          return (
+            <div className="max-w-full rounded-lg mt-2 react-player">
+              <ReactPlayer width="100%" url={part.content} controls />
+            </div>
+          );
+        case 'url':
+          return (
+            <a
+              key={i}
+              href={part.content}
+              target="_blank"
+              rel="noreferrer"
+              className="text-xs text-pink-400 underline"
+            >
+              {part.content}
+            </a>
+          );
+        case 'mention':
+          return (
+            <UserMention
+              key={i}
+              npub={part.content}
+              sameAsCurrentUser={sameAsCurrentUser}
+            />
+          );
+        default:
+          return null;
+      }
+    });
+  };
+
   return (
     <div className={cn('flex ml-3 gap-3 relative group', !sameAuthorAsNextChat ? 'mb-4' : 'mb-0')}>
       {!sameAsCurrentUser && (
-        <>
+        <div className={isLastChat || !sameAuthorAsNextChat ? 'mt-auto' : 'w-10'}>
           {isLastChat || !sameAuthorAsNextChat ? (
-            <div className="mt-auto">
-              <div className="cursor-pointer" onClick={() => setIsProfileModalOpen(true)}>
-                <UserAvatar pubkey={chat.pubkey} />
-              </div>
+            <div className="cursor-pointer" onClick={openModal}>
+              <UserAvatar pubkey={chat.pubkey} />
             </div>
-          ) : (
-            <div className="w-10" />
-          )}
-        </>
+          ) : null}
+        </div>
       )}
 
       <div className={cn('flex gap-1', sameAsCurrentUser && 'flex-row-reverse')}>
@@ -119,46 +169,7 @@ export const ChatListItem = ({
                     categorizedReactions && 'flex-col',
                   )}
                 >
-                  <div className="[overflow-wrap:anywhere] self-start">
-                    {categorizedChatContent.map((part, i) => {
-                      if (part.category == 'text') {
-                        return (
-                          <p key={i} className="text-sm">
-                            {part.content}
-                          </p>
-                        );
-                      } else if (part.category == 'image') {
-                        return (
-                          <img
-                            key={i}
-                            src={loader(part.content, { w: 200 })}
-                            alt="chat"
-                            className="max-w-full h-40 rounded-lg mt-2 cursor-pointer"
-                            max-width="200"
-                            onClick={() => setSelectedImage(part.content)}
-                          />
-                        );
-                      } else if (part.category == 'video') {
-                        return (
-                          <div className="max-w-full rounded-lg mt-2 react-player">
-                            <ReactPlayer width="100%" url={part.content} controls={true} />
-                          </div>
-                        );
-                      } else if (part.category == 'url') {
-                        return (
-                          <a
-                            key={i}
-                            href={part.content}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-xs text-pink-400 underline"
-                          >
-                            {part.content}
-                          </a>
-                        );
-                      }
-                    })}
-                  </div>
+                  <div className="[overflow-wrap:anywhere] self-start">{renderChatContent()}</div>
 
                   <div className="ml-auto flex gap-2 items-center text-end text-xs font-light cursor-default">
                     {categorizedReactions && (
@@ -254,13 +265,7 @@ export const ChatListItem = ({
       )}
 
       {/* User Profile Modal */}
-      {isProfileModalOpen && (
-        <UserProfileModal
-          pubkey={chat.pubkey}
-          isOpen={isProfileModalOpen}
-          onClose={() => setIsProfileModalOpen(false)}
-        />
-      )}
+      {isOpen && <UserProfileModal pubkey={chat.pubkey} isOpen={isOpen} onClose={closeModal} />}
     </div>
   );
 };

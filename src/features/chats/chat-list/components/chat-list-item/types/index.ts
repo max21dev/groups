@@ -13,7 +13,7 @@ export type ChatListItemProps = {
   setDeletedChats: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
-export type ChatContentCategory = 'text' | 'image' | 'video' | 'url';
+export type ChatContentCategory = 'text' | 'image' | 'video' | 'url' | 'mention';
 
 export type CategorizedChatContent = {
   category: ChatContentCategory;
