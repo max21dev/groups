@@ -7,7 +7,7 @@ export const useActiveRelay = () => {
 
   const setActiveRelay = (relay: string | undefined) => {
     if (relay) {
-      navigate(`/${relay.replace('wss://', '')}`);
+      navigate(`/relay/${relay.replace('wss://', '')}`);
     } else {
       navigate(`/`);
     }

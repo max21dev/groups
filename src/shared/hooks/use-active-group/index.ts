@@ -7,9 +7,9 @@ export const useActiveGroup = () => {
 
   const setActiveGroupId = (groupId: string | undefined) => {
     if (groupId) {
-      navigate(`/${relay}/${groupId}`);
+      navigate(`/relay/${relay}/group/${groupId}`);
     } else {
-      navigate(`/${relay}`);
+      navigate(`/relay/${relay}`);
     }
   };
 
