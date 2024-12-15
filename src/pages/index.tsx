@@ -32,6 +32,7 @@ const Layout = () => {
 };
 
 const HomePage = () => import('@/pages/home');
+const UserPage = () => import('@/pages/user');
 
 export const router = createBrowserRouter([
   {
@@ -42,6 +43,12 @@ export const router = createBrowserRouter([
         path: '/',
         async lazy() {
           return { Component: (await HomePage()).HomePage };
+        },
+      },
+      {
+        path: '/user/:user',
+        async lazy() {
+          return { Component: (await UserPage()).UserPage };
         },
       },
       {
