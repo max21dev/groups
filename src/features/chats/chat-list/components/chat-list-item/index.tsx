@@ -13,6 +13,7 @@ import {
 import { UserAvatar, UserProfileModal } from '@/features/users';
 import { UserMention } from '@/features/users/user-mention';
 import { useUserProfileModal } from '@/features/users/user-profile-modal/hooks';
+import { NotePreview } from './components';
 
 import { cn, ellipsis, loader } from '@/shared/utils';
 
@@ -94,13 +95,9 @@ export const ChatListItem = ({
             </a>
           );
         case 'mention':
-          return (
-            <UserMention
-              key={i}
-              npub={part.content}
-              sameAsCurrentUser={sameAsCurrentUser}
-            />
-          );
+          return <UserMention key={i} npub={part.content} sameAsCurrentUser={sameAsCurrentUser} />;
+        case 'note':
+          return <NotePreview key={i} note={part.content} sameAsCurrentUser={sameAsCurrentUser} />;
         default:
           return null;
       }
