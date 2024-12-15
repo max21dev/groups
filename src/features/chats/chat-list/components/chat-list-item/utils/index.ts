@@ -6,18 +6,25 @@ const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
 const imageRegex = /\.(jpg|jpeg|png|gif|bmp|svg|webp)$/i;
 const videoRegex = /\.(mp4|mov)$/i;
 const youtubeRegex = /https?:\/\/(www\.)?youtube\.com\/watch\?v=[\w-]+$/i;
-const nostrMentionRegex = /nostr:npub1[0-9a-z]+/i;
+const nostrRegex = /nostr:[a-z0-9]+/i;
+const mentionRegex = /^npub1[0-9a-z]+$/i;
+const noteRegex = /^note1[0-9a-z]+$/i;
 
 const categorizePart = (part: string): CategorizedChatContent => {
-  if (nostrMentionRegex.test(part)) {
+  if (nostrRegex.test(part)) {
     const cleanPart = part.trim().replace(/:$/, '');
     try {
       const parsed = parse(cleanPart);
       if (parsed?.value) {
-        return { category: 'mention', content: parsed.value };
+        if (noteRegex.test(parsed?.value)) {
+          return { category: 'note', content: parsed.value };
+        }
+        if (mentionRegex.test(parsed?.value)) {
+          return { category: 'mention', content: parsed.value };
+        }
       }
     } catch {
-      return { category: 'text', content: cleanPart };
+      return { category: 'text', content: part };
     }
   }
 
@@ -35,7 +42,7 @@ const categorizePart = (part: string): CategorizedChatContent => {
 };
 
 export const categorizeChatContent = (content: string): CategorizedChatContent[] => {
-  const combinedRegex = new RegExp(`(${urlRegex.source})|(${nostrMentionRegex.source})`, 'gi');
+  const combinedRegex = new RegExp(`(${urlRegex.source})|(${nostrRegex.source})`, 'gi');
   const parts = content.split(combinedRegex).filter((part) => part?.trim() !== '');
   const uniqueParts = Array.from(new Set(parts));
 
