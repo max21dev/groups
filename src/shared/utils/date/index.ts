@@ -12,4 +12,11 @@ export const displayTime = (createdAt: number) => {
 
 export const sameDay = (date1: number, date2: number) => {
   return new Date(date1 * 1000).getDate() === new Date(date2 * 1000).getDate();
-}
+};
+
+export const formatTimestampToDate = (timestamp: number) => {
+  const date = new Date(timestamp * 1000);
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+
+  return date.toLocaleDateString('en-US', options);
+};

@@ -27,7 +27,7 @@ export const ChatTopBar = () => {
         <div className="flex items-center gap-2">
           <ArrowLeft
             className="sm:hidden hover:cursor-pointer"
-            onClick={() => navigate(`/${activeRelay?.replace(/^wss:\/\//, '')}`)}
+            onClick={() => navigate(`/relay/${activeRelay?.replace(/^wss:\/\//, '')}`)}
           />
 
           <GroupAvatar relay={activeRelay} groupId={activeGroupId} />
