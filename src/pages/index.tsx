@@ -15,7 +15,7 @@ const Layout = () => {
   }, [ndk]);
 
   useEffect(() => {
-    const explicitRelayUrls = ['wss://relay.primal.net'];
+    const explicitRelayUrls = ['wss://nos.lol', 'wss://relay.primal.net'];
     activeRelay && explicitRelayUrls.push(activeRelay);
 
     initNdk({ explicitRelayUrls }, true);
