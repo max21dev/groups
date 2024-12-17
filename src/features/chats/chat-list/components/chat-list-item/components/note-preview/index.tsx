@@ -3,9 +3,9 @@ import { cn, ellipsis } from '@/shared/utils';
 import { useNotePreview } from './hooks';
 
 export const NotePreview = ({
-                              note,
-                              sameAsCurrentUser,
-                            }: {
+  note,
+  sameAsCurrentUser,
+}: {
   note: string;
   sameAsCurrentUser: boolean;
 }) => {

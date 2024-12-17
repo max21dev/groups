@@ -22,15 +22,15 @@ import { useChatListItem } from './hooks';
 import { ChatListItemProps } from './types';
 
 export const ChatListItem = ({
-                               chat,
-                               chats,
-                               scrollToChat,
-                               setDeletedChats,
-                               chatsEvents,
-                               topChat,
-                               bottomChat,
-                               nextChat,
-                             }: ChatListItemProps) => {
+  chat,
+  chats,
+  scrollToChat,
+  setDeletedChats,
+  chatsEvents,
+  topChat,
+  bottomChat,
+  nextChat,
+}: ChatListItemProps) => {
   const {
     profile,
     topChatAuthor,
