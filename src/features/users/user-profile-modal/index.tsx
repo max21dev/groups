@@ -14,7 +14,7 @@ type UserProfileModalProps = {
   onClose: () => void;
 };
 
-export function UserProfileModal({ pubkey, isOpen, onClose }: UserProfileModalProps) {
+export const UserProfileModal = ({ pubkey, isOpen, onClose }: UserProfileModalProps) => {
   const [user, setUser] = useState<NDKUser>();
 
   const { profile } = useProfile({ pubkey });
@@ -67,4 +67,4 @@ export function UserProfileModal({ pubkey, isOpen, onClose }: UserProfileModalPr
       </DialogContent>
     </Dialog>
   );
-}
+};

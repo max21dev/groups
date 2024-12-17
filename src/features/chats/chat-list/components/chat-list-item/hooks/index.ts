@@ -74,7 +74,9 @@ export const useChatListItem = ({
 
   // TODO: refactor replies to new component
   const reply = chats?.find((e) => e.id === chat?.parentId);
+
   const { profile: replyAuthorProfile } = useProfile({ pubkey: reply?.pubkey });
+
   const firstReplyImageUrl = useMemo(
     () => fetchFirstContentImage(reply?.content || ''),
     [reply?.content],

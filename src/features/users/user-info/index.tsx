@@ -9,12 +9,12 @@ import { cn, getAvatarFallbackColor, loader } from '@/shared/utils';
 
 import { formatTimestampToDate } from '@/shared/utils/date';
 
-const UserInfo = ({
+export const UserInfo = ({
   profile,
   pubkey,
   npub,
 }: {
-  profile: NDKUserProfile | undefined;
+  profile: NDKUserProfile | null | undefined;
   pubkey: string;
   npub: string;
 }) => {
@@ -65,5 +65,3 @@ const UserInfo = ({
     </div>
   );
 };
-
-export default UserInfo;

@@ -11,6 +11,7 @@ type UserJoinLeaveBadgeProps = {
 };
 const UserJoinLeaveBadge = ({ request, type }: UserJoinLeaveBadgeProps) => {
   const { profile } = useProfile({ pubkey: request.pubkey });
+
   return (
     <Badge className="my-2 mx-auto text-muted-foreground cursor-default" variant="outline">
       {profile?.displayName || profile?.name || ellipsis(request.pubkey, 5)}{' '}

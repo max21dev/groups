@@ -18,6 +18,8 @@ export const useGroupsListItem = ({
   setLastChatTimestampPerGroup: React.Dispatch<React.SetStateAction<Record<string, number>>>;
 }) => {
   const [showGroup, setShowGroup] = useState<boolean>(true);
+  const [isMember, setIsMember] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const isCollapsed = useStore((state) => state.isCollapsed);
 
@@ -35,15 +37,31 @@ export const useGroupsListItem = ({
   const { chats } = useGroupChats(activeRelay, groupId, { limit: 1 });
 
   useEffect(() => {
+    if (!activeUser || !activeUser.pubkey) return;
+    if (!members || !members.length) return;
+
+    const isMember = members.some((member) => member.pubkey === activeUser.pubkey);
+
+    setIsMember(isMember);
+  }, [members, activeUser, setIsMember]);
+
+  useEffect(() => {
+    if (!activeUser || !activeUser.pubkey) return;
+    if (!admins || !admins.length) return;
+
+    const isAdmin = admins.some((admin) => admin.pubkey === activeUser.pubkey);
+
+    setIsAdmin(isAdmin);
+  }, [admins, activeUser, setIsAdmin]);
+
+  useEffect(() => {
+    if (!activeUser || !activeUser.pubkey) return;
+
     const hasFilter = groupsFilter && Object.values(groupsFilter).some((value) => !value);
-    if (hasFilter && activeUser?.pubkey) {
+
+    if (hasFilter) {
       setShowGroup(false);
-      const isMember = members
-        ? members.length > 0 && members.some((member) => member.pubkey === activeUser?.pubkey)
-        : false;
-      const isAdmin = admins
-        ? admins.length > 0 && admins.some((admin) => admin.pubkey === activeUser?.pubkey)
-        : false;
+
       if (groupsFilter.belongTo && isMember) {
         setShowGroup(true);
       }
@@ -58,7 +76,7 @@ export const useGroupsListItem = ({
     } else {
       setShowGroup(true);
     }
-  }, [members, admins, activeUser, groupsFilter]);
+  }, [isMember, isAdmin, activeUser, groupsFilter, setShowGroup]);
 
   useEffect(() => {
     if (!groupId) return;

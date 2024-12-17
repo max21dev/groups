@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { cn } from '@/shared/utils';
 
 export const UserMention = ({
-                              npub,
-                              sameAsCurrentUser,
-                            }: {
+  npub,
+  sameAsCurrentUser,
+}: {
   npub: string;
   sameAsCurrentUser: boolean;
 }) => {

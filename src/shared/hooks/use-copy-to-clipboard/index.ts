@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export const useCopyToClipboard = () => {
   const [hasCopied, setHasCopied] = useState(false);
@@ -13,13 +13,14 @@ export const useCopyToClipboard = () => {
   };
 
   useEffect(() => {
-    if (hasCopied) {
-      const timer = setTimeout(() => {
-        setHasCopied(false);
-      }, 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [hasCopied]);
+    if (!hasCopied) return;
+
+    const timer = setTimeout(() => {
+      setHasCopied(false);
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, [hasCopied, setHasCopied]);
 
   return { hasCopied, copyToClipboard };
 };

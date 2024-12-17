@@ -144,7 +144,7 @@ export const useChatBottomBar = () => {
 
     admins && setIsAdmin(admins.some((admin) => admin.pubkey === activeUser.pubkey));
     members && setIsMember(members.some((member) => member.pubkey === activeUser.pubkey));
-  }, [members, admins, activeUser]);
+  }, [members, admins, activeUser, setIsAdmin, setIsMember]);
 
   return {
     message,

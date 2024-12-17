@@ -3,7 +3,7 @@ import { useProfile } from 'nostr-hooks';
 import { nip19 } from 'nostr-tools';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import UserInfo from '@/features/users/user-info';
+import { UserInfo } from '@/features/users/user-info';
 
 export function UserPage() {
   const { user: npub } = useParams();

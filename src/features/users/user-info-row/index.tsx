@@ -1,6 +1,7 @@
 import { useProfile } from 'nostr-hooks';
 import { nip19 } from 'nostr-tools';
 
+import { Badge } from '@/shared/components/ui/badge';
 import {
   Tooltip,
   TooltipContent,
@@ -8,11 +9,9 @@ import {
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip';
 
-import { Badge } from '@/shared/components/ui/badge';
-
 import { UserAvatar } from '@/features/users';
-
 import { UserAssignRoleDialog } from '@/features/users/user-assign-role-dialog';
+
 import { ellipsis } from '@/shared/utils';
 
 export function UserInfoRow({ pubkey, roles }: { pubkey: string | undefined; roles?: string[] }) {
