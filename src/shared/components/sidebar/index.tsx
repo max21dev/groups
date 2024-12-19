@@ -29,6 +29,7 @@ export const Sidebar = ({
           transition && 'transition-all duration-75 ease-in-out',
           className,
         )}
+        enable={{ right: !isMobile }}
         size={{ width: isMobile ? window.innerWidth : sidebarWidth }}
         onResizeStart={() => {
           if (!isMobile) setTransition(false);
