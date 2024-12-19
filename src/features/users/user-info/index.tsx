@@ -13,18 +13,29 @@ export const UserInfo = ({
   profile,
   pubkey,
   npub,
+  className,
 }: {
   profile: NDKUserProfile | null | undefined;
   pubkey: string;
   npub: string;
+  className?: string;
 }) => {
   const { hasCopied, copyToClipboard } = useCopyToClipboard();
 
   return (
-    <div className="shadow w-full rounded-lg bg-white dark:bg-slate-950 flex flex-col gap-4 overflow-hidden">
-      <div className="w-full h-48 bg-slate-300 dark:bg-slate-800 overflow-hidden flex items-center justify-center">
+    <div
+      className={cn(
+        'w-full bg-white dark:bg-slate-950 flex flex-col gap-4 overflow-hidden',
+        className,
+      )}
+    >
+      <div className="w-full p-24 relative bg-slate-300 dark:bg-slate-800 overflow-hidden flex items-center justify-center">
         {profile?.banner && (
-          <img src={profile?.banner} alt="User banner" className="h-auto w-full" />
+          <img
+            src={profile?.banner}
+            alt="User banner"
+            className="absolute h-full w-full object-cover"
+          />
         )}
       </div>
       <div className="w-full relative">

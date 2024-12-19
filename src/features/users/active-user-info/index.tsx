@@ -7,15 +7,21 @@ import { cn } from '@/shared/utils';
 import { useActiveUserInfo } from './hooks';
 
 export function ActiveUserInfo() {
-  const { activeGroupId, activeUser, isCollapsed, openLoginModal, profile } = useActiveUserInfo();
+  const { activeGroupId, activeUser, isCollapsed, openLoginModal, profile, isMobile } =
+    useActiveUserInfo();
 
   return (
     <>
       {activeUser ? (
-        <div className={cn('p-2 flex justify-center border-t', !isCollapsed && 'bg-accent')}>
+        <div
+          className={cn(
+            'p-2 flex justify-center border-t',
+            (!isCollapsed || isMobile) && 'bg-accent',
+          )}
+        >
           <UserAvatar pubkey={activeUser?.pubkey} />
 
-          {!isCollapsed && (
+          {(!isCollapsed || isMobile) && (
             <div className="flex flex-col ml-2 truncate">
               <span className="text-sm h-4">
                 {profile?.displayName ? profile?.displayName : profile?.name}

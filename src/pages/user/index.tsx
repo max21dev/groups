@@ -7,14 +7,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ChatBottomBar } from '@/features/chats';
 import { ActiveUserInfo } from '@/features/users';
 import { UserInfo } from '@/features/users/user-info';
-
-import { ModeToggle } from '@/shared/components/mode-toggle';
 import { Sidebar } from '@/shared/components/sidebar';
 import { useStore } from '@/shared/store';
 import { cn } from '@/shared/utils';
+import { Button } from '@/shared/components/ui/button.tsx';
 
 export function UserPage() {
-  const [activeDmId, setActiveDmId] = useState<string | null>(null);
+  const [activeDmId] = useState<string | null>(null);
   const { user: npub } = useParams();
   const { profile } = useProfile({ npub });
   const { activeUser } = useActiveUser();
@@ -38,7 +37,7 @@ export function UserPage() {
               onClick={() => navigate(-1)}
               className="flex items-center gap-2 bg-gray-200 dark:bg-slate-800 dark:text-white w-fit self-start px-2 py-1 rounded cursor-pointer"
             >
-              <ArrowLeft className="w-4" /> Back
+              <ArrowLeft className="w-4" /> Back To Home
             </span>
             <UserInfo profile={profile} pubkey={pubkey} npub={npub} className="shadow rounded-lg" />
           </div>
@@ -54,13 +53,13 @@ export function UserPage() {
                       'max-sm:flex-row',
                     )}
                   >
-                    <button
+                    <Button
+                      variant="outline"
                       onClick={() => navigate(-1)}
-                      className="h-9 bg-background border border-input px-4 rounded-md shadow-sm cursor-pointer"
+                      className=" w-full h-9 bg-background border border-input px-4 rounded-md shadow-sm cursor-pointer"
                     >
-                      <ArrowLeft className="w-4" />
-                    </button>
-                    <ModeToggle />
+                      <ArrowLeft className="w-4" /> Back To Home
+                    </Button>
                   </div>
                 </div>
 
