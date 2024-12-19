@@ -13,7 +13,7 @@ import { cn } from '@/shared/utils';
 import { useHomePage } from './hooks';
 
 export function HomePage() {
-  const { isCollapsed, activeGroupId, activeUser } = useHomePage();
+  const { isCollapsed, activeGroupId, activeUser, isMobile } = useHomePage();
   const { activeRelay } = useActiveRelay();
 
   return (
@@ -22,7 +22,13 @@ export function HomePage() {
         <Sidebar className={cn('sm:block max-w-full w-full', activeGroupId && 'max-sm:hidden')}>
           <div className="flex flex-col w-full h-full">
             <div className="p-2">
-              <div className={cn('flex gap-1 w-full', isCollapsed && 'flex-col')}>
+              <div
+                className={cn(
+                  'flex gap-1 w-full',
+                  isCollapsed && 'flex-col',
+                  isMobile && 'flex-row',
+                )}
+              >
                 <ModeToggle />
 
                 {activeUser?.pubkey && <GroupsFilterDropdown />}
