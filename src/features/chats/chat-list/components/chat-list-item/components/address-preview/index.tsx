@@ -15,7 +15,6 @@ export const AddressPreview = ({
   sameAsCurrentUser: boolean;
 }) => {
   const { eventData, category, loading } = useAddressPreview(address);
-  console.log(eventData, category, loading);
   return (
     <>
       {loading ? (

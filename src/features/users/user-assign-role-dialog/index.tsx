@@ -64,7 +64,6 @@ export const UserAssignRoleDialog: React.FC<UserAssignRoleDialogProps> = ({
       });
   }, [activeRelay, activeGroupId, userPubKey, roles, toast]);
 
-  console.log('roles', roles, selectedRoles);
   return (
     <div>
       <Dialog open={open} onOpenChange={toggleDialog}>
