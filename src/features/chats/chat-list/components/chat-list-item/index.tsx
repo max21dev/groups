@@ -13,11 +13,10 @@ import {
 import { UserAvatar, UserProfileModal } from '@/features/users';
 import { UserMention } from '@/features/users/user-mention';
 import { useUserProfileModal } from '@/features/users/user-profile-modal/hooks';
-import { NotePreview } from './components';
 
 import { cn, ellipsis, loader } from '@/shared/utils';
 
-import { ChatListItemReactions } from './components';
+import { AddressPreview, ChatListItemReactions, NotePreview } from './components';
 import { useChatListItem } from './hooks';
 import { ChatListItemProps } from './types';
 
@@ -98,6 +97,10 @@ export const ChatListItem = ({
           return <UserMention key={i} npub={part.content} sameAsCurrentUser={sameAsCurrentUser} />;
         case 'note':
           return <NotePreview key={i} note={part.content} sameAsCurrentUser={sameAsCurrentUser} />;
+        case 'address':
+          return (
+            <AddressPreview key={i} address={part.content} sameAsCurrentUser={sameAsCurrentUser} />
+          );
         default:
           return null;
       }
