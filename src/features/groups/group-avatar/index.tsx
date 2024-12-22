@@ -17,7 +17,7 @@ export const GroupAvatar = ({
   return (
     <Avatar>
       {!groupId || !relay || isLoadingGroupAvatar ? (
-        <div className="w-full h-full bg-muted" />
+        <div className="w-full h-full bg-muted" ></div>
       ) : picture ? (
         <>
           <AvatarImage src={loader(picture, { w: 50, h: 50 })} alt={name} className="w-10 h-10" />
