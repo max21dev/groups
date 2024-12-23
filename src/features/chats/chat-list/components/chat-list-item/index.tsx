@@ -1,7 +1,6 @@
 import { format } from 'date-fns';
 import { SmilePlusIcon, Trash2, Undo, Zap } from 'lucide-react';
 import { useState } from 'react';
-import ReactPlayer from 'react-player';
 
 import {
   ContextMenu,
@@ -11,12 +10,11 @@ import {
 } from '@/shared/components/ui/context-menu';
 
 import { UserAvatar, UserProfileModal } from '@/features/users';
-import { UserMention } from '@/features/users/user-mention';
 import { useUserProfileModal } from '@/features/users/user-profile-modal/hooks';
 
 import { cn, ellipsis, loader } from '@/shared/utils';
 
-import { AddressPreview, ChatListItemReactions, NotePreview } from './components';
+import { ChatContent, ChatListItemReactions } from './components';
 import { useChatListItem } from './hooks';
 import { ChatListItemProps } from './types';
 
@@ -55,57 +53,6 @@ export const ChatListItem = ({
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
 
   if (!chat) return null;
-
-  const renderChatContent = () => {
-    return categorizedChatContent.map((part, i) => {
-      switch (part.category) {
-        case 'text':
-          return (
-            <p key={i} className="text-sm">
-              {part.content}
-            </p>
-          );
-        case 'image':
-          return (
-            <img
-              key={i}
-              src={loader(part.content, { w: 200 })}
-              alt="chat"
-              className="max-w-full h-40 rounded-lg mt-2 cursor-pointer"
-              onClick={() => setSelectedImage(part.content)}
-            />
-          );
-        case 'video':
-          return (
-            <div className="max-w-full rounded-lg mt-2 react-player">
-              <ReactPlayer width="100%" url={part.content} controls />
-            </div>
-          );
-        case 'url':
-          return (
-            <a
-              key={i}
-              href={part.content}
-              target="_blank"
-              rel="noreferrer"
-              className="text-xs text-pink-400 underline"
-            >
-              {part.content}
-            </a>
-          );
-        case 'mention':
-          return <UserMention key={i} npub={part.content} sameAsCurrentUser={sameAsCurrentUser} />;
-        case 'note':
-          return <NotePreview key={i} note={part.content} sameAsCurrentUser={sameAsCurrentUser} />;
-        case 'address':
-          return (
-            <AddressPreview key={i} address={part.content} sameAsCurrentUser={sameAsCurrentUser} />
-          );
-        default:
-          return null;
-      }
-    });
-  };
 
   return (
     <div className={cn('flex ml-3 gap-3 relative group', !sameAuthorAsNextChat ? 'mb-4' : 'mb-0')}>
@@ -169,7 +116,13 @@ export const ChatListItem = ({
                     categorizedReactions && 'flex-col',
                   )}
                 >
-                  <div className="[overflow-wrap:anywhere] self-start">{renderChatContent()}</div>
+                  <div className="[overflow-wrap:anywhere] self-start">
+                    <ChatContent
+                      categorizedChatContent={categorizedChatContent}
+                      sameAsCurrentUser={sameAsCurrentUser}
+                      setSelectedImage={setSelectedImage}
+                    />
+                  </div>
 
                   <div className="ml-auto flex gap-2 items-center text-end text-xs font-light cursor-default">
                     {categorizedReactions && (
