@@ -11,11 +11,7 @@ export const useAddressPreview = (address: string) => {
   const { ndk } = useNdk();
 
   useEffect(() => {
-    if (!ndk) {
-      return;
-    }
-
-    ndk.fetchEvent(address).then((event) => {
+    ndk?.fetchEvent(address).then((event) => {
       if (event && event.kind) {
         if (event.kind === 30000) {
           setCategory('users-list');
@@ -29,7 +25,7 @@ export const useAddressPreview = (address: string) => {
         setCategory(null);
       }
     });
-  }, [address, ndk]);
+  }, [address, ndk, setEventData, setCategory]);
 
   return { eventData, category };
 };
