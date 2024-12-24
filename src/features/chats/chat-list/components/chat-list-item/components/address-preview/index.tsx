@@ -12,7 +12,7 @@ export const AddressPreview = ({
   sameAsCurrentUser,
 }: {
   address: string;
-  sameAsCurrentUser: boolean;
+  sameAsCurrentUser?: boolean;
 }) => {
   const { eventData, category } = useAddressPreview(address);
 
@@ -32,11 +32,20 @@ export const AddressPreview = ({
     <>
       <div
         className={cn(
-          'rounded-xl overflow-hidden',
+          'rounded-s-xl overflow-hidden',
           sameAsCurrentUser ? 'bg-blue-700' : 'bg-zinc-200 dark:bg-zinc-700',
+          category === 'group' && 'rounded-e-xl',
+          sameAsCurrentUser !== undefined && 'max-w-80',
         )}
       >
-        {category === 'users-list' && <UsersList tags={eventData.tags} />}
+        {category === 'users-list' && (
+          <UsersList
+            tags={eventData.tags}
+            pubkey={eventData?.pubkey}
+            createdAt={eventData.created_at}
+            address={address}
+          />
+        )}
         {category === 'group' && <GroupWidget groupId={eventData.tags[0][1]} />}
       </div>
     </>
