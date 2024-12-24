@@ -1,4 +1,5 @@
 import { useActiveUser } from 'nostr-hooks';
+import { useParams } from 'react-router-dom';
 
 import { useSidebar } from '@/shared/components/sidebar/hooks';
 import { useActiveGroup } from '@/shared/hooks';
@@ -10,11 +11,13 @@ export const useHomePage = () => {
 
   const { activeGroupId } = useActiveGroup();
   const { activeUser } = useActiveUser();
+  const { event } = useParams();
 
   return {
     isCollapsed,
     activeGroupId,
     activeUser,
     isMobile,
+    event,
   };
 };
