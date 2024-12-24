@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/compo
 import { Input } from '@/shared/components/ui/input';
 
 import { useCopyToClipboard } from '@/shared/hooks';
+import { cn, getAvatarFallbackColor } from '@/shared/utils';
 
 type UserProfileModalProps = {
   pubkey: string;
@@ -36,7 +37,18 @@ export const UserProfileModal = ({ pubkey, isOpen, onClose }: UserProfileModalPr
         </DialogHeader>
         <div className="p-4">
           <div className="flex flex-col items-center gap-2">
-            <img src={profile?.image} alt="User Avatar" className="rounded-full w-24 h-24" />
+            {profile?.image ? (
+              <img src={profile.image} alt="User Avatar" className="rounded-full w-24 h-24" />
+            ) : (
+              <div
+                className={cn(
+                  'flex justify-center items-center text-2xl text-primary-foreground rounded-full w-24 h-24',
+                  getAvatarFallbackColor(pubkey),
+                )}
+              >
+                {pubkey.slice(0, 2).toUpperCase()}
+              </div>
+            )}
             <p className="mt-4 text-xl font-semibold">{profile?.displayName || profile?.name}</p>
             <p className="text-gray-500 break-words max-w-80">{profile?.nip05}</p>
             {user?.npub && (
