@@ -1,4 +1,3 @@
-import { Globe, TrashIcon } from 'lucide-react';
 import { RelayAdd } from '@/features/relays';
 import { Button } from '@/shared/components/ui/button';
 import {
@@ -10,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/components/ui/dropdown-menu';
+import { Globe, TrashIcon } from 'lucide-react';
 
 import { MANDATORY_RELAYS } from './config';
 import { useRelaySelectDropDown } from './hooks';
@@ -27,13 +27,14 @@ export const RelaySelectDropdown = () => {
     handleDeleteRelay,
     isCollapsed,
     setActiveRelay,
+    isMobile,
   } = useRelaySelectDropDown();
 
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          {isCollapsed ? (
+          {isCollapsed && !isMobile ? (
             <Button variant="outline">
               <Globe />
             </Button>

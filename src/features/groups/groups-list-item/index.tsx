@@ -13,8 +13,16 @@ export const GroupsListItem = ({
   groupId: string;
   setLastChatTimestampPerGroup: React.Dispatch<React.SetStateAction<Record<string, number>>>;
 }) => {
-  const { metadata, isCollapsed, chats, setActiveGroupId, activeGroupId, showGroup, activeRelay } =
-    useGroupsListItem({ groupId, setLastChatTimestampPerGroup });
+  const {
+    metadata,
+    isCollapsed,
+    chats,
+    setActiveGroupId,
+    activeGroupId,
+    showGroup,
+    activeRelay,
+    isMobile,
+  } = useGroupsListItem({ groupId, setLastChatTimestampPerGroup });
 
   if (!metadata || !showGroup) return null;
 
@@ -24,14 +32,14 @@ export const GroupsListItem = ({
       size="lg"
       className={cn(
         'gap-4 items-center px-2 py-8 cursor-pointer overflow-hidden',
-        isCollapsed ? 'justify-center' : 'justify-start',
+        isCollapsed && !isMobile ? 'justify-center' : 'justify-start',
         activeGroupId === groupId && 'bg-accent',
       )}
       onClick={() => setActiveGroupId(groupId)}
     >
       <GroupAvatar relay={activeRelay} groupId={groupId} />
 
-      {!isCollapsed && (
+      {(!isCollapsed || isMobile) && (
         <div className="flex flex-col items-start w-full min-w-0">
           <div className="w-full flex items-center">
             <div className="truncate">{metadata?.name}</div>

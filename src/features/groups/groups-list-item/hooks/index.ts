@@ -7,6 +7,7 @@ import {
 } from 'nostr-hooks/nip29';
 import { useEffect, useState } from 'react';
 
+import { useSidebar } from '@/shared/components/sidebar/hooks';
 import { useActiveGroup, useActiveRelay } from '@/shared/hooks';
 import { useStore } from '@/shared/store';
 
@@ -22,6 +23,7 @@ export const useGroupsListItem = ({
   const [isAdmin, setIsAdmin] = useState(false);
 
   const isCollapsed = useStore((state) => state.isCollapsed);
+  const { isMobile } = useSidebar();
 
   const groupsFilter = useStore((state) => state.groupsFilter);
 
@@ -95,5 +97,6 @@ export const useGroupsListItem = ({
     activeRelay,
     activeGroupId,
     showGroup,
+    isMobile,
   };
 };

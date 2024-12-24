@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { useSidebar } from '@/shared/components/sidebar/hooks';
 import { useToast } from '@/shared/components/ui/use-toast';
 
 import { useActiveGroup, useActiveRelay } from '@/shared/hooks';
@@ -16,6 +17,7 @@ export const useRelaySelectDropDown = () => {
   const addRelay = useStore((state) => state.addRelay);
   const safeRemoveRelay = useStore((state) => state.safeRemoveRelay);
   const isCollapsed = useStore((state) => state.isCollapsed);
+  const { isMobile } = useSidebar();
 
   const { toast } = useToast();
 
@@ -58,5 +60,6 @@ export const useRelaySelectDropDown = () => {
     handleDeleteRelay,
     setActiveRelay,
     setActiveGroupId,
+    isMobile,
   };
 };
