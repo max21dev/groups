@@ -17,6 +17,7 @@ type UserProfileModalProps = {
 
 export const UserProfileModal = ({ pubkey, isOpen, onClose }: UserProfileModalProps) => {
   const [user, setUser] = useState<NDKUser>();
+  const [imageError, setImageError] = useState(false);
 
   const { profile } = useProfile({ pubkey });
 
@@ -37,8 +38,13 @@ export const UserProfileModal = ({ pubkey, isOpen, onClose }: UserProfileModalPr
         </DialogHeader>
         <div className="p-4">
           <div className="flex flex-col items-center gap-2">
-            {profile?.image ? (
-              <img src={profile.image} alt="User Avatar" className="rounded-full w-24 h-24" />
+            {profile?.image && !imageError ? (
+              <img
+                src={profile.image}
+                alt="User Avatar"
+                className="rounded-full w-24 h-24"
+                onError={() => setImageError(true)}
+              />
             ) : (
               <div
                 className={cn(

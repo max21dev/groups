@@ -1,5 +1,4 @@
-import { ChatBottomBar, ChatList, ChatTopBar } from '@/features/chats';
-import { AddressPreview } from '@/features/chats/chat-list/components/chat-list-item/components';
+import { ChatBottomBar, ChatEvent, ChatList, ChatTopBar } from '@/features/chats';
 import { GroupsFilterDropdown, GroupsList, GroupsListWidget } from '@/features/groups';
 import { RelayList, RelaySelectDropdown } from '@/features/relays/';
 import { ActiveUserInfo, UserLoginModal } from '@/features/users';
@@ -60,7 +59,7 @@ export function HomePage() {
           <div className="flex flex-col w-full h-full">
             {event ? (
               <div className="flex flex-col items-center mt-8 h-full">
-                <AddressPreview address={event} />
+                <ChatEvent event={event} />
               </div>
             ) : !activeGroupId ? (
               <div className="flex flex-col justify-center items-center h-full">
