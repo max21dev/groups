@@ -2,11 +2,10 @@ import ReactPlayer from 'react-player';
 
 import { loader } from '@/shared/utils';
 
+import { ChatEvent } from '@/features/chats';
 import { UserMention } from '@/features/users/user-mention';
 
 import { CategorizedChatContent } from '../../types';
-import { AddressPreview } from '../address-preview';
-import { NotePreview } from '../note-preview';
 
 export const ChatContent = ({
   categorizedChatContent,
@@ -55,12 +54,8 @@ export const ChatContent = ({
         );
       case 'mention':
         return <UserMention key={i} npub={part.content} sameAsCurrentUser={sameAsCurrentUser} />;
-      case 'note':
-        return <NotePreview key={i} note={part.content} sameAsCurrentUser={sameAsCurrentUser} />;
-      case 'address':
-        return (
-          <AddressPreview key={i} address={part.content} sameAsCurrentUser={sameAsCurrentUser} />
-        );
+      case 'event':
+        return <ChatEvent key={i} event={part.content} sameAsCurrentUser={sameAsCurrentUser} />;
       default:
         return null;
     }
