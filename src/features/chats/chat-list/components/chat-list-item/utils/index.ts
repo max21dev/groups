@@ -10,6 +10,7 @@ const nostrRegex = /nostr:[a-z0-9]+/i;
 const mentionRegex = /^npub1[0-9a-z]+$/i;
 const noteRegex = /^note1[0-9a-z]+$/i;
 const addressRegex = /^naddr1[0-9a-z]+$/i;
+const eventRegex = /^nevent1[0-9a-z]+$/i;
 
 const categorizePart = (part: string): CategorizedChatContent => {
   if (nostrRegex.test(part)) {
@@ -17,14 +18,15 @@ const categorizePart = (part: string): CategorizedChatContent => {
     try {
       const parsed = parse(cleanPart);
       if (parsed?.value) {
-        if (noteRegex.test(parsed?.value)) {
-          return { category: 'note', content: parsed.value };
+        if (
+          noteRegex.test(parsed?.value) ||
+          addressRegex.test(parsed?.value) ||
+          eventRegex.test(parsed?.value)
+        ) {
+          return { category: 'event', content: parsed.value };
         }
         if (mentionRegex.test(parsed?.value)) {
           return { category: 'mention', content: parsed.value };
-        }
-        if (addressRegex.test(parsed?.value)) {
-          return { category: 'address', content: parsed.value };
         }
       }
     } catch {
