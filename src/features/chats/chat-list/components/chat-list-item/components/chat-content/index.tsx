@@ -8,10 +8,10 @@ import { UserMention } from '@/features/users/user-mention';
 import { CategorizedChatContent } from '../../types';
 
 export const ChatContent = ({
-                              categorizedChatContent,
-                              sameAsCurrentUser,
-                              setSelectedImage,
-                            }: {
+  categorizedChatContent,
+  sameAsCurrentUser,
+  setSelectedImage,
+}: {
   categorizedChatContent: CategorizedChatContent[];
   setSelectedImage: React.Dispatch<React.SetStateAction<string | null>>;
   sameAsCurrentUser?: boolean;
