@@ -8,13 +8,13 @@ import { UserMention } from '@/features/users/user-mention';
 import { CategorizedChatContent } from '../../types';
 
 export const ChatContent = ({
-  categorizedChatContent,
-  sameAsCurrentUser,
-  setSelectedImage,
-}: {
+                              categorizedChatContent,
+                              sameAsCurrentUser,
+                              setSelectedImage,
+                            }: {
   categorizedChatContent: CategorizedChatContent[];
   setSelectedImage: React.Dispatch<React.SetStateAction<string | null>>;
-  sameAsCurrentUser: boolean;
+  sameAsCurrentUser?: boolean;
 }) => {
   return categorizedChatContent.map((part, i) => {
     switch (part.category) {
@@ -30,7 +30,7 @@ export const ChatContent = ({
             key={i}
             src={loader(part.content, { w: 200 })}
             alt="chat"
-            className="max-w-full h-40 rounded-lg mt-2 cursor-pointer"
+            className="max-w-full h-40 object-contain rounded-lg mt-2 cursor-pointer"
             onClick={() => setSelectedImage(part.content)}
           />
         );
@@ -53,7 +53,9 @@ export const ChatContent = ({
           </a>
         );
       case 'mention':
-        return <UserMention key={i} npub={part.content} sameAsCurrentUser={sameAsCurrentUser} />;
+        return (
+          <UserMention key={i} npub={part.content} sameAsCurrentUser={sameAsCurrentUser ?? false} />
+        );
       case 'event':
         return <ChatEvent key={i} event={part.content} sameAsCurrentUser={sameAsCurrentUser} />;
       default:
