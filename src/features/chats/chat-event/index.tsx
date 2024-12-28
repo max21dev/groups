@@ -5,14 +5,14 @@ import { Spinner } from '@/shared/components/spinner';
 import { GroupWidget } from '@/features/groups';
 import { UserAvatar } from '@/features/users';
 
-import { FollowSet, Note } from './components';
+import { FollowSet, LongFormContent, Note } from './components';
 import { ChatEventMenu } from './components/chat-event-menu';
 import { useChatEvent } from './hook';
 
 export const ChatEvent = ({
-                            event,
-                            sameAsCurrentUser,
-                          }: {
+  event,
+  sameAsCurrentUser,
+}: {
   event: string;
   sameAsCurrentUser?: boolean;
 }) => {
@@ -34,10 +34,12 @@ export const ChatEvent = ({
     <>
       <div
         className={cn(
-          'rounded-xl overflow-hidden p-2',
+          'rounded-xl p-2',
           sameAsCurrentUser ? 'bg-blue-700' : 'bg-zinc-200 dark:bg-zinc-700',
           category === 'group' && 'p-0',
-          sameAsCurrentUser !== undefined ? 'max-w-80' : 'max-w-2xl',
+          sameAsCurrentUser !== undefined
+            ? 'max-w-80 [&_.set-max-h]:max-h-80'
+            : 'max-w-2xl [&_.set-max-h]:max-h-[85vh]',
         )}
       >
         {category !== 'group' && (
@@ -65,8 +67,10 @@ export const ChatEvent = ({
         )}
         {category === 'follow-set' && <FollowSet tags={eventData.tags} address={event} />}
         {category === 'group' && <GroupWidget groupId={eventData.tags[0][1]} />}
-        {category === 'note' && <Note content={eventData.content} />}
-        {category === 'long-form-content' && <Note content={eventData.content} />}
+        {category === 'note' && (
+          <Note content={eventData.content} sameAsCurrentUser={sameAsCurrentUser} />
+        )}
+        {category === 'long-form-content' && <LongFormContent content={eventData.content} />}
       </div>
     </>
   );
