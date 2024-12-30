@@ -1,3 +1,4 @@
+import { useNip98 } from 'nostr-hooks';
 import { useRef, useState } from 'react';
 
 import { useToast } from '@/shared/components/ui/use-toast';
@@ -5,6 +6,8 @@ import { useToast } from '@/shared/components/ui/use-toast';
 export const useGroupMetadataForm = (setPicture: (url: string) => void) => {
   const groupImageUrlInputRef = useRef<HTMLInputElement>(null);
   const [isUploadingGroupImage, setIsUploadingGroupImage] = useState(false);
+
+  const { getToken } = useNip98();
 
   const { toast } = useToast();
 
@@ -26,7 +29,7 @@ export const useGroupMetadataForm = (setPicture: (url: string) => void) => {
     input.type = 'file';
     input.accept = allowedTypes.join(',');
 
-    input.onchange = (event) => {
+    input.onchange = async (event) => {
       const file = (event.target as HTMLInputElement).files?.[0];
       if (!file) return;
 
@@ -44,9 +47,27 @@ export const useGroupMetadataForm = (setPicture: (url: string) => void) => {
 
       setIsUploadingGroupImage(true);
 
+      const token = await getToken({
+        url: import.meta.env.VITE_NOSTR_BUILD_UPLOAD_API_ENDPOINT,
+        method: 'POST',
+      });
+
+      if (!token) {
+        toast({
+          title: 'Error',
+          description: 'Failed to upload media',
+          variant: 'destructive',
+        });
+
+        return;
+      }
+
       fetch(import.meta.env.VITE_NOSTR_BUILD_UPLOAD_API_ENDPOINT, {
         method: 'POST',
         body: formData,
+        headers: {
+          Authorization: token,
+        },
       })
         .then((res) => res.json())
         .then(({ status, data }) => {
