@@ -1,4 +1,4 @@
-import { useActiveUser } from 'nostr-hooks';
+import { useActiveUser, useNip98 } from 'nostr-hooks';
 import { sendGroupChat, useGroupAdmins, useGroupChats, useGroupMembers } from 'nostr-hooks/nip29';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -23,6 +23,7 @@ export const useChatBottomBar = () => {
   const { activeRelay } = useActiveRelay();
 
   const { activeUser } = useActiveUser();
+  const { getToken } = useNip98();
 
   const { members } = useGroupMembers(activeRelay, activeGroupId);
   const { admins } = useGroupAdmins(activeRelay, activeGroupId);
@@ -107,7 +108,7 @@ export const useChatBottomBar = () => {
     input.type = 'file';
     input.accept = 'image/*,video/*';
 
-    input.onchange = (event) => {
+    input.onchange = async (event) => {
       const file = (event.target as HTMLInputElement).files?.[0];
       if (!file) return;
 
@@ -116,9 +117,27 @@ export const useChatBottomBar = () => {
 
       setisUploadingMedia(true);
 
+      const token = await getToken({
+        url: import.meta.env.VITE_NOSTR_BUILD_UPLOAD_API_ENDPOINT,
+        method: 'POST',
+      });
+
+      if (!token) {
+        toast({
+          title: 'Error',
+          description: 'Failed to upload media',
+          variant: 'destructive',
+        });
+
+        return;
+      }
+
       fetch(import.meta.env.VITE_NOSTR_BUILD_UPLOAD_API_ENDPOINT, {
         method: 'POST',
         body: formData,
+        headers: {
+          Authorization: token,
+        },
       })
         .then((res) => res.json())
         .then(({ status, data }) => {
