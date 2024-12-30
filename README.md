@@ -2,7 +2,7 @@
 
 ## Introduction
 
-**"Groups"** is a free and open-source chat application built on the Nostr protocol, utilizing the NIP-29 standard to support relay-based groups with specific moderation capabilities.
+**"Groups"** is a free and open-source chat application built on the Nostr protocol, utilizing the NIP-29 to support relay-based groups with specific moderation capabilities.
 This client enables users to participate in groups managed by relays, where access and participation are governed by rules enforced by the relay.
 
 ## Features
@@ -27,7 +27,7 @@ This client enables users to participate in groups managed by relays, where acce
   - ✅ React to messages with emojis.
   - ✅ Reply to messages.
   - ✅ Zap to messages sender.
-  - ✅ Reaction to message (kind:7 in supported relay).
+  - ✅ Reaction to messages.
   - ✅ upload images.
   - 🚧 Mention users in messages.
   - 🚧 Pin important messages.
@@ -42,11 +42,11 @@ This client enables users to participate in groups managed by relays, where acce
     - ✅ Update group metadata (kind 9002).
     - ✅ Update group status (kind 9006).
     - ✅ Delete group (kind 9008).
-  - 🚧 View and manage group members and admins.
+  - ✅ View and manage group members and admins.
     - ✅ View members (kind 39002).
     - ✅ View admins (kind 39001).
     - ✅ Remove user (kind 9001).
-    - 🚧 Add user (kind 9000).
+    - ✅ Put user (kind 9000).
   - 🚧 Moderate group content and messages.
     - ✅ Add admin permission (kind 9003).
     - ✅ Remove admin permission (kind 9004).
@@ -66,11 +66,9 @@ You can access the live demo of **"Groups"** at the following URL:
 ## Supported Kinds:
 
 - ### Moderation:
-  - 9000 add-user 🚧
-  - 9001 remove-user 🚧
+  - 9000 put-user ✅
+  - 9001 remove-user ✅
   - 9002 edit-metadata ✅
-  - 9003 add-permission ✅
-  - 9004 remove-permission ✅
   - 9005 delete-event ✅
   - 9006 edit-group-status ✅
 - ### Chat:
