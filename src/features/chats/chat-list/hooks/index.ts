@@ -1,6 +1,7 @@
 import { useActiveUser } from 'nostr-hooks';
 import { useGroupChats, useGroupJoinRequests, useGroupLeaveRequests } from 'nostr-hooks/nip29';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { useActiveGroup, useActiveRelay } from '@/shared/hooks';
 
@@ -9,6 +10,8 @@ export const useChatList = () => {
   const chatRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const [deletedChats, setDeletedChats] = useState<string[]>([]);
+
+  const { chatId } = useParams();
 
   const { activeGroupId } = useActiveGroup();
   const { activeRelay } = useActiveRelay();
@@ -40,7 +43,11 @@ export const useChatList = () => {
         container.scrollTop = container.scrollHeight;
       }
     }
-  }, [processedChats]);
+
+    if (chatId) {
+      scrollToChat(chatId);
+    }
+  }, [processedChats, chatId]);
 
   const scrollToChat = (chatId: string) => {
     const chatElement = chatRefs.current[chatId];

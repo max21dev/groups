@@ -4,9 +4,13 @@ import { useState } from 'react';
 
 import { Button } from '@/shared/components/ui/button';
 
-import { GroupAvatar, GroupDeleteButton, GroupLeaveButton } from '@/features/groups';
+import {
+  GroupAvatar,
+  GroupDeleteButton,
+  GroupLeaveButton,
+  GroupLinkButton,
+} from '@/features/groups';
 import { UserInfoRow } from '@/features/users';
-
 import { GroupMetadataForm } from '../group-metadata-form';
 
 export const GroupDetails = ({
@@ -29,6 +33,8 @@ export const GroupDetails = ({
           {editMode ? <Undo2 className="mr-2 h-4 w-4" /> : <Edit className="mr-2 h-4 w-4" />}
           {editMode ? 'Back to view mode' : 'Edit'}
         </Button>
+
+        <GroupLinkButton />
 
         <GroupLeaveButton relay={relay} groupId={groupId} />
 
