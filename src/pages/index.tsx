@@ -65,6 +65,12 @@ export const router = createBrowserRouter([
         },
       },
       {
+        path: '/relay/:relay/group/:groupId/:chatId',
+        async lazy() {
+          return { Component: (await HomePage()).HomePage };
+        },
+      },
+      {
         path: '/relay/:relay/group/:groupId/e/:event',
         async lazy() {
           return { Component: (await HomePage()).HomePage };

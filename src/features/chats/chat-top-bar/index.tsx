@@ -1,4 +1,4 @@
-import { ArrowLeft, Info } from 'lucide-react';
+import { ArrowLeft, CheckIcon, Info, Share2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 import { GroupAvatar, GroupDetails } from '@/features/groups';
@@ -14,10 +14,23 @@ import {
 } from '@/shared/components/ui/sheet';
 
 import { useChatTopBar } from './hooks';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/shared/components/ui/tooltip.tsx';
 
 export const ChatTopBar = () => {
-  const { metadata, isGroupDetailsOpen, toggleGroupDetails, activeGroupId, activeRelay } =
-    useChatTopBar();
+  const {
+    metadata,
+    isGroupDetailsOpen,
+    toggleGroupDetails,
+    activeGroupId,
+    activeRelay,
+    copyToClipboard,
+    hasCopied,
+  } = useChatTopBar();
 
   const navigate = useNavigate();
 
@@ -29,9 +42,7 @@ export const ChatTopBar = () => {
             className="sm:hidden hover:cursor-pointer"
             onClick={() => navigate(`/relay/${activeRelay?.replace(/^wss:\/\//, '')}`)}
           />
-
           <GroupAvatar relay={activeRelay} groupId={activeGroupId} />
-
           <div className="flex flex-col">
             {/* <span className="font-light text-xs">{group?.id}</span> */}
             <span className="font-bold mt-0 mb-0">{metadata?.name}</span>
@@ -41,6 +52,30 @@ export const ChatTopBar = () => {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() =>
+                    copyToClipboard(
+                      `${window.location.origin}/relay/${activeRelay?.replace('wss://', '')}/group/${activeGroupId}`,
+                    )
+                  }
+                >
+                  {hasCopied ? (
+                    <CheckIcon size={25} className="text-green-600" />
+                  ) : (
+                    <Share2 size={25} />
+                  )}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {hasCopied ? 'Link Copied' : 'Copy Group Link To Share'}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <Sheet onOpenChange={() => toggleGroupDetails()}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">

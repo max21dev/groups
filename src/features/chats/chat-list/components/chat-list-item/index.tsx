@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { SmilePlusIcon, Trash2, Undo, Zap } from 'lucide-react';
+import { Copy, SmilePlusIcon, Trash2, Undo, Zap } from 'lucide-react';
 import { useState } from 'react';
 
 import {
@@ -45,6 +45,7 @@ export const ChatListItem = ({
     sendReaction,
     deleteChat,
     categorizedReactions,
+    copyChatLink,
   } = useChatListItem({ topChat, bottomChat, nextChat, chats, chat, setDeletedChats, chatsEvents });
 
   const { isOpen, openModal, closeModal } = useUserProfileModal();
@@ -166,6 +167,11 @@ export const ChatListItem = ({
                 >
                   <Trash2 className="h-4 w-4 mr-3" />
                   Delete
+                </ContextMenuItem>
+
+                <ContextMenuItem onClick={() => copyChatLink(chat.id)}>
+                  <Copy className="h-4 w-4 mr-3" />
+                  Copy Link
                 </ContextMenuItem>
 
                 <ContextMenuItem onClick={() => setReplyTo(chat.id)}>

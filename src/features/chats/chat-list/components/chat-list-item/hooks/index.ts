@@ -13,7 +13,12 @@ import { useChatBottomBar } from '@/features/chats/chat-bottom-bar/hooks';
 
 import { useToast } from '@/shared/components/ui/use-toast';
 
-import { useActiveGroup, useActiveRelay, useZapModalState } from '@/shared/hooks';
+import {
+  useActiveGroup,
+  useActiveRelay,
+  useCopyToClipboard,
+  useZapModalState,
+} from '@/shared/hooks';
 
 import { useStore } from '@/shared/store';
 
@@ -35,6 +40,8 @@ export const useChatListItem = ({
 
   const { activeRelay } = useActiveRelay();
   const { activeGroupId } = useActiveGroup();
+
+  const { copyToClipboard } = useCopyToClipboard();
 
   const { activeUser } = useActiveUser();
 
@@ -139,6 +146,13 @@ export const useChatListItem = ({
     [activeUser, activeGroupId, activeRelay, chatsEvents, setDeletedChats, toast],
   );
 
+  const copyChatLink = (chatId: string) => {
+    copyToClipboard(
+      `${window.location.origin}/relay/${activeRelay?.replace('wss://', '')}/group/${activeGroupId}/${chatId}`,
+    );
+    toast({ description: 'Chat link copied to clipboard' });
+  };
+
   return {
     isLastChat,
     sameAuthorAsNextChat,
@@ -156,5 +170,6 @@ export const useChatListItem = ({
     activeUser,
     sendReaction,
     categorizedReactions,
+    copyChatLink,
   };
 };
