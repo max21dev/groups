@@ -1,5 +1,5 @@
 import { debounce } from 'lodash';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 type UseSearchProps<T> = {
   data: T[];
@@ -7,27 +7,29 @@ type UseSearchProps<T> = {
   delay?: number;
 };
 
-export const useSearch = <T>({ data, delay = 50, searchKey }: UseSearchProps<T>) => {
+export const useSearch = <T>({ data, delay = 300, searchKey }: UseSearchProps<T>) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [filteredData, setFilteredData] = useState<T[]>([]);
 
-  const debouncedSetSearchTerm = useMemo(() => debounce(setSearchTerm, delay), [delay]);
-
-  const filteredData = useMemo(() => {
-    if (!searchTerm) return data;
-
-    return data.filter((item) => {
-      const searchableValue = searchKey ? searchKey(item) : String(item);
-      return searchableValue.toLowerCase().includes(searchTerm.toLowerCase());
-    });
-  }, [data, searchTerm, searchKey]);
+  const updateSearch = useCallback(
+    debounce((key: string) => {
+      const result = data.filter((item) => {
+        const searchableValue = searchKey ? searchKey(item) : String(item);
+        return searchableValue.toLowerCase().includes(key.toLowerCase());
+      });
+      setFilteredData(result);
+    }, delay),
+    [data, delay, searchKey],
+  );
 
   useEffect(() => {
-    return () => debouncedSetSearchTerm.cancel();
-  }, [debouncedSetSearchTerm]);
+    updateSearch(searchTerm);
+    return () => updateSearch.cancel();
+  }, [searchTerm, updateSearch]);
 
   return {
     searchTerm,
-    setSearchTerm: debouncedSetSearchTerm,
+    setSearchTerm,
     filteredData,
   };
 };
