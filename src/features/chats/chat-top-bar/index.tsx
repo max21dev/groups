@@ -1,5 +1,5 @@
 import { ArrowLeft, CheckIcon, Info, Share2 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 import { GroupAvatar, GroupDetails } from '@/features/groups';
 
@@ -13,13 +13,16 @@ import {
   SheetTrigger,
 } from '@/shared/components/ui/sheet';
 
-import { useChatTopBar } from './hooks';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip.tsx';
+
+import { cn } from '@/shared/utils';
+
+import { useChatTopBar } from './hooks';
 
 export const ChatTopBar = () => {
   const {
@@ -97,7 +100,31 @@ export const ChatTopBar = () => {
         </div>
       </div>
 
-      {/* <div className="p-2 border-t"></div> */}
+      <div className="px-1 py-0.5 border-t flex items-center gap-1.5">
+        <NavLink
+          to={`/relay/${activeRelay?.replace('wss://', '')}/group/${activeGroupId}`}
+          end
+          className={({ isActive }) =>
+            cn(
+              'py-0.5 px-2 text-xs font-medium rounded-lg border',
+              isActive && 'bg-blue-500 text-white',
+            )
+          }
+        >
+          Chats
+        </NavLink>
+        <NavLink
+          to={`/relay/${activeRelay?.replace('wss://', '')}/group/${activeGroupId}/threads`}
+          className={({ isActive }) =>
+            cn(
+              'py-0.5 px-2 text-xs font-medium rounded-lg border',
+              isActive && 'bg-blue-500 text-white',
+            )
+          }
+        >
+          Threads
+        </NavLink>
+      </div>
     </div>
   );
 };

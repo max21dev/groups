@@ -25,7 +25,7 @@ export const Note = ({
           className="fixed max-w-full p-20 inset-0 z-50 flex items-center justify-center bg-black/80"
           onClick={() => setSelectedImage(null)}
         >
-          <img src={selectedImage} alt="Enlarged chat" className="h-auto rounded-lg" />
+          <img src={selectedImage} alt="Enlarged chat" className="h-auto max-h-svh rounded-lg" />
         </div>
       )}
     </div>

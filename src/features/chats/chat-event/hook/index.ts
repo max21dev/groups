@@ -14,7 +14,7 @@ export const useChatEvent = (event: string) => {
   useEffect(() => {
     ndk?.fetchEvent(event).then((event) => {
       if (event && event.kind) {
-        if (event.kind === 1) {
+        if (event.kind === 1 || event.kind === 11) {
           setCategory('note');
         } else if (event.kind === 30000) {
           setCategory('follow-set');

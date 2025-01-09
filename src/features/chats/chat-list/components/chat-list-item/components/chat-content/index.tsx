@@ -36,7 +36,7 @@ export const ChatContent = ({
         );
       case 'video':
         return (
-          <div className="max-w-full rounded-lg mt-2 react-player">
+          <div key={i} className="max-w-full rounded-lg mt-2 react-player">
             <ReactPlayer width="100%" url={part.content} controls />
           </div>
         );
