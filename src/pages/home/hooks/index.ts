@@ -1,5 +1,5 @@
 import { useActiveUser } from 'nostr-hooks';
-import { useParams } from 'react-router-dom';
+import { useMatch, useParams } from 'react-router-dom';
 
 import { useSidebar } from '@/shared/components/sidebar/hooks';
 import { useActiveGroup } from '@/shared/hooks';
@@ -12,6 +12,7 @@ export const useHomePage = () => {
   const { activeGroupId } = useActiveGroup();
   const { activeUser } = useActiveUser();
   const { event } = useParams();
+  const isThreadsVisible = !!useMatch('/relay/:relay/group/:groupId/threads');
 
   return {
     isCollapsed,
@@ -19,5 +20,6 @@ export const useHomePage = () => {
     activeUser,
     isMobile,
     event,
+    isThreadsVisible,
   };
 };

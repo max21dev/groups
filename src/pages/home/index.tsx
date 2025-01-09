@@ -1,4 +1,4 @@
-import { ChatBottomBar, ChatEvent, ChatList, ChatTopBar } from '@/features/chats';
+import { ChatBottomBar, ChatEvent, ChatList, ChatThreads, ChatTopBar } from '@/features/chats';
 import { GroupsFilterDropdown, GroupsList, GroupsListWidget } from '@/features/groups';
 import { RelayList, RelaySelectDropdown } from '@/features/relays/';
 import { ActiveUserInfo, UserLoginModal } from '@/features/users';
@@ -13,7 +13,8 @@ import { cn } from '@/shared/utils';
 import { useHomePage } from './hooks';
 
 export function HomePage() {
-  const { isCollapsed, activeGroupId, activeUser, isMobile, event } = useHomePage();
+  const { isCollapsed, activeGroupId, activeUser, isMobile, event, isThreadsVisible } =
+    useHomePage();
   const { activeRelay } = useActiveRelay();
 
   return (
@@ -68,11 +69,16 @@ export function HomePage() {
             ) : (
               <>
                 <ChatTopBar />
-                <ChatList key={`${activeRelay}-${activeGroupId}`} />
-
-                <div className="flex flex-col w-full mt-auto items-center gap-2 p-2">
-                  <ChatBottomBar />
-                </div>
+                {isThreadsVisible ? (
+                  <ChatThreads />
+                ) : (
+                  <>
+                    <ChatList key={`${activeRelay}-${activeGroupId}`} />
+                    <div className="flex flex-col w-full mt-auto items-center gap-2 p-2">
+                      <ChatBottomBar />
+                    </div>
+                  </>
+                )}
               </>
             )}
           </div>
