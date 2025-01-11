@@ -9,7 +9,8 @@ import {
 
 import { Button } from '@/shared/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
-import { useSendChatThread } from './hooks ';
+
+import { useSendChatThread } from './hooks';
 
 export const SendChatThread = () => {
   const [isSendThreadModalOpen, setIsSendThreadModalOpen] = useState(false);

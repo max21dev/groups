@@ -5,6 +5,7 @@ export type InputMessageProps = {
   message: string;
   setMessage: (message: string) => void;
   handleKeyPress: (event: React.KeyboardEvent<HTMLTextAreaElement>) => void;
+  placeholder?: string;
 };
 
 export const InputMessage = ({
@@ -12,6 +13,7 @@ export const InputMessage = ({
   message,
   setMessage,
   handleKeyPress,
+  placeholder = 'Write a message...',
 }: InputMessageProps) => {
   return (
     <Textarea
@@ -21,7 +23,7 @@ export const InputMessage = ({
       onKeyDown={handleKeyPress}
       onChange={(event) => setMessage(event.target.value)}
       name="message"
-      placeholder="Write a message..."
+      placeholder={placeholder}
       className="w-full border flex items-center resize-none overflow-x-hidden overflow-y-auto bg-background max-h-64"
     />
   );
