@@ -4,11 +4,12 @@ import { Button } from '@/shared/components/ui/button';
 
 export type SendButtonProps = {
   handleSend: () => void;
+  disabled?: boolean;
 };
 
-export const SendButton = ({ handleSend }: SendButtonProps) => {
+export const SendButton = ({ handleSend, disabled = false }: SendButtonProps) => {
   return (
-    <Button size="icon" variant="ghost" onClick={handleSend}>
+    <Button size="icon" variant="ghost" onClick={handleSend} disabled={disabled}>
       <SendHorizontalIcon size={20} className="text-muted-foreground" />
     </Button>
   );
