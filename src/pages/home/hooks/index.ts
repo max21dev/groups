@@ -1,5 +1,5 @@
 import { useActiveUser } from 'nostr-hooks';
-import { useMatch, useParams } from 'react-router-dom';
+import { useMatch, useParams, useSearchParams } from 'react-router-dom';
 
 import { useSidebar } from '@/shared/components/sidebar/hooks';
 import { useActiveGroup } from '@/shared/hooks';
@@ -14,6 +14,9 @@ export const useHomePage = () => {
   const { event } = useParams();
   const isThreadsVisible = !!useMatch('/relay/:relay/group/:groupId/threads');
 
+  const [searchParams] = useSearchParams();
+  const isChatThread = !!searchParams.get('chatThread');
+
   return {
     isCollapsed,
     activeGroupId,
@@ -21,5 +24,6 @@ export const useHomePage = () => {
     isMobile,
     event,
     isThreadsVisible,
+    isChatThread,
   };
 };

@@ -15,8 +15,8 @@ import { useSendChatThread } from './hooks';
 export const SendChatThread = () => {
   const [isSendThreadModalOpen, setIsSendThreadModalOpen] = useState(false);
   const {
-    thread,
-    setThread,
+    content,
+    setContent,
     handleKeyPress,
     handleSend,
     isAdmin,
@@ -50,8 +50,8 @@ export const SendChatThread = () => {
           <div className="w-full h-full flex items-center gap-2 [&_*]:min-h-32">
             <InputMessage
               handleKeyPress={handleKeyPress}
-              message={thread}
-              setMessage={setThread}
+              message={content}
+              setMessage={setContent}
               textareaRef={textareaRef}
               placeholder="Share your ideas..."
             />
@@ -61,7 +61,7 @@ export const SendChatThread = () => {
               isUploadingMedia={isUploadingMedia}
               openUploadMediaDialog={openUploadMediaDialog}
             />
-            <SendButton handleSend={handleSend} disabled={thread.trim() === '' ? true : false} />
+            <SendButton handleSend={handleSend} disabled={content.trim() === '' ? true : false} />
           </div>
         </DialogContent>
       </Dialog>
