@@ -2,6 +2,7 @@ import { cn, ellipsis, formatTimestampToDate } from '@/shared/utils';
 
 import { Spinner } from '@/shared/components/spinner';
 
+import { ChatThreadComments } from '@/features/chats/chat-threads/components';
 import { GroupWidget } from '@/features/groups';
 import { UserAvatar } from '@/features/users';
 
@@ -12,11 +13,13 @@ import { useChatEvent } from './hook';
 export const ChatEvent = ({
   event,
   sameAsCurrentUser,
+  isChatThread,
 }: {
   event: string;
   sameAsCurrentUser?: boolean;
+  isChatThread?: boolean;
 }) => {
-  const { eventData, profile, category } = useChatEvent(event);
+  const { eventData, profile, category, isThreadsVisible } = useChatEvent(event);
 
   if (eventData === undefined) {
     return (
@@ -34,7 +37,7 @@ export const ChatEvent = ({
     <>
       <div
         className={cn(
-          'rounded-xl p-2',
+          'w-full rounded-xl p-2',
           sameAsCurrentUser ? 'bg-blue-700' : 'bg-zinc-200 dark:bg-zinc-700',
           category === 'group' && 'p-0',
           sameAsCurrentUser !== undefined
@@ -44,24 +47,20 @@ export const ChatEvent = ({
       >
         {category !== 'group' && (
           <div className="flex items-center gap-2 mb-2">
-            {profile && (
-              <>
-                <UserAvatar pubkey={eventData.pubkey} />
-                <div className="flex flex-col">
-                  <span>
-                    {profile?.name ||
-                      profile?.displayName ||
-                      profile?.nip05 ||
-                      ellipsis(eventData.pubkey, 4)}
-                  </span>
-                  <span className="text-xs">
-                    {eventData.created_at && formatTimestampToDate(eventData.created_at)}
-                  </span>
-                </div>
-              </>
-            )}
+            <UserAvatar pubkey={eventData.pubkey} />
+            <div className="flex flex-col">
+              <span>
+                {profile?.name ||
+                  profile?.displayName ||
+                  profile?.nip05 ||
+                  ellipsis(eventData.pubkey, 4)}
+              </span>
+              <span className="text-xs">
+                {eventData.created_at && formatTimestampToDate(eventData.created_at)}
+              </span>
+            </div>
             <div className="ml-auto">
-              <ChatEventMenu event={event} />
+              <ChatEventMenu event={event} isChatThread={isChatThread} />
             </div>
           </div>
         )}
@@ -71,6 +70,8 @@ export const ChatEvent = ({
           <Note content={eventData.content} sameAsCurrentUser={sameAsCurrentUser} />
         )}
         {category === 'long-form-content' && <LongFormContent content={eventData.content} />}
+
+        {!isThreadsVisible && isChatThread && <ChatThreadComments parentId={event} />}
       </div>
     </>
   );

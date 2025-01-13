@@ -2,6 +2,8 @@ import { NDKEvent } from '@nostr-dev-kit/ndk';
 import { useNdk, useProfile } from 'nostr-hooks';
 import { useEffect, useState } from 'react';
 
+import { useHomePage } from '@/pages/home/hooks';
+
 type EventCategory = 'follow-set' | 'group' | 'note' | 'long-form-content';
 
 export const useChatEvent = (event: string) => {
@@ -11,10 +13,12 @@ export const useChatEvent = (event: string) => {
 
   const { ndk } = useNdk();
 
+  const { isThreadsVisible } = useHomePage();
+
   useEffect(() => {
     ndk?.fetchEvent(event).then((event) => {
       if (event && event.kind) {
-        if (event.kind === 1 || event.kind === 11) {
+        if (event.kind === 1 || event.kind === 11 || event.kind === 1111) {
           setCategory('note');
         } else if (event.kind === 30000) {
           setCategory('follow-set');
@@ -32,5 +36,5 @@ export const useChatEvent = (event: string) => {
     });
   }, [event, ndk, setEventData, setCategory]);
 
-  return { eventData, profile, category };
+  return { eventData, profile, category, isThreadsVisible };
 };

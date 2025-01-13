@@ -13,8 +13,15 @@ import { cn } from '@/shared/utils';
 import { useHomePage } from './hooks';
 
 export function HomePage() {
-  const { isCollapsed, activeGroupId, activeUser, isMobile, event, isThreadsVisible } =
-    useHomePage();
+  const {
+    isCollapsed,
+    activeGroupId,
+    activeUser,
+    isMobile,
+    event,
+    isThreadsVisible,
+    isChatThread,
+  } = useHomePage();
   const { activeRelay } = useActiveRelay();
 
   return (
@@ -59,8 +66,8 @@ export function HomePage() {
         <div className={cn('w-full', 'sm:block', !activeGroupId && 'max-sm:hidden')}>
           <div className="flex flex-col w-full h-full">
             {event ? (
-              <div className="flex flex-col items-center mt-8 h-full">
-                <ChatEvent event={event} />
+              <div className="flex flex-col items-center px-2 py-8 h-full overflow-y-auto">
+                <ChatEvent event={event} isChatThread={isChatThread} />
               </div>
             ) : !activeGroupId ? (
               <div className="flex flex-col justify-center items-center h-full">

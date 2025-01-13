@@ -1,4 +1,4 @@
-import { NotebookPenIcon } from 'lucide-react';
+import { MessageSquareTextIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import {
@@ -10,10 +10,10 @@ import {
 import { Button } from '@/shared/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
 
-import { useSendChatThread } from './hooks';
+import { useSendThreadComment } from './hooks';
 
-export const SendChatThread = () => {
-  const [isSendThreadModalOpen, setIsSendThreadModalOpen] = useState(false);
+export const SendThreadComment = ({ rootId }: { rootId: string }) => {
+  const [isSendCommentModalOpen, setIsSendCommentModalOpen] = useState(false);
   const {
     content,
     setContent,
@@ -25,7 +25,7 @@ export const SendChatThread = () => {
     activeUser,
     openUploadMediaDialog,
     isUploadingMedia,
-  } = useSendChatThread();
+  } = useSendThreadComment(rootId);
 
   if (!activeUser || (!isMember && !isAdmin)) {
     return null;
@@ -34,18 +34,18 @@ export const SendChatThread = () => {
   return (
     <div>
       <Button
-        variant="outline"
+        variant="ghost"
         className="flex justify-center items-center gap-1 self-stretch"
-        onClick={() => setIsSendThreadModalOpen(true)}
+        onClick={() => setIsSendCommentModalOpen(true)}
       >
-        <NotebookPenIcon size={17} />
-        Add New Thread
+        <MessageSquareTextIcon size={17} />
+        Add Comment
       </Button>
 
-      <Dialog open={isSendThreadModalOpen} onOpenChange={() => setIsSendThreadModalOpen(false)}>
+      <Dialog open={isSendCommentModalOpen} onOpenChange={() => setIsSendCommentModalOpen(false)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>New Thread</DialogTitle>
+            <DialogTitle>New Comment</DialogTitle>
           </DialogHeader>
           <div className="w-full h-full flex items-center gap-2 [&_*]:min-h-32">
             <InputMessage
@@ -53,7 +53,7 @@ export const SendChatThread = () => {
               message={content}
               setMessage={setContent}
               textareaRef={textareaRef}
-              placeholder="Share your ideas..."
+              placeholder="Add a comment..."
             />
           </div>
           <div className="flex justify-end gap-1">
