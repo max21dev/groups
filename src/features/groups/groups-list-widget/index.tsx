@@ -1,20 +1,26 @@
+import { useAllGroupsMetadataRecords } from 'nostr-hooks/nip29';
+import { memo, useMemo } from 'react';
+
 import { GroupWidget } from '@/features/groups';
 import { Spinner } from '@/shared/components/spinner';
 import { useActiveRelay } from '@/shared/hooks';
-import { useAllGroupsMetadataRecords } from 'nostr-hooks/nip29';
 
 import { Search } from '@/shared/components/search';
 import { useSearch } from '@/shared/components/search/hooks';
 
-export const GroupsListWidget = () => {
+export const GroupsListWidget = memo(() => {
   const { activeRelay } = useActiveRelay();
 
   const { metadataRecords, isLoadingMetadata } = useAllGroupsMetadataRecords(activeRelay);
 
-  const groupsListData = Object.keys(metadataRecords).map((id) => ({
-    ...metadataRecords[id],
-    id,
-  }));
+  const groupsListData = useMemo(
+    () =>
+      Object.keys(metadataRecords).map((id) => ({
+        ...metadataRecords[id],
+        id,
+      })),
+    [metadataRecords],
+  );
 
   const { searchTerm, setSearchTerm, filteredData } = useSearch({
     data: groupsListData,
@@ -39,4 +45,4 @@ export const GroupsListWidget = () => {
       </div>
     </>
   );
-};
+});

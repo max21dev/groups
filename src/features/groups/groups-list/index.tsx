@@ -1,5 +1,5 @@
 import { useAllGroupsMetadataRecords } from 'nostr-hooks/nip29';
-import { useMemo, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 
 import { Search } from '@/shared/components/search';
 import { useSearch } from '@/shared/components/search/hooks';
@@ -9,7 +9,7 @@ import { GroupsListItem } from '@/features/groups';
 
 import { useActiveRelay } from '@/shared/hooks';
 
-export const GroupsList = () => {
+export const GroupsList = memo(() => {
   const [lastChatTimestampPerGroup, setLastChatTimestampPerGroup] = useState<
     Record<string, number>
   >({});
@@ -28,10 +28,14 @@ export const GroupsList = () => {
     [metadataRecords, lastChatTimestampPerGroup],
   );
 
-  const groupsListData = Object.keys(metadataRecords).map((id) => ({
-    ...metadataRecords[id],
-    id,
-  }));
+  const groupsListData = useMemo(
+    () =>
+      Object.keys(metadataRecords).map((id) => ({
+        ...metadataRecords[id],
+        id,
+      })),
+    [metadataRecords],
+  );
 
   const { searchTerm, setSearchTerm, filteredData } = useSearch({
     data: groupsListData,
@@ -63,4 +67,4 @@ export const GroupsList = () => {
           ))}
     </>
   );
-};
+});
