@@ -1,11 +1,13 @@
-import { useToast } from '@/shared/components/ui/use-toast';
-import { useActiveGroup, useActiveRelay, useLoginModalState } from '@/shared/hooks';
 import { useActiveUser, useNip98 } from 'nostr-hooks';
 import { useGroupAdmins, useGroupMembers } from 'nostr-hooks/nip29';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useToast } from '@/shared/components/ui/use-toast';
+import { useActiveGroup, useActiveRelay, useLoginModalState } from '@/shared/hooks';
+
 export const useSendContent = (
   onSend: (relay: string, groupId: string, content: string) => void,
+  onAfterSend?: () => void,
 ) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [content, setContent] = useState('');
@@ -34,7 +36,23 @@ export const useSendContent = (
     onSend(activeRelay, activeGroupId, trimmedContent);
     setContent('');
     textareaRef.current?.focus();
+
+    if (onAfterSend) {
+      onAfterSend();
+    }
   }, [activeRelay, activeGroupId, content, activeUser, onSend, openLoginModal, toast]);
+
+  const handleThumbsUp = useCallback(() => {
+    if (!activeRelay || !activeGroupId) return;
+
+    if (!activeUser) {
+      openLoginModal();
+      return;
+    }
+
+    onSend(activeRelay, activeGroupId, '👍');
+    textareaRef.current?.focus();
+  }, [activeRelay, activeGroupId, activeUser, onSend, openLoginModal]);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -110,12 +128,15 @@ export const useSendContent = (
     setContent,
     handleKeyPress,
     handleSend,
-    addUploadedMediaUrl,
+    handleThumbsUp,
     openUploadMediaDialog,
     textareaRef,
     isAdmin,
     isMember,
     isUploadingMedia,
     activeUser,
+    activeRelay,
+    activeGroupId,
+    openLoginModal,
   };
 };

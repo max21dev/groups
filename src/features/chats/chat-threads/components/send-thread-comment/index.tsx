@@ -25,7 +25,7 @@ export const SendThreadComment = ({ rootId }: { rootId: string }) => {
     activeUser,
     openUploadMediaDialog,
     isUploadingMedia,
-  } = useSendThreadComment(rootId);
+  } = useSendThreadComment(rootId, () => setIsSendCommentModalOpen(false));
 
   if (!activeUser || (!isMember && !isAdmin)) {
     return null;

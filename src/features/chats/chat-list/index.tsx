@@ -1,5 +1,6 @@
 // import { AnimatePresence, motion } from 'framer-motion';
 import { Nip29GroupChat } from 'nostr-hooks/nip29';
+import { memo } from 'react';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -14,7 +15,7 @@ import { useChatList } from './hooks';
 
 // TODO: Fix Animate Bugs
 
-export function ChatList() {
+export const ChatList = memo(() => {
   const {
     chatsContainerRef,
     chatRefs,
@@ -123,4 +124,4 @@ export function ChatList() {
       </div>
     </div>
   );
-}
+});
