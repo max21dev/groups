@@ -1,11 +1,14 @@
+import { memo } from 'react';
+
 import { ChatEvent } from '@/features/chats';
 
 import { Spinner } from '@/shared/components/spinner';
 
 import { SendChatThread } from '@/features/chats/chat-threads/components';
+
 import { useChatThreads } from './hooks';
 
-export const ChatThreads = () => {
+export const ChatThreads = memo(() => {
   const { isLoadingThreads, threads } = useChatThreads();
 
   return (
@@ -23,4 +26,4 @@ export const ChatThreads = () => {
       </div>
     </div>
   );
-};
+});

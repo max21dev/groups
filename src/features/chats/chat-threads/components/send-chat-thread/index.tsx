@@ -25,7 +25,7 @@ export const SendChatThread = () => {
     activeUser,
     openUploadMediaDialog,
     isUploadingMedia,
-  } = useSendChatThread();
+  } = useSendChatThread(() => setIsSendThreadModalOpen(false));
 
   if (!activeUser || (!isMember && !isAdmin)) {
     return null;
