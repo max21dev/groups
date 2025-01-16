@@ -28,7 +28,7 @@ export const ChatThreadComments = ({ parentId }: { parentId: string }) => {
         ))}
       </div>
 
-      {hasMoreThreadComments && (
+      {hasMoreThreadComments && threadComments && threadComments.length > 1 && (
         <div
           className="w-full text-center pt-2 text-blue-400 text-sm hover:underline cursor-pointer border-t border-t-slate-400"
           onClick={() => loadMoreThreadComments()}

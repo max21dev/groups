@@ -23,7 +23,7 @@ export const GroupWidget = ({ groupId }: { groupId: string }) => {
 
   return (
     <Card
-      className="shadow-md justify-between hover:bg-gradient-to-r from-gray-400 to-green-100 cursor-pointer"
+      className="shadow-md justify-between hover:bg-gradient-to-r from-gray-400 to-green-100 cursor-pointer min-h-56"
       onClick={() => setActiveGroupId(groupId)}
     >
       <CardHeader className="p-4 space-y-0 flex flex-row gap-2 items-center">

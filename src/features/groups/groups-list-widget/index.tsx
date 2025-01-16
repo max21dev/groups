@@ -36,7 +36,7 @@ export const GroupsListWidget = memo(() => {
       <div className="w-2/3 p-4 mt-0">
         <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} placeholder="Search Groups" />
       </div>
-      <div className="w-full grid sm:grid-cols-1 lg:grid-cols-3 xl:grid-cols-5 gap-2 p-4 overflow-x-auto mb-auto">
+      <div className="w-full grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-2 p-4 overflow-x-auto mb-auto">
         {searchTerm === ''
           ? Object.keys(metadataRecords).map((groupId) => (
               <GroupWidget key={groupId} groupId={groupId} />
