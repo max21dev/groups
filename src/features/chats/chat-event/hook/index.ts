@@ -4,10 +4,13 @@ import { useEffect, useState } from 'react';
 
 import { useHomePage } from '@/pages/home/hooks';
 
+import { fetchReactions } from '../utils';
+
 type EventCategory = 'follow-set' | 'group' | 'note' | 'long-form-content';
 
 export const useChatEvent = (event: string) => {
   const [eventData, setEventData] = useState<NDKEvent | null | undefined>(undefined);
+  const [reactions, setReactions] = useState<NDKEvent[] | null | undefined>([]);
   const [category, setCategory] = useState<EventCategory | null | undefined>(undefined);
   const { profile } = useProfile({ pubkey: eventData?.pubkey });
 
@@ -16,7 +19,7 @@ export const useChatEvent = (event: string) => {
   const { isThreadsVisible } = useHomePage();
 
   useEffect(() => {
-    ndk?.fetchEvent(event).then((event) => {
+    ndk?.fetchEvent(event).then(async (event) => {
       if (event && event.kind) {
         if (event.kind === 1 || event.kind === 11 || event.kind === 1111) {
           setCategory('note');
@@ -29,12 +32,23 @@ export const useChatEvent = (event: string) => {
         }
 
         setEventData(event);
+
+        const fetchedReactions = await fetchReactions(ndk, event.id);
+        setReactions(fetchedReactions);
       } else {
         setEventData(null);
         setCategory(null);
+        setReactions([]);
       }
     });
-  }, [event, ndk, setEventData, setCategory]);
+  }, [event, ndk]);
 
-  return { eventData, profile, category, isThreadsVisible };
+  const refreshReactions = async () => {
+    if (!eventData || !ndk) return;
+
+    const fetchedReactions = await fetchReactions(ndk, eventData.id);
+    setReactions(fetchedReactions);
+  };
+
+  return { eventData, profile, category, reactions, refreshReactions, isThreadsVisible };
 };

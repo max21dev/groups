@@ -1,4 +1,7 @@
+import { Button } from '@/shared/components/ui/button';
+
 import { memo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { cn, ellipsis, formatTimestampToDate } from '@/shared/utils';
 
@@ -8,7 +11,14 @@ import { ChatThreadComments } from '@/features/chats/chat-threads/components';
 import { GroupWidget } from '@/features/groups';
 import { UserAvatar } from '@/features/users';
 
-import { ChatEventMenu, FollowSet, LongFormContent, Note } from './components';
+import {
+  AddEventReaction,
+  ChatEventMenu,
+  ChatEventReactions,
+  FollowSet,
+  LongFormContent,
+  Note,
+} from './components';
 import { useChatEvent } from './hook';
 
 export const ChatEvent = memo(
@@ -21,7 +31,10 @@ export const ChatEvent = memo(
     sameAsCurrentUser?: boolean;
     isChatThread?: boolean;
   }) => {
-    const { eventData, profile, category, isThreadsVisible } = useChatEvent(event);
+    const { eventData, profile, category, isThreadsVisible, reactions, refreshReactions } =
+      useChatEvent(event);
+
+    const navigate = useNavigate();
 
     if (eventData === undefined) {
       return (
@@ -37,6 +50,13 @@ export const ChatEvent = memo(
 
     return (
       <>
+        {sameAsCurrentUser === undefined && isChatThread && !isThreadsVisible && (
+          <div className="w-full max-w-2xl">
+            <Button variant="outline" className="me-auto mb-2" onClick={() => navigate(-1)}>
+              Back to threads
+            </Button>
+          </div>
+        )}
         <div
           className={cn(
             'w-full rounded-xl p-2',
@@ -72,6 +92,24 @@ export const ChatEvent = memo(
             <Note content={eventData.content} sameAsCurrentUser={sameAsCurrentUser} />
           )}
           {category === 'long-form-content' && <LongFormContent content={eventData.content} />}
+
+          <div className="flex justify-between items-center mt-2">
+            {category !== 'group' && reactions && reactions.length > 0 && (
+              <ChatEventReactions reaction={reactions} />
+            )}
+
+            {category !== 'group' && sameAsCurrentUser === undefined && (
+              <div className="flex ms-auto">
+                <AddEventReaction
+                  eventId={eventData.id}
+                  pubkey={eventData.pubkey}
+                  content={eventData.content}
+                  profile={profile}
+                  refreshReactions={refreshReactions}
+                />
+              </div>
+            )}
+          </div>
 
           {!isThreadsVisible && isChatThread && <ChatThreadComments parentId={event} />}
         </div>
