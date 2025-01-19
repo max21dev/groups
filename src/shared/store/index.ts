@@ -60,6 +60,16 @@ type RelaysActions = {
   setRelayStatus: (relay: string, status: string) => void;
 };
 
+type BookmarkState = {
+  bookmarkedGroups: { id: string; relay: string; name?: string }[];
+};
+
+type BookmarkActions = {
+  setBookmarkedGroups: (groups: { id: string; relay: string; name?: string }[]) => void;
+  addBookmarkedGroup: (group: { id: string; relay: string; name?: string }) => void;
+  removeBookmarkedGroup: (groupId: string) => void;
+};
+
 export const useStore = create<
   AppState &
     AppActions &
@@ -68,7 +78,9 @@ export const useStore = create<
     RelaysState &
     RelaysActions &
     GroupsState &
-    GroupsActions
+    GroupsActions &
+    BookmarkState &
+    BookmarkActions
 >()(
   persist(
     (set, get) => ({
@@ -144,8 +156,28 @@ export const useStore = create<
         });
       },
 
-      groupsFilter: { belongTo: true, manage: true, own: true, notJoined: true },
+      groupsFilter: { belongTo: true, manage: true, own: true, notJoined: true, bookmarked: true },
       setGroupsFilter: (groupsFilter) => set({ groupsFilter }),
+
+      // Bookmark State
+
+      bookmarkedGroups: [],
+
+      setBookmarkedGroups: (groups) => set({ bookmarkedGroups: groups }),
+
+      addBookmarkedGroup: (group) => {
+        const { bookmarkedGroups } = get();
+        if (!bookmarkedGroups.some((g) => g.id === group.id)) {
+          set({ bookmarkedGroups: [...bookmarkedGroups, group] });
+        }
+      },
+
+      removeBookmarkedGroup: (groupId) => {
+        const { bookmarkedGroups } = get();
+        set({
+          bookmarkedGroups: bookmarkedGroups.filter((group) => group.id !== groupId),
+        });
+      },
     }),
     {
       name: 'app-storage',
@@ -158,6 +190,7 @@ export const useStore = create<
         sidebarWidth: state.sidebarWidth,
         isCollapsed: state.isCollapsed,
         hasCustomSidebarWidth: state.hasCustomSidebarWidth,
+        bookmarkedGroups: state.bookmarkedGroups,
       }),
     },
   ),

@@ -7,6 +7,8 @@ import {
 } from 'nostr-hooks/nip29';
 import { useEffect, useState } from 'react';
 
+import { useGroupBookmark } from '@/features/groups/group-bookmark/hooks';
+
 import { useSidebar } from '@/shared/components/sidebar/hooks';
 import { useActiveGroup, useActiveRelay } from '@/shared/hooks';
 import { useStore } from '@/shared/store';
@@ -32,6 +34,8 @@ export const useGroupsListItem = ({
   const { activeRelay } = useActiveRelay();
 
   const { setActiveGroupId, activeGroupId } = useActiveGroup();
+
+  const { isBookmarked } = useGroupBookmark(groupId);
 
   const { metadata } = useGroupMetadata(activeRelay, groupId);
   const { admins } = useGroupAdmins(activeRelay, groupId);
@@ -73,6 +77,9 @@ export const useGroupsListItem = ({
       }
 
       if (groupsFilter?.notJoined && !isMember && !isAdmin) {
+        setShowGroup(true);
+      }
+      if (groupsFilter?.bookmarked && isBookmarked) {
         setShowGroup(true);
       }
     } else {

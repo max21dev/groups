@@ -1,7 +1,7 @@
 import { ArrowLeft, CheckIcon, Info, Share2 } from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router-dom';
 
-import { GroupAvatar, GroupDetails } from '@/features/groups';
+import { GroupAvatar, GroupBookmark, GroupDetails } from '@/features/groups';
 
 import { Button } from '@/shared/components/ui/button';
 import {
@@ -55,6 +55,7 @@ export const ChatTopBar = () => {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <GroupBookmark groupId={activeGroupId} groupName={metadata?.name} />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>

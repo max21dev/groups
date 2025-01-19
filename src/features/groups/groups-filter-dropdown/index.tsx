@@ -13,7 +13,8 @@ import {
 import { useGroupFilterDropDown } from './hooks';
 
 export const GroupsFilterDropdown = () => {
-  const { setBelongTo, setManage, setOwn, setNotJoined, groupsFilter } = useGroupFilterDropDown();
+  const { setBelongTo, setManage, setOwn, setNotJoined, groupsFilter, setBookmarked } =
+    useGroupFilterDropDown();
   return (
     <>
       <DropdownMenu>
@@ -43,6 +44,12 @@ export const GroupsFilterDropdown = () => {
             onCheckedChange={setNotJoined}
           >
             I haven't joined
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem
+            checked={groupsFilter?.bookmarked}
+            onCheckedChange={setBookmarked}
+          >
+            I have bookmarked
           </DropdownMenuCheckboxItem>
         </DropdownMenuContent>
       </DropdownMenu>
