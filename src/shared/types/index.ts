@@ -3,4 +3,5 @@ export type GroupsFilter = {
   manage?: boolean;
   own?: boolean;
   notJoined?: boolean;
+  bookmarked?: boolean;
 };
