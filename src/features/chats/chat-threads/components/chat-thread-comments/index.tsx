@@ -13,9 +13,11 @@ export const ChatThreadComments = ({ parentId }: { parentId: string }) => {
     <div>
       <div className="flex justify-between items-center py-1 mt-2 border-b border-b-slate-400">
         <h4>Comments</h4>
-        <SendThreadComment rootId={parentId} />
       </div>
 
+      <div className="w-full flex justify-center items-center">
+        <SendThreadComment rootId={parentId} />
+      </div>
       {isLoadingThreadComments && <Spinner />}
 
       {!isLoadingThreadComments && !threadComments && (

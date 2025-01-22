@@ -1,19 +1,15 @@
-import { MessageSquareTextIcon } from 'lucide-react';
-import { useState } from 'react';
-
 import {
+  EmojiButton,
   InputMessage,
+  JoinRequestButton,
+  LoginButton,
   SendButton,
   UploadImageButton,
 } from '@/features/chats/chat-bottom-bar/components';
 
-import { Button } from '@/shared/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
-
 import { useSendThreadComment } from './hooks';
 
 export const SendThreadComment = ({ rootId }: { rootId: string }) => {
-  const [isSendCommentModalOpen, setIsSendCommentModalOpen] = useState(false);
   const {
     content,
     setContent,
@@ -25,46 +21,53 @@ export const SendThreadComment = ({ rootId }: { rootId: string }) => {
     activeUser,
     openUploadMediaDialog,
     isUploadingMedia,
-  } = useSendThreadComment(rootId, () => setIsSendCommentModalOpen(false));
+    openLoginModal,
+    activeGroupId,
+    activeRelay,
+  } = useSendThreadComment(rootId);
 
-  if (!activeUser || (!isMember && !isAdmin)) {
-    return null;
+  if (!activeUser) {
+    return (
+      <div className="w-full h-full my-2 flex items-center justify-center">
+        <LoginButton
+          openLoginModal={openLoginModal}
+          variant="outline"
+          text="To add comments, please login first."
+          size="sm"
+        />
+      </div>
+    );
+  }
+
+  if (!isMember && !isAdmin) {
+    return (
+      <div className="w-full h-full my-2 flex items-center justify-center">
+        <JoinRequestButton
+          groupId={activeGroupId}
+          relay={activeRelay}
+          variant="outline"
+          text="Join group to add comments."
+          size="sm"
+        />
+      </div>
+    );
   }
 
   return (
-    <div>
-      <Button
-        variant="ghost"
-        className="flex justify-center items-center gap-1 self-stretch"
-        onClick={() => setIsSendCommentModalOpen(true)}
-      >
-        <MessageSquareTextIcon size={17} />
-        Add Comment
-      </Button>
-
-      <Dialog open={isSendCommentModalOpen} onOpenChange={() => setIsSendCommentModalOpen(false)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>New Comment</DialogTitle>
-          </DialogHeader>
-          <div className="w-full h-full flex items-center gap-2 [&_*]:min-h-32">
-            <InputMessage
-              handleKeyPress={handleKeyPress}
-              message={content}
-              setMessage={setContent}
-              textareaRef={textareaRef}
-              placeholder="Add a comment..."
-            />
-          </div>
-          <div className="flex justify-end gap-1">
-            <UploadImageButton
-              isUploadingMedia={isUploadingMedia}
-              openUploadMediaDialog={openUploadMediaDialog}
-            />
-            <SendButton handleSend={handleSend} disabled={content.trim() === '' ? true : false} />
-          </div>
-        </DialogContent>
-      </Dialog>
+    <div className="w-full h-full my-2 flex items-center gap-1">
+      <UploadImageButton
+        isUploadingMedia={isUploadingMedia}
+        openUploadMediaDialog={openUploadMediaDialog}
+      />
+      <InputMessage
+        handleKeyPress={handleKeyPress}
+        message={content}
+        setMessage={setContent}
+        textareaRef={textareaRef}
+        placeholder="Add a comment..."
+      />
+      <EmojiButton message={content} setMessage={setContent} textareaRef={textareaRef} />
+      <SendButton handleSend={handleSend} disabled={content.trim() === '' ? true : false} />
     </div>
   );
 };
