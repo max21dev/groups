@@ -32,7 +32,7 @@ export const AddEventReaction = ({
   return (
     <>
       <SmilePlusIcon
-        className="h-5 w-5 self-end hover:cursor-pointer"
+        className="h-5 w-5 self-end hover:cursor-pointer text-muted-foreground hover:text-foreground transition"
         onClick={() => setIsEmojiPickerOpen(true)}
       />
       {isEmojiPickerOpen && (
