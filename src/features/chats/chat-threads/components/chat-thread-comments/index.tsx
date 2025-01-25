@@ -6,8 +6,13 @@ import { SendThreadComment } from '@/features/chats/chat-threads/components';
 import { useChatThreadComments } from './hooks';
 
 export const ChatThreadComments = ({ parentId }: { parentId: string }) => {
-  const { threadComments, isLoadingThreadComments, hasMoreThreadComments, loadMoreThreadComments } =
-    useChatThreadComments(parentId);
+  const {
+    threadComments,
+    isLoadingThreadComments,
+    hasMoreThreadComments,
+    loadMoreThreadComments,
+    deleteThreadComment,
+  } = useChatThreadComments(parentId);
 
   return (
     <div>
@@ -26,7 +31,11 @@ export const ChatThreadComments = ({ parentId }: { parentId: string }) => {
 
       <div className="flex flex-col-reverse gap-1 [&_>*]:rounded-none divide-y divide-y-reverse divide-gray-400">
         {threadComments?.map((threadComment) => (
-          <ChatEvent key={threadComment.id} event={threadComment.id} />
+          <ChatEvent
+            key={threadComment.id}
+            event={threadComment.id}
+            deleteThreadComment={deleteThreadComment}
+          />
         ))}
       </div>
 

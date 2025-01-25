@@ -26,10 +26,12 @@ export const ChatEvent = memo(
     event,
     sameAsCurrentUser,
     isChatThread,
+    deleteThreadComment,
   }: {
     event: string;
     sameAsCurrentUser?: boolean;
     isChatThread?: boolean;
+    deleteThreadComment?: (commentId: string) => void;
   }) => {
     const { eventData, profile, category, isThreadsVisible, reactions, refreshReactions } =
       useChatEvent(event);
@@ -42,6 +44,10 @@ export const ChatEvent = memo(
           <Spinner />
         </div>
       );
+    }
+
+    if (eventData === null && deleteThreadComment !== undefined) {
+      return null;
     }
 
     if (eventData === null) {
@@ -82,7 +88,12 @@ export const ChatEvent = memo(
                 </span>
               </div>
               <div className="ml-auto">
-                <ChatEventMenu event={event} isChatThread={isChatThread} />
+                <ChatEventMenu
+                  event={event}
+                  isChatThread={isChatThread}
+                  deleteThreadComment={deleteThreadComment}
+                  pubkey={eventData.pubkey}
+                />
               </div>
             </div>
           )}
