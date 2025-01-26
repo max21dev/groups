@@ -1,4 +1,5 @@
-import { Copy, EllipsisIcon, MaximizeIcon } from 'lucide-react';
+import { Copy, EllipsisIcon, MaximizeIcon, Trash2 } from 'lucide-react';
+import { useActiveUser } from 'nostr-hooks';
 import { Link, useParams } from 'react-router-dom';
 
 import {
@@ -12,14 +13,21 @@ import { useActiveGroup, useActiveRelay, useCopyToClipboard } from '@/shared/hoo
 export const ChatEventMenu = ({
   event,
   isChatThread,
+  pubkey,
+  deleteThreadComment,
 }: {
   event: string;
   isChatThread?: boolean;
+  deleteThreadComment?: (commentId: string) => void;
+  pubkey?: string;
 }) => {
   const { activeRelay } = useActiveRelay();
   const { activeGroupId } = useActiveGroup();
-  const { copyToClipboard } = useCopyToClipboard();
+  const { activeUser } = useActiveUser();
+
   const { event: eventParam } = useParams();
+
+  const { copyToClipboard } = useCopyToClipboard();
 
   return (
     <DropdownMenu>
@@ -36,6 +44,15 @@ export const ChatEventMenu = ({
               <MaximizeIcon size={18} />
               Open
             </Link>
+          </DropdownMenuItem>
+        )}
+        {deleteThreadComment && activeUser?.pubkey === pubkey && (
+          <DropdownMenuItem
+            className="flex items-center gap-2 cursor-pointer text-red-500 focus:text-red-600"
+            onClick={() => deleteThreadComment(event)}
+          >
+            <Trash2 size={18} />
+            Delete
           </DropdownMenuItem>
         )}
         <DropdownMenuItem
