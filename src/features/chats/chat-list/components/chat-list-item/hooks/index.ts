@@ -7,7 +7,6 @@ import {
   useGroupReactions,
 } from 'nostr-hooks/nip29';
 import { useCallback, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
 
 import { useJoinRequestButton } from '@/features/chats/chat-bottom-bar/components/join-request-button/hooks';
 import { useChatBottomBar } from '@/features/chats/chat-bottom-bar/hooks';
@@ -41,8 +40,6 @@ export const useChatListItem = ({
 
   const { activeRelay } = useActiveRelay();
   const { activeGroupId } = useActiveGroup();
-
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const { copyToClipboard } = useCopyToClipboard();
 
