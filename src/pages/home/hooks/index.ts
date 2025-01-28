@@ -1,24 +1,28 @@
 import { useActiveUser } from 'nostr-hooks';
-import { useMatch, useParams, useSearchParams } from 'react-router-dom';
+import { useMatch, useSearchParams } from 'react-router-dom';
 
 import { useSidebar } from '@/shared/components/sidebar/hooks';
-import { useActiveGroup } from '@/shared/hooks';
+
+import { useActiveGroup, useActiveRelay } from '@/shared/hooks';
 import { useStore } from '@/shared/store';
 
 export const useHomePage = () => {
   const isCollapsed = useStore((state) => state.isCollapsed);
   const { isMobile } = useSidebar();
 
+  const { activeRelay } = useActiveRelay();
   const { activeGroupId } = useActiveGroup();
+
   const { activeUser } = useActiveUser();
-  const { event } = useParams();
-  const isThreadsVisible = !!useMatch('/relay/:relay/group/:groupId/threads');
+  const isThreadsVisible = !!useMatch('/threads');
 
   const [searchParams] = useSearchParams();
   const isChatThread = !!searchParams.get('chatThread');
+  const event = searchParams.get('eventId');
 
   return {
     isCollapsed,
+    activeRelay,
     activeGroupId,
     activeUser,
     isMobile,

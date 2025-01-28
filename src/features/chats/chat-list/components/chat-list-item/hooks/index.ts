@@ -148,7 +148,7 @@ export const useChatListItem = ({
 
   const copyChatLink = (chatId: string) => {
     copyToClipboard(
-      `${window.location.origin}/relay/${activeRelay?.replace('wss://', '')}/group/${activeGroupId}/${chatId}`,
+      `${window.location.origin}/?relay=${activeRelay}&groupId=${activeGroupId}&chatId=${chatId}`,
     );
     toast({ description: 'Chat link copied to clipboard' });
   };

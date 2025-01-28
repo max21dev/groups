@@ -1,5 +1,5 @@
 import { ArrowLeft, CheckIcon, Info, Share2 } from 'lucide-react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import { GroupAvatar, GroupBookmark, GroupDetails } from '@/features/groups';
 
@@ -31,11 +31,10 @@ export const ChatTopBar = () => {
     toggleGroupDetails,
     activeGroupId,
     activeRelay,
+    setActiveGroupId,
     copyToClipboard,
     hasCopied,
   } = useChatTopBar();
-
-  const navigate = useNavigate();
 
   return (
     <div className="w-full border-b">
@@ -43,7 +42,7 @@ export const ChatTopBar = () => {
         <div className="flex items-center gap-2">
           <ArrowLeft
             className="sm:hidden hover:cursor-pointer"
-            onClick={() => navigate(`/relay/${activeRelay?.replace(/^wss:\/\//, '')}`)}
+            onClick={() => setActiveGroupId(undefined)}
           />
           <GroupAvatar relay={activeRelay} groupId={activeGroupId} />
           <div className="flex flex-col">
@@ -64,7 +63,7 @@ export const ChatTopBar = () => {
                   size="icon"
                   onClick={() =>
                     copyToClipboard(
-                      `${window.location.origin}/relay/${activeRelay?.replace('wss://', '')}/group/${activeGroupId}`,
+                      `${window.location.origin}/?relay=${activeRelay}&groupId=${activeGroupId}`,
                     )
                   }
                 >
@@ -103,7 +102,7 @@ export const ChatTopBar = () => {
 
       <div className="px-1 py-0.5 border-t flex items-center gap-1.5">
         <NavLink
-          to={`/relay/${activeRelay?.replace('wss://', '')}/group/${activeGroupId}`}
+          to={`/?relay=${activeRelay}&groupId=${activeGroupId}`}
           end
           className={({ isActive }) =>
             cn(
@@ -115,7 +114,7 @@ export const ChatTopBar = () => {
           Chats
         </NavLink>
         <NavLink
-          to={`/relay/${activeRelay?.replace('wss://', '')}/group/${activeGroupId}/threads`}
+          to={`/threads?relay=${activeRelay}&groupId=${activeGroupId}`}
           className={({ isActive }) =>
             cn(
               'py-0.5 px-2 text-xs font-medium rounded-lg border',

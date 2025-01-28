@@ -40,7 +40,7 @@ export const RelaySelectDropdown = () => {
             </Button>
           ) : (
             <Button variant="outline" className="w-full text-xs font-light">
-              {activeRelay?.replace('wss://', '') || 'Select a relay'}
+              {activeRelay || 'Select a relay'}
             </Button>
           )}
         </DropdownMenuTrigger>
