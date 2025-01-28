@@ -8,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/components/ui/dropdown-menu';
+
 import { useActiveGroup, useActiveRelay, useCopyToClipboard } from '@/shared/hooks';
 
 export const ChatEventMenu = ({
@@ -38,7 +39,7 @@ export const ChatEventMenu = ({
         {!eventParam && (
           <DropdownMenuItem>
             <Link
-              to={`/relay/${activeRelay?.replace('wss://', '')}/group/${activeGroupId}/e/${event}${isChatThread ? '?chatThread=true' : ''}`}
+              to={`/?relay=${activeRelay}&groupId=${activeGroupId}&eventId=${event}${isChatThread ? '&chatThread=true' : ''}`}
               className="flex items-center gap-2 w-full"
             >
               <MaximizeIcon size={18} />

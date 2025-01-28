@@ -6,7 +6,7 @@ import { useStore } from '@/shared/store';
 
 export const useChatTopBar = () => {
   const { activeRelay } = useActiveRelay();
-  const { activeGroupId } = useActiveGroup();
+  const { activeGroupId, setActiveGroupId } = useActiveGroup();
   const { metadata } = useGroupMetadata(activeRelay, activeGroupId);
   const { copyToClipboard, hasCopied } = useCopyToClipboard();
 
@@ -19,6 +19,7 @@ export const useChatTopBar = () => {
     toggleGroupDetails,
     activeRelay,
     activeGroupId,
+    setActiveGroupId,
     copyToClipboard,
     hasCopied,
   };

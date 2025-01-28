@@ -7,7 +7,6 @@ import { ModeToggle } from '@/shared/components/mode-toggle';
 import { Sidebar } from '@/shared/components/sidebar';
 import { ZapModal } from '@/shared/components/zap-modal';
 
-import { useActiveRelay } from '@/shared/hooks';
 import { cn } from '@/shared/utils';
 
 import { useHomePage } from './hooks';
@@ -21,8 +20,8 @@ export function HomePage() {
     event,
     isThreadsVisible,
     isChatThread,
+    activeRelay,
   } = useHomePage();
-  const { activeRelay } = useActiveRelay();
 
   return (
     <>

@@ -1,19 +1,17 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 export const useActiveRelay = () => {
-  const { relay } = useParams();
-
-  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const relay = useMemo(() => searchParams.get('relay') || undefined, [searchParams]);
 
   const setActiveRelay = (relay: string | undefined) => {
     if (relay) {
-      navigate(`/relay/${relay.replace('wss://', '')}`);
+      setSearchParams({ relay });
     } else {
-      navigate(`/`);
+      setSearchParams({});
     }
   };
 
-  const activeRelay = !relay ? undefined : relay.startsWith('ws://') ? relay : `wss://${relay}`;
-
-  return { activeRelay, setActiveRelay };
+  return { activeRelay: relay, setActiveRelay };
 };

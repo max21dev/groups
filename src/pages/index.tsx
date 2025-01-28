@@ -53,35 +53,41 @@ export const router = createBrowserRouter([
         },
       },
       {
-        path: '/relay/:relay',
+        path: '/threads',
         async lazy() {
           return { Component: (await HomePage()).HomePage };
         },
       },
-      {
-        path: '/relay/:relay/group/:groupId',
-        async lazy() {
-          return { Component: (await HomePage()).HomePage };
-        },
-      },
-      {
-        path: '/relay/:relay/group/:groupId/threads',
-        async lazy() {
-          return { Component: (await HomePage()).HomePage };
-        },
-      },
-      {
-        path: '/relay/:relay/group/:groupId/:chatId',
-        async lazy() {
-          return { Component: (await HomePage()).HomePage };
-        },
-      },
-      {
-        path: '/relay/:relay/group/:groupId/e/:event',
-        async lazy() {
-          return { Component: (await HomePage()).HomePage };
-        },
-      },
+      // {
+      //   path: '/relay/:relay',
+      //   async lazy() {
+      //     return { Component: (await HomePage()).HomePage };
+      //   },
+      // },
+      // {
+      //   path: '/relay/:relay/group/:groupId',
+      //   async lazy() {
+      //     return { Component: (await HomePage()).HomePage };
+      //   },
+      // },
+      // {
+      //   path: '/relay/:relay/group/:groupId/threads',
+      //   async lazy() {
+      //     return { Component: (await HomePage()).HomePage };
+      //   },
+      // },
+      // {
+      //   path: '/relay/:relay/group/:groupId/:chatId',
+      //   async lazy() {
+      //     return { Component: (await HomePage()).HomePage };
+      //   },
+      // },
+      // {
+      //   path: '/relay/:relay/group/:groupId/e/:event',
+      //   async lazy() {
+      //     return { Component: (await HomePage()).HomePage };
+      //   },
+      // },
     ],
   },
 ]);

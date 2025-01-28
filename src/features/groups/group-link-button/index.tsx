@@ -13,9 +13,7 @@ export const GroupLinkButton = () => {
   return (
     <Button
       onClick={() =>
-        copyToClipboard(
-          `${window.location.origin}/relay/${activeRelay?.replace('wss://', '')}/group/${activeGroupId}`,
-        )
+        copyToClipboard(`${window.location.origin}/?relay=${activeRelay}&groupId=${activeGroupId}`)
       }
       variant="outline"
       className="flex gap-2"

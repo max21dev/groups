@@ -7,6 +7,7 @@ import {
   useGroupReactions,
 } from 'nostr-hooks/nip29';
 import { useCallback, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import { useJoinRequestButton } from '@/features/chats/chat-bottom-bar/components/join-request-button/hooks';
 import { useChatBottomBar } from '@/features/chats/chat-bottom-bar/hooks';
@@ -40,6 +41,8 @@ export const useChatListItem = ({
 
   const { activeRelay } = useActiveRelay();
   const { activeGroupId } = useActiveGroup();
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const { copyToClipboard } = useCopyToClipboard();
 
@@ -148,7 +151,7 @@ export const useChatListItem = ({
 
   const copyChatLink = (chatId: string) => {
     copyToClipboard(
-      `${window.location.origin}/relay/${activeRelay?.replace('wss://', '')}/group/${activeGroupId}/${chatId}`,
+      `${window.location.origin}/?relay=${activeRelay}&groupId=${activeGroupId}&chatId=${chatId}`,
     );
     toast({ description: 'Chat link copied to clipboard' });
   };
