@@ -1,13 +1,21 @@
+import { EllipsisVerticalIcon } from 'lucide-react';
+
 import { UserAvatar } from '@/features/users';
 
 import { Button } from '@/shared/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/shared/components/ui/dropdown-menu';
 
 import { cn } from '@/shared/utils';
 
 import { useActiveUserInfo } from './hooks';
 
 export function ActiveUserInfo() {
-  const { activeGroupId, activeUser, isCollapsed, openLoginModal, profile, isMobile } =
+  const { activeGroupId, activeUser, isCollapsed, openLoginModal, profile, isMobile, logout } =
     useActiveUserInfo();
 
   return (
@@ -15,7 +23,7 @@ export function ActiveUserInfo() {
       {activeUser ? (
         <div
           className={cn(
-            'p-2 flex justify-center border-t',
+            'p-2 flex justify-center items-center border-t',
             (!isCollapsed || isMobile) && 'bg-accent',
           )}
         >
@@ -31,6 +39,19 @@ export function ActiveUserInfo() {
               </span>
             </div>
           )}
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <EllipsisVerticalIcon size={20} className="cursor-pointer w-8" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="p-0 [&_*]:p-0">
+              <DropdownMenuItem>
+                <Button variant="ghost" className="w-full" onClick={() => logout()}>
+                  Logout
+                </Button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       ) : !activeGroupId ? (
         <div className="p-2 w-full border-t">

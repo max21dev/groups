@@ -1,13 +1,22 @@
+import { SearchIcon } from 'lucide-react';
+
 import { useAllGroupsMetadataRecords } from 'nostr-hooks/nip29';
 import { memo, useMemo, useState } from 'react';
+
+import { GroupsListItem } from '@/features/groups';
+import { useHomePage } from '@/pages/home/hooks';
 
 import { Search } from '@/shared/components/search';
 import { useSearch } from '@/shared/components/search/hooks';
 import { Spinner } from '@/shared/components/spinner';
-
-import { GroupsListItem } from '@/features/groups';
-
+import { Button } from '@/shared/components/ui/button';
 import { useActiveRelay } from '@/shared/hooks';
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/shared/components/ui/dropdown-menu';
 
 export const GroupsList = memo(() => {
   const [lastChatTimestampPerGroup, setLastChatTimestampPerGroup] = useState<
@@ -15,6 +24,8 @@ export const GroupsList = memo(() => {
   >({});
 
   const { activeRelay } = useActiveRelay();
+
+  const { isCollapsed, isMobile } = useHomePage();
 
   const { metadataRecords, isLoadingMetadata } = useAllGroupsMetadataRecords(activeRelay);
 
@@ -48,7 +59,24 @@ export const GroupsList = memo(() => {
 
   return (
     <>
-      <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} placeholder="Search Groups" />
+      {isCollapsed && !isMobile ? (
+        <DropdownMenu>
+          <DropdownMenuTrigger className="w-full" asChild>
+            <Button variant="outline" className="p-0 py-2">
+              <SearchIcon size={20} className="cursor-pointer" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            <Search
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              placeholder="Search Groups"
+            />
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : (
+        <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} placeholder="Search Groups" />
+      )}
 
       {searchTerm === ''
         ? sortedGroupIds.map((groupId) => (

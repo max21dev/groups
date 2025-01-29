@@ -1,6 +1,6 @@
 import { Copy, EllipsisIcon, MaximizeIcon, Trash2 } from 'lucide-react';
 import { useActiveUser } from 'nostr-hooks';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 import {
   DropdownMenu,
@@ -25,8 +25,9 @@ export const ChatEventMenu = ({
   const { activeRelay } = useActiveRelay();
   const { activeGroupId } = useActiveGroup();
   const { activeUser } = useActiveUser();
+  const [searchParams] = useSearchParams();
 
-  const { event: eventParam } = useParams();
+  const eventId = searchParams.get('eventId');
 
   const { copyToClipboard } = useCopyToClipboard();
 
@@ -36,7 +37,7 @@ export const ChatEventMenu = ({
         <EllipsisIcon size={20} className="cursor-pointer" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {!eventParam && (
+        {!eventId && (
           <DropdownMenuItem>
             <Link
               to={`/?relay=${activeRelay}&groupId=${activeGroupId}&eventId=${event}${isChatThread ? '&chatThread=true' : ''}`}
