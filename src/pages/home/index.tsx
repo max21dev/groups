@@ -1,5 +1,10 @@
 import { ChatBottomBar, ChatEvent, ChatList, ChatThreads, ChatTopBar } from '@/features/chats';
-import { GroupsFilterDropdown, GroupsList, GroupsListWidget } from '@/features/groups';
+import {
+  GroupsFilterDropdown,
+  GroupsList,
+  GroupsListPinned,
+  GroupsListWidget,
+} from '@/features/groups';
 import { RelayList, RelaySelectDropdown } from '@/features/relays/';
 import { ActiveUserInfo, UserLoginModal } from '@/features/users';
 
@@ -49,6 +54,8 @@ export function HomePage() {
                 'p-2 flex flex-col h-full gap-4 overflow-y-hidden hover:overflow-y-auto max-sm:overflow-y-auto',
               )}
             >
+              <GroupsListPinned />
+
               <GroupsList />
 
               {!activeRelay && (

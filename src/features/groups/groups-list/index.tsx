@@ -70,12 +70,16 @@ export const GroupsList = memo(() => {
             <Search
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
-              placeholder="Search Groups"
+              placeholder="Search Groups in Relay"
             />
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
-        <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} placeholder="Search Groups" />
+        <Search
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          placeholder="Search Groups in Relay"
+        />
       )}
 
       {searchTerm === ''
