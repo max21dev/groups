@@ -1,7 +1,7 @@
 import { useActiveUser } from 'nostr-hooks';
 import { useGroupChats, useGroupJoinRequests, useGroupLeaveRequests } from 'nostr-hooks/nip29';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import { useActiveGroup, useActiveRelay } from '@/shared/hooks';
 
@@ -11,7 +11,9 @@ export const useChatList = () => {
 
   const [deletedChats, setDeletedChats] = useState<string[]>([]);
 
-  const { chatId } = useParams();
+  const [searchParams] = useSearchParams();
+
+  const chatId = searchParams.get('chatId');
 
   const { activeGroupId } = useActiveGroup();
   const { activeRelay } = useActiveRelay();

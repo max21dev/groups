@@ -3,6 +3,7 @@ import { PinIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import { GroupAvatar } from '@/features/groups/group-avatar';
+import { GroupBookmark } from '@/features/groups/group-bookmark';
 import { useGroupBookmark } from '@/features/groups/group-bookmark/hooks';
 import { useHomePage } from '@/pages/home/hooks';
 
@@ -40,12 +41,23 @@ export const GroupsListPinned = () => {
         >
           <GroupAvatar relay={group.relay} groupId={group.id} />
           {(!isCollapsed || isMobile) && (
-            <div className="flex flex-col gap-1">
-              <p className="text-sm font-semibold truncate">{group.name}</p>
-              <p className="text-xs truncate text-muted-foreground">
-                {group.relay.replace('wss://', '')}
-              </p>
-            </div>
+            <>
+              <div className="flex flex-col gap-1">
+                <p className="text-sm font-semibold truncate">{group.name}</p>
+                <p className="text-xs truncate text-muted-foreground">
+                  {group.relay.replace('wss://', '')}
+                </p>
+              </div>
+              <div
+                className="ms-auto rounded hover:bg-black/20 [&_*]:w-8 [&_*]:h-8 [&_*]:p-1.5"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                }}
+              >
+                <GroupBookmark groupId={group.id} groupName={group.name} />
+              </div>
+            </>
           )}
         </Link>
       ))}
