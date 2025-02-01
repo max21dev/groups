@@ -44,7 +44,7 @@ export const useGroupBookmark = (groupId: string | undefined, groupName?: string
   };
 
   const updateBookmarks = async (updateFn: (tags: string[][]) => string[][]) => {
-    if (!ndk || !activeUser || !activeRelay) return;
+    if (!ndk || !activeUser) return;
 
     const events = await ndk.fetchEvents({
       kinds: [NDKKind.SimpleGroupList],
