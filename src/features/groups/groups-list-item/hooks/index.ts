@@ -5,7 +5,7 @@ import {
   useGroupMembers,
   useGroupMetadata,
 } from 'nostr-hooks/nip29';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { useGroupBookmark } from '@/features/groups/group-bookmark/hooks';
 
@@ -20,10 +20,6 @@ export const useGroupsListItem = ({
   groupId: string;
   setLastChatTimestampPerGroup: React.Dispatch<React.SetStateAction<Record<string, number>>>;
 }) => {
-  const [showGroup, setShowGroup] = useState<boolean>(true);
-  const [isMember, setIsMember] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-
   const isCollapsed = useStore((state) => state.isCollapsed);
   const { isMobile } = useSidebar();
 
@@ -42,57 +38,34 @@ export const useGroupsListItem = ({
   const { members } = useGroupMembers(activeRelay, groupId);
   const { chats } = useGroupChats(activeRelay, groupId, { limit: 1 });
 
-  useEffect(() => {
-    if (!activeUser || !activeUser.pubkey) return;
-    if (!members || !members.length) return;
+  const isMember = useMemo(
+    () => members?.some((member) => member.pubkey === activeUser?.pubkey) ?? false,
+    [members, activeUser],
+  );
 
-    const isMember = members.some((member) => member.pubkey === activeUser.pubkey);
+  const isAdmin = useMemo(
+    () => admins?.some((admin) => admin.pubkey === activeUser?.pubkey) ?? false,
+    [admins, activeUser],
+  );
 
-    setIsMember(isMember);
-  }, [members, activeUser, setIsMember]);
+  const showGroup = useMemo(() => {
+    if (!groupsFilter) return true;
+    if (!Object.values(groupsFilter).some((value) => !value)) return true;
 
-  useEffect(() => {
-    if (!activeUser || !activeUser.pubkey) return;
-    if (!admins || !admins.length) return;
-
-    const isAdmin = admins.some((admin) => admin.pubkey === activeUser.pubkey);
-
-    setIsAdmin(isAdmin);
-  }, [admins, activeUser, setIsAdmin]);
-
-  useEffect(() => {
-    if (!activeUser || !activeUser.pubkey) return;
-
-    const hasFilter = groupsFilter && Object.values(groupsFilter).some((value) => !value);
-
-    if (hasFilter) {
-      setShowGroup(false);
-
-      if (groupsFilter.belongTo && isMember) {
-        setShowGroup(true);
-      }
-
-      if (groupsFilter.manage && isAdmin) {
-        setShowGroup(true);
-      }
-
-      if (groupsFilter?.notJoined && !isMember && !isAdmin) {
-        setShowGroup(true);
-      }
-      if (groupsFilter?.bookmarked && isBookmarked) {
-        setShowGroup(true);
-      }
-    } else {
-      setShowGroup(true);
-    }
-  }, [isMember, isAdmin, activeUser, groupsFilter, setShowGroup]);
+    return (
+      (groupsFilter.belongTo && isMember) ||
+      (groupsFilter.manage && isAdmin) ||
+      (groupsFilter.notJoined && !isMember && !isAdmin) ||
+      (groupsFilter.bookmarked && isBookmarked)
+    );
+  }, [isMember, isAdmin, groupsFilter, isBookmarked]);
 
   useEffect(() => {
     if (!groupId) return;
 
     setLastChatTimestampPerGroup((prev) => ({
       ...prev,
-      [groupId]: chats && chats.length ? chats[chats.length - 1].timestamp : 0,
+      [groupId]: chats?.[0]?.timestamp || 0,
     }));
   }, [groupId, chats, setLastChatTimestampPerGroup]);
 
