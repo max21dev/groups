@@ -4,6 +4,7 @@ import {
   GroupsList,
   GroupsListPinned,
   GroupsListWidget,
+  GroupsSearch,
 } from '@/features/groups';
 import { RelayList, RelaySelectDropdown } from '@/features/relays/';
 import { ActiveUserInfo, UserLoginModal } from '@/features/users';
@@ -46,10 +47,13 @@ export function HomePage() {
                 {activeUser?.pubkey && <GroupsFilterDropdown />}
 
                 <RelaySelectDropdown />
+
+                {activeRelay && <GroupsSearch />}
               </div>
             </div>
 
             <div
+              id="scrollableGroupsList"
               className={cn(
                 'p-2 flex flex-col h-full gap-4 overflow-y-hidden hover:overflow-y-auto max-sm:overflow-y-auto',
               )}
