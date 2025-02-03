@@ -43,7 +43,7 @@ export const SendChatThread = () => {
       </Button>
 
       <Dialog open={isSendThreadModalOpen} onOpenChange={() => setIsSendThreadModalOpen(false)}>
-        <DialogContent>
+        <DialogContent className="[&>button]:right-6 [&>button]:top-6">
           <DialogHeader>
             <DialogTitle>New Thread</DialogTitle>
           </DialogHeader>
