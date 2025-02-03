@@ -1,12 +1,15 @@
+import { RadioIcon } from 'lucide-react';
 import { useAllGroupsMetadataRecords } from 'nostr-hooks/nip29';
 import { memo, useMemo, useState } from 'react';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { GroupsListItem } from '@/features/groups';
+import { useHomePage } from '@/pages/home/hooks';
 
 import { Spinner } from '@/shared/components/spinner';
 import { useActiveRelay } from '@/shared/hooks';
+import { cn } from '@/shared/utils';
 
 export const GroupsList = memo(() => {
   const [lastChatTimestampPerGroup, setLastChatTimestampPerGroup] = useState<
@@ -17,6 +20,8 @@ export const GroupsList = memo(() => {
   const { activeRelay } = useActiveRelay();
 
   const { metadataRecords, isLoadingMetadata } = useAllGroupsMetadataRecords(activeRelay);
+
+  const { isCollapsed, isMobile } = useHomePage();
 
   const sortedGroupIds = useMemo(
     () =>
@@ -37,22 +42,35 @@ export const GroupsList = memo(() => {
   if (!sortedGroupIds.length) return null;
 
   return (
-    <InfiniteScroll
-      dataLength={visibleCount}
-      next={loadMore}
-      hasMore={visibleCount < sortedGroupIds.length}
-      loader={<Spinner />}
-      className="flex flex-col gap-2"
-      scrollThreshold={'300px'}
-      scrollableTarget="scrollableGroupsList"
-    >
-      {sortedGroupIds.slice(0, visibleCount).map((groupId) => (
-        <GroupsListItem
-          key={groupId}
-          groupId={groupId}
-          setLastChatTimestampPerGroup={setLastChatTimestampPerGroup}
-        />
-      ))}
-    </InfiniteScroll>
+    <>
+      <div
+        className={cn(
+          'flex items-center gap-2 p-2 -mb-2',
+          isCollapsed && !isMobile && 'justify-center',
+        )}
+      >
+        {(!isCollapsed || isMobile) && (
+          <p className="text-sm font-semibold">Groups in {activeRelay?.replace('wss://', '')}</p>
+        )}
+        <RadioIcon size={18} />
+      </div>
+      <InfiniteScroll
+        dataLength={visibleCount}
+        next={loadMore}
+        hasMore={visibleCount < sortedGroupIds.length}
+        loader={<Spinner />}
+        className="flex flex-col gap-2"
+        scrollThreshold={'300px'}
+        scrollableTarget="scrollableGroupsList"
+      >
+        {sortedGroupIds.slice(0, visibleCount).map((groupId) => (
+          <GroupsListItem
+            key={groupId}
+            groupId={groupId}
+            setLastChatTimestampPerGroup={setLastChatTimestampPerGroup}
+          />
+        ))}
+      </InfiniteScroll>
+    </>
   );
 });

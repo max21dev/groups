@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { GroupAvatar } from '@/features/groups/group-avatar';
+import { useHomePage } from '@/pages/home/hooks';
 
 import { Search } from '@/shared/components/search';
 import { useSearch } from '@/shared/components/search/hooks';
@@ -13,13 +14,15 @@ import { Button } from '@/shared/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
 import { useActiveRelay } from '@/shared/hooks';
 
-import { ellipsis } from '@/shared/utils';
+import { cn, ellipsis } from '@/shared/utils';
 
 export const GroupsSearch = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { activeRelay } = useActiveRelay();
 
   const { metadataRecords, isLoadingMetadata } = useAllGroupsMetadataRecords(activeRelay);
+
+  const { isCollapsed, isMobile } = useHomePage();
 
   const groupsListData = useMemo(
     () =>
@@ -41,7 +44,12 @@ export const GroupsSearch = () => {
 
   return (
     <>
-      <Button variant="outline" size="icon" className="p-2" onClick={() => setIsOpen(true)}>
+      <Button
+        variant="outline"
+        size="icon"
+        className={cn('p-2', isCollapsed && !isMobile && 'w-full')}
+        onClick={() => setIsOpen(true)}
+      >
         <SearchIcon className="cursor-pointer" />
       </Button>
 
