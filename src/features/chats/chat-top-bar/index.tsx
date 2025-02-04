@@ -37,7 +37,7 @@ export const ChatTopBar = () => {
   } = useChatTopBar();
 
   return (
-    <div className="w-full border-b">
+    <div className="w-full">
       <div className="flex justify-between items-center px-4 py-2">
         <div className="flex items-center gap-2">
           <ArrowLeft
@@ -100,14 +100,14 @@ export const ChatTopBar = () => {
         </div>
       </div>
 
-      <div className="px-1 py-0.5 border-t flex items-center gap-1.5">
+      <div className="flex items-stretch divide-x">
         <NavLink
           to={`/?relay=${activeRelay}&groupId=${activeGroupId}`}
           end
           className={({ isActive }) =>
             cn(
-              'py-0.5 px-2 text-xs font-medium rounded-lg border',
-              isActive && 'bg-blue-500 text-white',
+              'py-1 px-4 text-xs font-medium border-y',
+              isActive && '-mt-0.5 border-t-2 border-t-blue-500 border-b-0',
             )
           }
         >
@@ -117,13 +117,14 @@ export const ChatTopBar = () => {
           to={`/threads?relay=${activeRelay}&groupId=${activeGroupId}`}
           className={({ isActive }) =>
             cn(
-              'py-0.5 px-2 text-xs font-medium rounded-lg border',
-              isActive && 'bg-blue-500 text-white',
+              'py-1 px-4 text-xs font-medium border-y',
+              isActive && '-mt-0.5 border-t-2 border-t-blue-500 border-b-0',
             )
           }
         >
           Threads
         </NavLink>
+        <div className="flex-grow border-y"></div>
       </div>
     </div>
   );

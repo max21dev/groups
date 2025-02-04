@@ -56,12 +56,12 @@ export const SendChatThread = () => {
               placeholder="Share your ideas..."
             />
           </div>
-          <div className="flex justify-end gap-1">
+          <div className="flex justify-end gap-3 [&_*]:hover:bg-transparent [&_*]:w-fit [&_*]:h-fit">
             <UploadImageButton
               isUploadingMedia={isUploadingMedia}
               openUploadMediaDialog={openUploadMediaDialog}
             />
-            <SendButton handleSend={handleSend} disabled={content.trim() === '' ? true : false} />
+            <SendButton handleSend={handleSend} disabled={content.trim() === ''} />
           </div>
         </DialogContent>
       </Dialog>
