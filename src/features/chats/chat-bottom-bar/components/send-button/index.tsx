@@ -9,8 +9,11 @@ export type SendButtonProps = {
 
 export const SendButton = ({ handleSend, disabled = false }: SendButtonProps) => {
   return (
-    <Button size="icon" variant="ghost" onClick={handleSend} disabled={disabled}>
-      <SendHorizontalIcon size={20} className="text-muted-foreground" />
+    <Button size="icon" variant="ghost" className="group" onClick={handleSend} disabled={disabled}>
+      <SendHorizontalIcon
+        size={20}
+        className="text-muted-foreground group-hover:text-accent-foreground"
+      />
     </Button>
   );
 };
