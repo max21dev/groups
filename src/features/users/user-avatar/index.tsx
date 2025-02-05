@@ -1,4 +1,5 @@
 import { useProfile } from 'nostr-hooks';
+import { forwardRef } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
 import {
@@ -10,14 +11,14 @@ import {
 
 import { cn, getAvatarFallbackColor, loader } from '@/shared/utils';
 
-export function UserAvatar({ pubkey }: { pubkey: string }) {
+export const UserAvatar = forwardRef<HTMLDivElement, { pubkey: string }>(({ pubkey }, ref) => {
   const { profile } = useProfile({ pubkey });
 
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Avatar>
+          <Avatar ref={ref}>
             <AvatarImage src={loader(profile?.image || '', { w: 50, h: 50 })} alt={profile?.name} />
 
             <AvatarFallback
@@ -33,4 +34,6 @@ export function UserAvatar({ pubkey }: { pubkey: string }) {
       </Tooltip>
     </TooltipProvider>
   );
-}
+});
+
+export default UserAvatar;
