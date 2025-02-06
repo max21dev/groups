@@ -1,9 +1,9 @@
-import { useActiveUser, useNip98 } from 'nostr-hooks';
+import { useActiveUser } from 'nostr-hooks';
 import { useGroupAdmins, useGroupMembers } from 'nostr-hooks/nip29';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useToast } from '@/shared/components/ui/use-toast';
-import { useActiveGroup, useActiveRelay, useLoginModalState } from '@/shared/hooks';
+import { useActiveGroup, useActiveRelay, useLoginModalState, useUploadMedia } from '@/shared/hooks';
 
 export const useSendContent = (
   onSend: (relay: string, groupId: string, content: string) => void,
@@ -13,16 +13,20 @@ export const useSendContent = (
   const [content, setContent] = useState('');
   const [isMember, setIsMember] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isUploadingMedia, setIsUploadingMedia] = useState(false);
 
   const { openLoginModal } = useLoginModalState();
   const { activeGroupId } = useActiveGroup();
   const { activeRelay } = useActiveRelay();
   const { activeUser } = useActiveUser();
-  const { getToken } = useNip98();
   const { members } = useGroupMembers(activeRelay, activeGroupId);
   const { admins } = useGroupAdmins(activeRelay, activeGroupId);
   const { toast } = useToast();
+  const { isUploadingMedia, openUploadMediaDialog } = useUploadMedia(
+    setContent,
+    ['image/*', 'video/*'],
+    textareaRef,
+    true,
+  );
 
   const handleSend = useCallback(() => {
     const trimmedContent = content.trim();
@@ -61,59 +65,6 @@ export const useSendContent = (
     } else if (event.key === 'Enter' && event.shiftKey) {
       setContent((prev) => prev + '\n');
     }
-  };
-
-  const addUploadedMediaUrl = (url: string) => {
-    setContent((prev) => (prev.trim() ? `${prev}\n${url}` : url));
-    textareaRef.current?.focus();
-  };
-
-  const openUploadMediaDialog = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*,video/*';
-
-    input.onchange = async (event) => {
-      const file = (event.target as HTMLInputElement).files?.[0];
-      if (!file) return;
-
-      const formData = new FormData();
-      formData.append('fileToUpload', file);
-
-      setIsUploadingMedia(true);
-
-      const token = await getToken({
-        url: import.meta.env.VITE_NOSTR_BUILD_UPLOAD_API_ENDPOINT,
-        method: 'POST',
-      });
-
-      if (!token) {
-        toast({ title: 'Error', description: 'Failed to upload media', variant: 'destructive' });
-        setIsUploadingMedia(false);
-        return;
-      }
-
-      try {
-        const response = await fetch(import.meta.env.VITE_NOSTR_BUILD_UPLOAD_API_ENDPOINT, {
-          method: 'POST',
-          body: formData,
-          headers: { Authorization: token },
-        }).then((res) => res.json());
-
-        if (response.status === 'success' && response.data?.[0]?.url) {
-          addUploadedMediaUrl(response.data[0].url);
-        } else {
-          toast({ title: 'Error', description: 'Failed to upload media', variant: 'destructive' });
-        }
-      } catch (e) {
-        console.error(e);
-        toast({ title: 'Error', description: 'Failed to upload media', variant: 'destructive' });
-      } finally {
-        setIsUploadingMedia(false);
-      }
-    };
-
-    input.click();
   };
 
   useEffect(() => {
