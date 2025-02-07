@@ -59,7 +59,6 @@ export const ChatListItem = memo(
 
     const { isOpen, openModal, closeModal } = useUserProfileModal();
 
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState<boolean>(false);
 
     if (!chat) return null;
@@ -132,7 +131,6 @@ export const ChatListItem = memo(
                       <ChatContent
                         categorizedChatContent={categorizedChatContent}
                         sameAsCurrentUser={sameAsCurrentUser}
-                        setSelectedImage={setSelectedImage}
                       />
                     </div>
 
@@ -212,16 +210,6 @@ export const ChatListItem = memo(
             onClick={() => setIsEmojiPickerOpen(true)}
           />
         </div>
-
-        {/* Image Overlay */}
-        {selectedImage && (
-          <div
-            className="fixed max-w-full p-20 inset-0 z-50 flex items-center justify-center bg-black/80"
-            onClick={() => setSelectedImage(null)}
-          >
-            <img src={selectedImage} alt="Enlarged chat" className="h-auto rounded-lg" />
-          </div>
-        )}
 
         {/* Chat List Item Reactions */}
         {isEmojiPickerOpen && (
