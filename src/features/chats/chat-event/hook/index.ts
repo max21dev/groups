@@ -6,7 +6,7 @@ import { useHomePage } from '@/pages/home/hooks';
 
 import { fetchReactions } from '../utils';
 
-type EventCategory = 'follow-set' | 'group' | 'note' | 'long-form-content';
+type EventCategory = 'follow-set' | 'group' | 'note' | 'long-form-content' | 'poll';
 
 export const useChatEvent = (event: string) => {
   const [eventData, setEventData] = useState<NDKEvent | null | undefined>(undefined);
@@ -23,6 +23,8 @@ export const useChatEvent = (event: string) => {
       if (event && event.kind) {
         if (event.kind === 1 || event.kind === 11 || event.kind === 1111) {
           setCategory('note');
+        } else if (event.kind === 1068) {
+          setCategory('poll');
         } else if (event.kind === 30000) {
           setCategory('follow-set');
         } else if (event.kind === 30023) {
