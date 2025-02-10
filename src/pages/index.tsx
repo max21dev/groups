@@ -58,6 +58,12 @@ export const router = createBrowserRouter([
           return { Component: (await HomePage()).HomePage };
         },
       },
+      {
+        path: '/polls',
+        async lazy() {
+          return { Component: (await HomePage()).HomePage };
+        },
+      },
     ],
   },
 ]);

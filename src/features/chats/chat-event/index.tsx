@@ -1,15 +1,14 @@
-import { Button } from '@/shared/components/ui/button';
-
 import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { cn, ellipsis, formatTimestampToDate } from '@/shared/utils';
-
-import { Spinner } from '@/shared/components/spinner';
-
+import { Poll } from '@/features/chats/chat-polls/components';
 import { ChatThreadComments } from '@/features/chats/chat-threads/components';
 import { GroupWidget } from '@/features/groups';
 import { UserAvatar } from '@/features/users';
+
+import { Spinner } from '@/shared/components/spinner';
+import { Button } from '@/shared/components/ui/button';
+import { cn, ellipsis, formatTimestampToDate } from '@/shared/utils';
 
 import {
   AddEventReaction,
@@ -102,6 +101,7 @@ export const ChatEvent = memo(
           {category === 'note' && (
             <Note content={eventData.content} sameAsCurrentUser={sameAsCurrentUser} />
           )}
+          {category === 'poll' && <Poll poll={eventData} />}
           {category === 'long-form-content' && <LongFormContent content={eventData.content} />}
 
           <div className="flex justify-between items-center mt-2">

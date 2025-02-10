@@ -124,6 +124,17 @@ export const ChatTopBar = () => {
         >
           Threads
         </NavLink>
+        <NavLink
+          to={`/polls?relay=${activeRelay}&groupId=${activeGroupId}`}
+          className={({ isActive }) =>
+            cn(
+              'py-1 px-4 text-xs font-medium border-y',
+              isActive && '-mt-0.5 border-t-2 border-t-blue-500 border-b-0',
+            )
+          }
+        >
+          Polls
+        </NavLink>
         <div className="flex-grow border-y"></div>
       </div>
     </div>

@@ -15,6 +15,7 @@ export const useHomePage = () => {
 
   const { activeUser } = useActiveUser();
   const isThreadsVisible = !!useMatch('/threads');
+  const isPollsVisible = !!useMatch('/polls');
 
   const [searchParams] = useSearchParams();
   const isChatThread = !!searchParams.get('chatThread');
@@ -28,6 +29,7 @@ export const useHomePage = () => {
     isMobile,
     event,
     isThreadsVisible,
+    isPollsVisible,
     isChatThread,
   };
 };
