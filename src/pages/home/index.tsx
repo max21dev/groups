@@ -1,4 +1,11 @@
-import { ChatBottomBar, ChatEvent, ChatList, ChatThreads, ChatTopBar } from '@/features/chats';
+import {
+  ChatBottomBar,
+  ChatEvent,
+  ChatList,
+  ChatPolls,
+  ChatThreads,
+  ChatTopBar,
+} from '@/features/chats';
 import {
   GroupsFilterDropdown,
   GroupsList,
@@ -25,6 +32,7 @@ export function HomePage() {
     isMobile,
     event,
     isThreadsVisible,
+    isPollsVisible,
     isChatThread,
     activeRelay,
   } = useHomePage();
@@ -88,6 +96,12 @@ export function HomePage() {
                 <ChatTopBar />
                 {isThreadsVisible ? (
                   <ChatThreads />
+                ) : isPollsVisible ? (
+                  <ChatPolls
+                    relay={activeRelay}
+                    groupId={activeGroupId}
+                    pubkey={activeUser?.pubkey}
+                  />
                 ) : (
                   <>
                     <ChatList key={`${activeRelay}-${activeGroupId}`} />
