@@ -1,13 +1,25 @@
-import { ChartNoAxesColumnIcon, PlusIcon, XIcon } from 'lucide-react';
+import {
+  CalendarIcon,
+  ChartNoAxesColumnIcon,
+  PlusIcon,
+  SendHorizontalIcon,
+  XIcon,
+} from 'lucide-react';
 import { useState } from 'react';
 
-import { SendButton, UploadImageButton } from '@/features/chats/chat-bottom-bar/components';
+import {
+  JoinRequestButton,
+  LoginButton,
+  UploadImageButton,
+} from '@/features/chats/chat-bottom-bar/components';
 
 import { Button } from '@/shared/components/ui/button';
+import { Calendar } from '@/shared/components/ui/calendar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
-import { Input } from '@/shared/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/components/ui/popover';
 import { Switch } from '@/shared/components/ui/switch';
 import { Textarea } from '@/shared/components/ui/textarea';
+import { formatTimestampToDate } from '@/shared/utils';
 
 import { useSendChatPoll } from './hooks';
 
@@ -42,12 +54,38 @@ export const SendChatPoll = ({
     handleRemoveOption,
     handleCreatePoll,
     activeUser,
+    activeGroupId,
+    activeRelay,
+    openLoginModal,
     isMember,
     isAdmin,
   } = useSendChatPoll(relay, groupId, pubkey, () => setIsSendPollModalOpen(false));
 
-  if (!activeUser || (!isMember && !isAdmin)) {
-    return null;
+  if (!activeUser) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <LoginButton
+          openLoginModal={openLoginModal}
+          variant="outline"
+          text="To create polls and vote, please login first."
+          size="sm"
+        />
+      </div>
+    );
+  }
+
+  if (!isMember && !isAdmin) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <JoinRequestButton
+          groupId={activeGroupId}
+          relay={activeRelay}
+          variant="outline"
+          text="Join group to create polls and vote."
+          size="sm"
+        />
+      </div>
+    );
   }
 
   return (
@@ -75,7 +113,7 @@ export const SendChatPoll = ({
                 placeholder="Poll question..."
                 value={pollQuestion}
                 onChange={(e) => setPollQuestion(e.target.value)}
-                className="w-full border flex items-center resize-none overflow-x-hidden overflow-y-auto bg-background max-h-24"
+                className="w-full border flex items-center resize-none overflow-x-hidden overflow-y-auto bg-background min-h-20 max-h-36"
               />
               <UploadImageButton
                 isUploadingMedia={isUploadingQuestionMedia}
@@ -83,7 +121,7 @@ export const SendChatPoll = ({
               />
             </div>
 
-            <div className="flex gap-2 w-full">
+            <div className="flex gap-1 w-full">
               <div className="w-full flex gap-1">
                 <Textarea
                   ref={pollOptionInputRef}
@@ -114,7 +152,7 @@ export const SendChatPoll = ({
                   key={index}
                   className="flex justify-between items-center min-h-8 border rounded-md ps-3 relative"
                 >
-                  {option}
+                  {option.text}
                   <Button
                     variant="destructive"
                     size="sm"
@@ -128,18 +166,34 @@ export const SendChatPoll = ({
             </ul>
 
             <div className="flex gap-2 w-full">
-              <div className="flex flex-col gap-2">
-                <Input
-                  className="cursor-pointer"
-                  type="date"
-                  placeholder="Expiry date"
-                  min={new Date(Date.now() + 86400000).toISOString().split('T')[0]}
-                  onClick={(e) => e.currentTarget.showPicker?.()}
-                  onChange={handleEndsAtChange}
-                />
-              </div>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-[200px] justify-start text-left font-normal"
+                  >
+                    {endsAt ? (
+                      formatTimestampToDate(endsAt)
+                    ) : (
+                      <span className="flex justify-center items-center gap-2">
+                        <CalendarIcon size={17} />
+                        Expiry date
+                      </span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
 
-              <div className="flex items-center gap-2">
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    fromDate={new Date(new Date().setDate(new Date().getDate() + 1))}
+                    selected={endsAt ? new Date(endsAt * 1000) : undefined}
+                    onSelect={(date) => handleEndsAtChange(date)}
+                  />
+                </PopoverContent>
+              </Popover>
+
+              <div className="flex items-center ms-auto gap-2">
                 <Switch
                   checked={pollType === 'multiplechoice'}
                   onCheckedChange={(checked) =>
@@ -151,12 +205,14 @@ export const SendChatPoll = ({
             </div>
           </div>
 
-          <div className="flex justify-end h-fit [&_*]:hover:bg-transparent [&_*]:w-fit [&_*]:h-fit">
-            <SendButton
-              handleSend={handleCreatePoll}
-              disabled={!pollQuestion || pollOptions.length === 0 || !endsAt}
-            />
-          </div>
+          <Button
+            className="flex ms-auto h-fit w-fit gap-2"
+            onClick={handleCreatePoll}
+            disabled={!pollQuestion || pollOptions.length === 0 || !endsAt}
+          >
+            Publish
+            <SendHorizontalIcon size={18} />
+          </Button>
         </DialogContent>
       </Dialog>
     </div>

@@ -1,4 +1,5 @@
 import { NDKEvent } from '@nostr-dev-kit/ndk';
+import { nanoid } from 'nanoid';
 import { useActiveUser, useNdk } from 'nostr-hooks';
 import { useRef, useState } from 'react';
 
@@ -6,9 +7,14 @@ import { useChatBottomBar } from '@/features/chats/chat-bottom-bar/hooks';
 import { usePollsStore } from '@/features/chats/chat-polls/store';
 
 import { useToast } from '@/shared/components/ui/use-toast';
-import { useUploadMedia } from '@/shared/hooks';
+import { useActiveGroup, useActiveRelay, useLoginModalState, useUploadMedia } from '@/shared/hooks';
 
 type PollType = 'singlechoice' | 'multiplechoice';
+
+type PollOption = {
+  id: string;
+  text: string;
+};
 
 export const useSendChatPoll = (
   relay: string | undefined,
@@ -21,13 +27,16 @@ export const useSendChatPoll = (
 
   const [pollQuestion, setPollQuestion] = useState('');
   const [pollOption, setPollOption] = useState('');
-  const [pollOptions, setPollOptions] = useState<string[]>([]);
+  const [pollOptions, setPollOptions] = useState<PollOption[]>([]);
   const [pollType, setPollType] = useState<PollType>('singlechoice');
   const [endsAt, setEndsAt] = useState<number | null>(null);
 
   const { polls, setPolls } = usePollsStore();
   const { ndk } = useNdk();
   const { activeUser } = useActiveUser();
+  const { activeRelay } = useActiveRelay();
+  const { activeGroupId } = useActiveGroup();
+  const { openLoginModal } = useLoginModalState();
   const { isMember, isAdmin } = useChatBottomBar();
   const { toast } = useToast();
 
@@ -41,14 +50,17 @@ export const useSendChatPoll = (
     openUploadMediaDialog: openUploadOptionMediaDialog,
   } = useUploadMedia(setPollOption, ['image/*'], pollOptionInputRef, true);
 
-  const handleEndsAtChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedDate = new Date(e.target.value);
+  const handleEndsAtChange = (date: Date | undefined) => {
+    if (!date) {
+      setEndsAt(null);
+      return;
+    }
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     tomorrow.setHours(0, 0, 0, 0);
 
-    if (selectedDate >= tomorrow) {
-      setEndsAt(Math.floor(selectedDate.getTime() / 1000));
+    if (date >= tomorrow) {
+      setEndsAt(Math.floor(date.getTime() / 1000));
     } else {
       setEndsAt(null);
     }
@@ -56,8 +68,15 @@ export const useSendChatPoll = (
 
   const handleAddOption = () => {
     if (pollOption.trim()) {
-      setPollOptions((prev) => [...prev, pollOption.trim()]);
+      setPollOptions((prev) => [
+        ...prev,
+        {
+          id: nanoid(),
+          text: pollOption.trim(),
+        },
+      ]);
       setPollOption('');
+      pollOptionInputRef.current?.focus();
     }
   };
 
@@ -67,14 +86,14 @@ export const useSendChatPoll = (
 
   const publishPollEvent = async (
     content: string,
-    options: string[],
+    options: PollOption[],
     type: PollType,
     expire: number | null,
   ) => {
     if (!ndk || !relay || !groupId || !pubkey) return;
 
     const tags = [
-      ...options.map((option, idx) => ['option', `option${idx}`, option]),
+      ...options.map((option) => ['option', option.id, option.text]),
       ['polltype', type],
       ['relay', relay],
       ['h', groupId],
@@ -145,6 +164,9 @@ export const useSendChatPoll = (
     handleCreatePoll,
 
     activeUser,
+    activeGroupId,
+    activeRelay,
+    openLoginModal,
     isMember,
     isAdmin,
   };
