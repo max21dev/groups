@@ -1,6 +1,6 @@
 import { NDKEvent, NDKKind } from '@nostr-dev-kit/ndk';
 import { useActiveUser, useNdk } from 'nostr-hooks';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 
 import { useChatBottomBar } from '@/features/chats/chat-bottom-bar/hooks';
 import { categorizeChatContent } from '@/features/chats/chat-list/components/chat-list-item/utils';
@@ -11,12 +11,17 @@ import { useActiveGroup, useActiveRelay } from '@/shared/hooks';
 
 type PollType = 'singlechoice' | 'multiplechoice';
 
+const POLL_KIND = 1018 as NDKKind;
+const RESPONSE_TAG = 'response';
+const OPTION_TAG = 'option';
+const POLL_TYPE_TAG = 'polltype';
+const ENDS_AT_TAG = 'endsAt';
+
 export const usePoll = (poll: NDKEvent) => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [voters, setVoters] = useState<Set<string>>(new Set());
 
   const { votes, isLoadingVotes, setVotes, setIsLoadingVotes } = usePollsStore();
-
   const { ndk } = useNdk();
   const { activeGroupId } = useActiveGroup();
   const { activeRelay } = useActiveRelay();
@@ -31,38 +36,42 @@ export const usePoll = (poll: NDKEvent) => {
     fetchChatPollVotes();
   }, [ndk, activeRelay, activeGroupId, poll.id]);
 
-  const fetchChatPollVotes = async () => {
+  const fetchChatPollVotes = useCallback(async () => {
     if (!ndk || !activeRelay || !activeGroupId || !poll.id) return;
     setIsLoadingVotes(true);
 
-    const voteEvents = await ndk.fetchEvents({
-      kinds: [1018 as NDKKind],
-      '#e': [poll.id],
-    });
+    try {
+      const voteEvents = await ndk.fetchEvents({
+        kinds: [POLL_KIND],
+        '#e': [poll.id],
+      });
 
-    const voteCounts: Record<string, number> = {};
-    const newVoters = new Set<string>();
+      const voteCounts: Record<string, number> = {};
+      const newVoters = new Set<string>();
 
-    voteEvents.forEach((event) => {
-      newVoters.add(event.pubkey);
+      voteEvents.forEach((event) => {
+        newVoters.add(event.pubkey);
 
-      event.tags
-        .filter((tag) => tag[0] === 'response')
-        .forEach((tag) => {
-          const optionId = tag[1];
-          voteCounts[optionId] = (voteCounts[optionId] || 0) + 1;
-        });
-    });
+        event.tags
+          .filter((tag) => tag[0] === RESPONSE_TAG)
+          .forEach((tag) => {
+            const optionId = tag[1];
+            voteCounts[optionId] = (voteCounts[optionId] || 0) + 1;
+          });
+      });
 
-    setVoters(newVoters);
-
-    setVotes(poll.id, voteCounts);
-    setIsLoadingVotes(false);
-  };
+      setVoters(newVoters);
+      setVotes(poll.id, voteCounts);
+    } catch (error) {
+      console.error('Error fetching poll votes:', error);
+    } finally {
+      setIsLoadingVotes(false);
+    }
+  }, [ndk, activeRelay, activeGroupId, poll.id, setIsLoadingVotes, setVotes]);
 
   const options = useMemo(() => {
     return poll.tags
-      .filter((tag) => tag[0] === 'option')
+      .filter((tag) => tag[0] === OPTION_TAG)
       .map((tag) => ({
         id: tag[1],
         label: tag[2],
@@ -71,27 +80,23 @@ export const usePoll = (poll: NDKEvent) => {
   }, [poll.tags, votes, poll.id]);
 
   const pollType = useMemo<PollType>(() => {
-    const tag = poll.tags.find((t) => t[0] === 'polltype');
-    if (!tag) return 'singlechoice';
-    return (tag[1] as PollType) || 'singlechoice';
+    const tag = poll.tags.find((t) => t[0] === POLL_TYPE_TAG);
+    return (tag?.[1] as PollType) || 'singlechoice';
   }, [poll.tags]);
 
   const endsAt = useMemo<number | null>(() => {
-    const endsAtTag = poll.tags.find((t) => t[0] === 'endsAt');
+    const endsAtTag = poll.tags.find((t) => t[0] === ENDS_AT_TAG);
     return endsAtTag ? parseInt(endsAtTag[1], 10) : null;
   }, [poll.tags]);
 
-  const sendVote = async (selected: string[]) => {
+  const sendVote = useCallback(async (selected: string[]) => {
     if (!ndk || !activeRelay || !activeGroupId || !poll.id || !selectedOptions.length) return;
 
-    const responseTags =
-      selected.length === 1
-        ? [['response', selected[0]]]
-        : selected.map((optionId) => ['response', optionId]);
+    const responseTags = selected.map((optionId) => [RESPONSE_TAG, optionId]);
 
     try {
       const voteEvent = new NDKEvent(ndk, {
-        kind: 1018,
+        kind: POLL_KIND,
         tags: [['e', poll.id], ...responseTags],
         created_at: Math.floor(Date.now() / 1000),
         content: '',
@@ -107,19 +112,17 @@ export const usePoll = (poll: NDKEvent) => {
       toast({ title: 'Error', description: 'Error casting vote', variant: 'default' });
       console.error('Error casting vote:', error);
     }
-  };
+  }, [ndk, activeRelay, activeGroupId, poll.id, selectedOptions.length, activeUser?.pubkey, toast, fetchChatPollVotes]);
+
+  const totalVotes = useMemo(() => {
+    return options.reduce((sum, option) => sum + option.votes, 0);
+  }, [options]);
 
   const canVote = useMemo(() => {
     if (!activeUser) return false;
-
     if (voters.has(activeUser.pubkey)) return false;
-
     if (!isMember && !isAdmin) return false;
-
-    if (endsAt && endsAt * 1000 <= Date.now()) {
-      return false;
-    }
-
+    if (endsAt && endsAt * 1000 <= Date.now()) return false;
     return true;
   }, [activeUser, isMember, isAdmin, endsAt, voters]);
 
@@ -132,6 +135,7 @@ export const usePoll = (poll: NDKEvent) => {
     isLoadingVotes,
     setSelectedOptions,
     sendVote,
+    totalVotes,
     canVote,
   };
 };
