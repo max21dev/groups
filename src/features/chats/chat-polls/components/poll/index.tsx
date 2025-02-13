@@ -1,4 +1,4 @@
-import { VoteIcon } from 'lucide-react';
+import { SendIcon } from 'lucide-react';
 
 import { NDKEvent } from '@nostr-dev-kit/ndk';
 
@@ -59,8 +59,8 @@ export const Poll = ({ poll }: { poll: NDKEvent }) => {
             onClick={() => sendVote(selectedOptions)}
             disabled={!selectedOptions.length}
           >
-            <VoteIcon size={20} />
             Vote
+            <SendIcon size={20} />
           </Button>
         )}
       </div>
