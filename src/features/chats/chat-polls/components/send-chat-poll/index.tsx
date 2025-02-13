@@ -1,10 +1,4 @@
-import {
-  CalendarIcon,
-  ChartNoAxesColumnIcon,
-  PlusIcon,
-  SendHorizontalIcon,
-  XIcon,
-} from 'lucide-react';
+import { CalendarIcon, ChartNoAxesColumnIcon, PlusIcon, SendIcon, XIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import {
@@ -102,7 +96,7 @@ export const SendChatPoll = ({
       <Dialog open={isSendPollModalOpen} onOpenChange={() => setIsSendPollModalOpen(false)}>
         <DialogContent className="[&>button]:right-6 [&>button]:top-6 max-h-[80vh] overflow-y-auto [overflow-wrap:anywhere]">
           <DialogHeader>
-            <DialogTitle>New Poll</DialogTitle>
+            <DialogTitle>Add new Poll in this Group</DialogTitle>
           </DialogHeader>
 
           <div className="w-full flex flex-col gap-2">
@@ -110,7 +104,7 @@ export const SendChatPoll = ({
               <Textarea
                 autoComplete="off"
                 ref={pollQuestionInputRef}
-                placeholder="Poll question..."
+                placeholder="Describe here the poll..."
                 value={pollQuestion}
                 onChange={(e) => setPollQuestion(e.target.value)}
                 className="w-full border flex items-center resize-none overflow-x-hidden overflow-y-auto bg-background min-h-20 max-h-36"
@@ -125,7 +119,7 @@ export const SendChatPoll = ({
               <div className="w-full flex gap-1">
                 <Textarea
                   ref={pollOptionInputRef}
-                  placeholder="New option..."
+                  placeholder="Add poll option..."
                   value={pollOption}
                   onChange={(e) => setPollOption(e.target.value)}
                   className="w-full border flex items-center resize-none overflow-x-hidden overflow-y-auto bg-background max-h-24"
@@ -177,7 +171,7 @@ export const SendChatPoll = ({
                     ) : (
                       <span className="flex justify-center items-center gap-2">
                         <CalendarIcon size={17} />
-                        Expiry date
+                        Poll expiry deadline
                       </span>
                     )}
                   </Button>
@@ -200,7 +194,7 @@ export const SendChatPoll = ({
                     setPollType(checked ? 'multiplechoice' : 'singlechoice')
                   }
                 />
-                <span>Multiple choices</span>
+                <span>Allow multiple choices</span>
               </div>
             </div>
           </div>
@@ -211,7 +205,7 @@ export const SendChatPoll = ({
             disabled={!pollQuestion || pollOptions.length === 0 || !endsAt}
           >
             Publish
-            <SendHorizontalIcon size={18} />
+            <SendIcon size={18} />
           </Button>
         </DialogContent>
       </Dialog>
