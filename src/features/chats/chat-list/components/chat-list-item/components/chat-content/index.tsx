@@ -10,10 +10,8 @@ import { CategorizedChatContent } from '../../types';
 
 export const ChatContent = ({
   categorizedChatContent,
-  sameAsCurrentUser,
 }: {
   categorizedChatContent: CategorizedChatContent[];
-  sameAsCurrentUser?: boolean;
 }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
@@ -67,11 +65,9 @@ export const ChatContent = ({
           </a>
         );
       case 'mention':
-        return (
-          <UserMention key={i} npub={part.content} sameAsCurrentUser={sameAsCurrentUser ?? false} />
-        );
+        return <UserMention key={i} npub={part.content} />;
       case 'event':
-        return <ChatEvent key={i} event={part.content} sameAsCurrentUser={sameAsCurrentUser} />;
+        return <ChatEvent key={i} event={part.content} />;
       default:
         return null;
     }

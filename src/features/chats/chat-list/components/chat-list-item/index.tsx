@@ -123,15 +123,12 @@ export const ChatListItem = memo(
                   <div
                     className={cn(
                       'flex gap-2',
-                      chat.content.length < 80 ? 'items-center' : 'flex-col justify-end',
+                      chat.content.length < 50 ? 'items-center' : 'flex-col justify-end',
                       categorizedReactions && 'flex-col',
                     )}
                   >
                     <div className="[overflow-wrap:anywhere] self-start">
-                      <ChatContent
-                        categorizedChatContent={categorizedChatContent}
-                        sameAsCurrentUser={sameAsCurrentUser}
-                      />
+                      <ChatContent categorizedChatContent={categorizedChatContent} />
                     </div>
 
                     <div className="ml-auto flex gap-2 items-center text-end text-xs font-light cursor-default">
