@@ -29,7 +29,7 @@ export const ChatThreadComments = ({ parentId }: { parentId: string }) => {
         <div className="w-full p-2 text-center">No Comments found.</div>
       )}
 
-      <div className="flex flex-col-reverse gap-1 [&_>*]:rounded-none divide-y divide-y-reverse divide-gray-400">
+      <div className="flex flex-col-reverse gap-1 [&_>*]:rounded-none [&_>*]:bg-transparent divide-y divide-y-reverse divide-gray-400">
         {threadComments?.map((threadComment) => (
           <ChatEvent
             key={threadComment.id}

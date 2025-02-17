@@ -3,12 +3,22 @@ import { useNdk, useProfile } from 'nostr-hooks';
 import { useEffect, useState } from 'react';
 
 import { useHomePage } from '@/pages/home/hooks';
+import { useLazyLoad } from '@/shared/hooks/use-lazy-load';
 
 import { fetchReactions } from '../utils';
 
-type EventCategory = 'follow-set' | 'group' | 'note' | 'long-form-content' | 'poll';
+type EventCategory =
+  | 'follow-set'
+  | 'group'
+  | 'note'
+  | 'long-form-content'
+  | 'poll'
+  | 'picture'
+  | 'live-stream'
+  | 'highlight';
 
 export const useChatEvent = (event: string) => {
+  const { ref: eventRef, hasEnteredViewport } = useLazyLoad<HTMLDivElement>();
   const [eventData, setEventData] = useState<NDKEvent | null | undefined>(undefined);
   const [reactions, setReactions] = useState<NDKEvent[] | null | undefined>([]);
   const [category, setCategory] = useState<EventCategory | null | undefined>(undefined);
@@ -16,19 +26,29 @@ export const useChatEvent = (event: string) => {
 
   const { ndk } = useNdk();
 
-  const { isThreadsVisible } = useHomePage();
+  const { isThreadsVisible, isPollsVisible, event: eventId } = useHomePage();
+
+  const isChatsPage = !(isThreadsVisible || isPollsVisible || !!eventId);
 
   useEffect(() => {
-    ndk?.fetchEvent(event).then(async (event) => {
+    if (!hasEnteredViewport || !ndk) return;
+
+    ndk.fetchEvent(event).then(async (event) => {
       if (event && event.kind) {
         if (event.kind === 1 || event.kind === 11 || event.kind === 1111) {
           setCategory('note');
+        } else if (event.kind === 20) {
+          setCategory('picture');
         } else if (event.kind === 1068) {
           setCategory('poll');
+        } else if (event.kind === 9802) {
+          setCategory('highlight');
         } else if (event.kind === 30000) {
           setCategory('follow-set');
         } else if (event.kind === 30023) {
           setCategory('long-form-content');
+        } else if (event.kind === 30311) {
+          setCategory('live-stream');
         } else if (event.kind >= 39000 && event.kind <= 39009) {
           setCategory('group');
         }
@@ -43,7 +63,7 @@ export const useChatEvent = (event: string) => {
         setReactions([]);
       }
     });
-  }, [event, ndk]);
+  }, [event, ndk, hasEnteredViewport]);
 
   const refreshReactions = async () => {
     if (!eventData || !ndk) return;
@@ -52,5 +72,14 @@ export const useChatEvent = (event: string) => {
     setReactions(fetchedReactions);
   };
 
-  return { eventData, profile, category, reactions, refreshReactions, isThreadsVisible };
+  return {
+    eventRef,
+    eventData,
+    profile,
+    category,
+    reactions,
+    refreshReactions,
+    isThreadsVisible,
+    isChatsPage,
+  };
 };

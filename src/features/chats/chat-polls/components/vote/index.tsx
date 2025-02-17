@@ -42,7 +42,7 @@ export const Vote = ({
   return (
     <li
       className={cn(
-        'p-2 rounded-md bg-black/5 list-none',
+        'p-2 rounded-md bg-primary/5 list-none',
         isChecked && 'outline outline-1 outline-primary',
       )}
     >
