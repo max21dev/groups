@@ -70,6 +70,23 @@ type BookmarkActions = {
   removeBookmarkedGroup: (groupId: string) => void;
 };
 
+type NotificationSettings = {
+  not_joined_groups: boolean;
+  admin_groups: boolean;
+  member_groups: boolean;
+  notif_exceptions: Map<string, Map<string, boolean>>;
+  last_seen_groups: Map<string, Map<string, number>>;
+  created_at: number;
+};
+
+type UserSettingsState = {
+  userSettings: NotificationSettings;
+};
+
+type UserSettingsActions = {
+  setUserSettings: (settings: NotificationSettings) => void;
+};
+
 export const useStore = create<
   AppState &
     AppActions &
@@ -80,7 +97,9 @@ export const useStore = create<
     GroupsState &
     GroupsActions &
     BookmarkState &
-    BookmarkActions
+    BookmarkActions &
+    UserSettingsState &
+    UserSettingsActions
 >()(
   persist(
     (set, get) => ({
@@ -178,6 +197,19 @@ export const useStore = create<
           bookmarkedGroups: bookmarkedGroups.filter((group) => group.id !== groupId),
         });
       },
+
+      // User Settings State
+
+      userSettings: {
+        not_joined_groups: true,
+        admin_groups: true,
+        member_groups: true,
+        notif_exceptions: new Map<string, Map<string, boolean>>(),
+        last_seen_groups: new Map<string, Map<string, number>>(),
+        created_at: Math.floor(Date.now() / 1000),
+      },
+
+      setUserSettings: (settings) => set({ userSettings: settings }),
     }),
     {
       name: 'app-storage',
