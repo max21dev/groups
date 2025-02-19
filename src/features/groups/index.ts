@@ -4,6 +4,8 @@ export * from './group-delete-button';
 export * from './group-details';
 export * from './group-leave-button';
 export * from './group-link-button';
+export * from './group-metadata-form';
+export * from './group-notification';
 export * from './group-widget';
 export * from './groups-filter-dropdown';
 export * from './groups-list';
