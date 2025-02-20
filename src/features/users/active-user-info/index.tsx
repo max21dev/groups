@@ -1,6 +1,8 @@
 import { EllipsisVerticalIcon } from 'lucide-react';
 
-import { UserAvatar } from '@/features/users';
+import { useState } from 'react';
+
+import { UserAvatar, UserSettings } from '@/features/users';
 
 import { Button } from '@/shared/components/ui/button';
 import {
@@ -15,6 +17,8 @@ import { cn } from '@/shared/utils';
 import { useActiveUserInfo } from './hooks';
 
 export function ActiveUserInfo() {
+  const [isUserSettingsOpen, setIsUserSettingsOpen] = useState(false);
+
   const { activeGroupId, activeUser, isCollapsed, openLoginModal, profile, isMobile, logout } =
     useActiveUserInfo();
 
@@ -46,12 +50,28 @@ export function ActiveUserInfo() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="p-0 [&_*]:p-0">
               <DropdownMenuItem>
+                <Button
+                  variant="ghost"
+                  className="w-full"
+                  onClick={() => setIsUserSettingsOpen(true)}
+                >
+                  Settings
+                </Button>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
                 <Button variant="ghost" className="w-full" onClick={() => logout()}>
                   Logout
                 </Button>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          {isUserSettingsOpen && (
+            <UserSettings
+              isOpen={isUserSettingsOpen}
+              onClose={() => setIsUserSettingsOpen(false)}
+            />
+          )}
         </div>
       ) : !activeGroupId ? (
         <div className="p-2 w-full border-t">

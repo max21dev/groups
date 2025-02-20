@@ -25,6 +25,8 @@ export const GroupsListItem = memo(
       showGroup,
       activeRelay,
       isMobile,
+      updateLastSeenGroup,
+      hasNewMessage,
     } = useGroupsListItem({ groupId, setLastChatTimestampPerGroup });
 
     if (!metadata || !showGroup) return null;
@@ -38,7 +40,10 @@ export const GroupsListItem = memo(
           isCollapsed && !isMobile ? 'justify-center' : 'justify-start',
           activeGroupId === groupId && 'bg-accent',
         )}
-        onClick={() => setActiveGroupId(groupId)}
+        onClick={() => {
+          setActiveGroupId(groupId);
+          updateLastSeenGroup(activeRelay, groupId);
+        }}
       >
         <GroupAvatar relay={activeRelay} groupId={groupId} />
 
@@ -58,11 +63,15 @@ export const GroupsListItem = memo(
               {metadata && ellipsis(metadata.about, 20)}{' '}
             </span>
 
-            {chats && chats.length > 0 && (
-              <span className="text-xs text-gray-300 truncate">
-                {ellipsis(chats[0].content, 20)}
-              </span>
-            )}
+            <div className="flex items-center w-full justify-between">
+              {chats && chats.length > 0 && (
+                <span className="text-xs text-gray-300 truncate">
+                  {ellipsis(chats[0].content, 20)}
+                </span>
+              )}
+
+              {hasNewMessage && <span className="w-2 h-2 bg-blue animate-pulse rounded-full" />}
+            </div>
           </div>
         )}
       </Button>
