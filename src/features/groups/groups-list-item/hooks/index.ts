@@ -8,6 +8,8 @@ import {
 import { useEffect, useMemo } from 'react';
 
 import { useGroupBookmark } from '@/features/groups/group-bookmark/hooks';
+import { useGroupNotification } from '@/features/groups/group-notification/hooks';
+import { useUserSettings } from '@/features/users/user-settings/hooks';
 
 import { useSidebar } from '@/shared/components/sidebar/hooks';
 import { useActiveGroup, useActiveRelay } from '@/shared/hooks';
@@ -38,6 +40,9 @@ export const useGroupsListItem = ({
   const { members } = useGroupMembers(activeRelay, groupId);
   const { chats } = useGroupChats(activeRelay, groupId, { limit: 1 });
 
+  const { userSettings, updateLastSeenGroup } = useUserSettings();
+  const { isNotificationEnabled } = useGroupNotification(groupId);
+
   const isMember = useMemo(
     () => members?.some((member) => member.pubkey === activeUser?.pubkey) ?? false,
     [members, activeUser],
@@ -60,6 +65,22 @@ export const useGroupsListItem = ({
     );
   }, [isMember, isAdmin, groupsFilter, isBookmarked]);
 
+  const hasNewMessage = useMemo(() => {
+    if (!groupId || !activeRelay) return false;
+    if (!isNotificationEnabled || !chats?.[0]?.timestamp) return false;
+
+    const lastSeenTimestamp = userSettings.last_seen_groups.get(activeRelay)?.get(groupId) || 0;
+
+    return chats[0].timestamp > lastSeenTimestamp && chats[0].timestamp > userSettings.created_at;
+  }, [
+    isNotificationEnabled,
+    chats,
+    userSettings.last_seen_groups,
+    userSettings.created_at,
+    activeRelay,
+    groupId,
+  ]);
+
   useEffect(() => {
     if (!groupId) return;
 
@@ -78,5 +99,7 @@ export const useGroupsListItem = ({
     activeGroupId,
     showGroup,
     isMobile,
+    updateLastSeenGroup,
+    hasNewMessage,
   };
 };

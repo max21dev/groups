@@ -2,16 +2,17 @@ import { Edit, Undo2 } from 'lucide-react';
 import { useGroupAdmins, useGroupMembers, useGroupMetadata } from 'nostr-hooks/nip29';
 import { memo, useState } from 'react';
 
-import { Button } from '@/shared/components/ui/button';
-
 import {
   GroupAvatar,
   GroupDeleteButton,
   GroupLeaveButton,
   GroupLinkButton,
+  GroupMetadataForm,
+  GroupNotification,
 } from '@/features/groups';
 import { UserInfoRow } from '@/features/users';
-import { GroupMetadataForm } from '../group-metadata-form';
+
+import { Button } from '@/shared/components/ui/button';
 
 export const GroupDetails = memo(
   ({ relay, groupId }: { relay: string | undefined; groupId: string | undefined }) => {
@@ -34,6 +35,8 @@ export const GroupDetails = memo(
           <GroupLeaveButton relay={relay} groupId={groupId} />
 
           <GroupDeleteButton relay={relay} groupId={groupId} />
+
+          <GroupNotification groupId={groupId} />
         </div>
         {editMode && metadata ? (
           <GroupMetadataForm relay={relay} groupId={groupId} initialMetadata={metadata} />
