@@ -1,6 +1,6 @@
 import { NDKEvent } from '@nostr-dev-kit/ndk';
-import { useActiveUser, useLogin, useNdk } from 'nostr-hooks';
-import { useEffect, useState } from 'react';
+import { useActiveUser, useNdk } from 'nostr-hooks';
+import { useEffect, useRef } from 'react';
 
 import { useStore } from '@/shared/store';
 
@@ -12,10 +12,9 @@ import {
 } from '../utils';
 
 export const useUserSettings = () => {
-  const [eventId, setEventId] = useState<string | null>(null);
+  const eventIdRef = useRef<string | null>(null);
 
   const { userSettings, setUserSettings } = useStore();
-  const { loginData } = useLogin();
   const { activeUser } = useActiveUser();
   const { ndk } = useNdk();
 
@@ -38,16 +37,15 @@ export const useUserSettings = () => {
     );
 
     if (settingsEvent) {
-      setEventId(settingsEvent.id);
+      eventIdRef.current = settingsEvent.id;
 
       try {
-        if (!loginData.privateKey) return;
+        const decryptedData = decryptUserSettings(settingsEvent.content, activeUser.pubkey);
 
-        const decryptedData = decryptUserSettings(
-          settingsEvent.content,
-          loginData.privateKey,
-          activeUser.pubkey,
-        );
+        if (!decryptedData) {
+          publishDefaultUserSettings(settingsEvent.id);
+          return;
+        }
 
         if (!decryptedData.created_at) {
           decryptedData.created_at = Math.floor(Date.now() / 1000);
@@ -62,8 +60,8 @@ export const useUserSettings = () => {
     }
   };
 
-  const publishDefaultUserSettings = async () => {
-    if (!ndk || !activeUser || !loginData.privateKey) return;
+  const publishDefaultUserSettings = async (previousEventId?: string) => {
+    if (!ndk || !activeUser) return;
 
     const defaultSettings = {
       not_joined_groups: true,
@@ -78,7 +76,6 @@ export const useUserSettings = () => {
 
     const encryptedData = encryptUserSettings(
       serializeSettings(defaultSettings),
-      loginData.privateKey,
       activeUser.pubkey,
     );
 
@@ -87,19 +84,19 @@ export const useUserSettings = () => {
       content: encryptedData,
       created_at: Math.floor(Date.now() / 1000),
       pubkey: activeUser.pubkey,
-      tags: [['d', 'user-groups-settings']],
+      tags: [['d', 'user-groups-settings'], ...(previousEventId ? [['e', previousEventId]] : [])],
     });
 
     try {
       await newEvent.publish();
-      setEventId(newEvent.id);
+      eventIdRef.current = newEvent.id;
     } catch (error) {
       console.error('Error publishing default user settings event:', error);
     }
   };
 
   const updateUserSettings = async (newSettings: Partial<typeof userSettings>) => {
-    if (!ndk || !activeUser || !loginData.privateKey) return;
+    if (!ndk || !activeUser) return;
 
     const updatedSettings = {
       ...userSettings,
@@ -110,7 +107,6 @@ export const useUserSettings = () => {
 
     const encryptedData = encryptUserSettings(
       serializeSettings(updatedSettings),
-      loginData.privateKey,
       activeUser.pubkey,
     );
 
@@ -119,19 +115,24 @@ export const useUserSettings = () => {
       content: encryptedData,
       created_at: Math.floor(Date.now() / 1000),
       pubkey: activeUser.pubkey,
-      tags: [['d', 'user-groups-settings'], ...(eventId ? [['e', eventId]] : [])],
+      tags: [
+        ['d', 'user-groups-settings'],
+        ...(eventIdRef.current ? [['e', eventIdRef.current]] : []),
+      ],
     });
 
     try {
       await updatedEvent.publish();
-      setEventId(updatedEvent.id);
+      eventIdRef.current = updatedEvent.id;
     } catch (error) {
       console.error('Error publishing user settings event:', error);
     }
   };
 
   const updateLastSeenGroup = async (relay: string | undefined, groupId: string | undefined) => {
-    if (!ndk || !activeUser || !loginData.privateKey || !groupId || !relay) return;
+    if (!ndk || !activeUser || !groupId || !relay) return;
+
+    await fetchUserSettings();
 
     const updatedLastSeen = new Map(userSettings.last_seen_groups);
 
@@ -150,7 +151,6 @@ export const useUserSettings = () => {
 
     const encryptedData = encryptUserSettings(
       serializeSettings(updatedSettings),
-      loginData.privateKey,
       activeUser.pubkey,
     );
 
@@ -159,12 +159,15 @@ export const useUserSettings = () => {
       content: encryptedData,
       created_at: Math.floor(Date.now() / 1000),
       pubkey: activeUser.pubkey,
-      tags: [['d', 'user-groups-settings'], ...(eventId ? [['e', eventId]] : [])],
+      tags: [
+        ['d', 'user-groups-settings'],
+        ...(eventIdRef.current ? [['e', eventIdRef.current]] : []),
+      ],
     });
 
     try {
       await updatedEvent.publish();
-      setEventId(updatedEvent.id);
+      eventIdRef.current = updatedEvent.id;
     } catch (error) {
       console.error('Error publishing user settings event:', error);
     }

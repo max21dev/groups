@@ -30,19 +30,19 @@ export function deserializeSettings(data: any) {
   };
 }
 
-export function encryptUserSettings(settings: any, privateKey: string, pubkey: string) {
-  const privateKeyBytes = hexToUint8Array(privateKey);
-  const conversationKey = nip44.getConversationKey(privateKeyBytes, pubkey);
+export function encryptUserSettings(settings: any, pubkey: string) {
+  const pubkeyBytes = hexToUint8Array(pubkey);
+  const conversationKey = nip44.getConversationKey(pubkeyBytes, pubkey);
   return nip44.encrypt(JSON.stringify(settings), conversationKey);
 }
 
-export function decryptUserSettings(encryptedData: string, privateKey: string, pubkey: string) {
+export function decryptUserSettings(encryptedData: string, pubkey: string) {
   try {
-    const privateKeyBytes = hexToUint8Array(privateKey);
-    const conversationKey = nip44.getConversationKey(privateKeyBytes, pubkey);
+    const pubkeyBytes = hexToUint8Array(pubkey);
+    const conversationKey = nip44.getConversationKey(pubkeyBytes, pubkey);
     return JSON.parse(nip44.decrypt(encryptedData, conversationKey));
   } catch (error) {
-    console.error('Decryption failed.');
+    console.error('Decryption failed, resetting settings.');
     return null;
   }
 }
