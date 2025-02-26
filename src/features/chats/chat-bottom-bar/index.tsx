@@ -8,7 +8,7 @@ import {
   ReplyTo,
   SendButton,
   ThumbsUpButton,
-  UploadImageButton,
+  UploadMediaMenu,
 } from './components';
 
 export const ChatBottomBar = () => {
@@ -30,6 +30,8 @@ export const ChatBottomBar = () => {
     openLoginModal,
     activeRelay,
     activeGroupId,
+    isUploadingToBlossom,
+    openUploadToBlossomDialog,
   } = useChatBottomBar();
 
   if (!activeUser) {
@@ -45,9 +47,11 @@ export const ChatBottomBar = () => {
       <ReplyTo setReplyTo={setReplyTo} chats={chats} replyTo={replyTo} />
 
       <div className="w-full h-full flex items-center gap-2">
-        <UploadImageButton
+        <UploadMediaMenu
           isUploadingMedia={isUploadingMedia}
           openUploadMediaDialog={openUploadMediaDialog}
+          isUploadingToBlossom={isUploadingToBlossom}
+          openUploadToBlossomDialog={openUploadToBlossomDialog}
         />
 
         <InputMessage
