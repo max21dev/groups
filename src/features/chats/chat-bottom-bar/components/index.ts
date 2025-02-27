@@ -6,3 +6,4 @@ export * from './reply-to';
 export * from './send-button';
 export * from './thumbs-up-button';
 export * from './upload-media-button';
+export * from './upload-media-menu';

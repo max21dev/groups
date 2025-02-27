@@ -25,6 +25,8 @@ export const useChatBottomBar = () => {
     openLoginModal,
     isMember,
     isAdmin,
+    isUploadingToBlossom,
+    openUploadToBlossomDialog,
   } = useSendContent((relay, groupId, content) => {
     sendGroupChat({
       relay,
@@ -61,5 +63,7 @@ export const useChatBottomBar = () => {
     isUploadingMedia,
     activeRelay,
     activeGroupId,
+    isUploadingToBlossom,
+    openUploadToBlossomDialog,
   };
 };

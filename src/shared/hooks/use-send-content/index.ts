@@ -3,7 +3,13 @@ import { useGroupAdmins, useGroupMembers } from 'nostr-hooks/nip29';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useToast } from '@/shared/components/ui/use-toast';
-import { useActiveGroup, useActiveRelay, useLoginModalState, useUploadMedia } from '@/shared/hooks';
+import {
+  useActiveGroup,
+  useActiveRelay,
+  useBlossomUpload,
+  useLoginModalState,
+  useUploadMedia,
+} from '@/shared/hooks';
 
 export const useSendContent = (
   onSend: (relay: string, groupId: string, content: string) => void,
@@ -27,6 +33,9 @@ export const useSendContent = (
     textareaRef,
     true,
   );
+
+  const { isUploading: isUploadingToBlossom, openUploadDialog: openUploadToBlossomDialog } =
+    useBlossomUpload(setContent, ['image/*', 'video/*'], textareaRef, true);
 
   const handleSend = useCallback(() => {
     const trimmedContent = content.trim();
@@ -89,5 +98,7 @@ export const useSendContent = (
     activeRelay,
     activeGroupId,
     openLoginModal,
+    isUploadingToBlossom,
+    openUploadToBlossomDialog,
   };
 };
