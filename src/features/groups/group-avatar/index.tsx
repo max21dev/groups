@@ -15,23 +15,22 @@ export const GroupAvatar = memo(
       <Avatar>
         {!groupId || !relay || isLoadingGroupAvatar ? (
           <div className="w-full h-full bg-muted"></div>
-        ) : picture ? (
+        ) : (
           <>
-            <AvatarImage src={loader(picture, { w: 50, h: 50 })} alt={name} className="w-10 h-10" />
-
-            <AvatarFallback>
-              <img src={picture} className="w-full aspect-square" alt={name} />
+            <AvatarImage
+              src={loader(picture || '', { w: 50, h: 50 })}
+              alt={name}
+              className="w-10 h-10"
+            />
+            <AvatarFallback
+              className={cn(
+                'w-full h-full flex justify-center items-center',
+                getAvatarFallbackColor(groupId),
+              )}
+            >
+              <span className="text-white text-lg">{name?.[0]?.toUpperCase()}</span>
             </AvatarFallback>
           </>
-        ) : (
-          <div
-            className={cn(
-              'w-full h-full flex justify-center items-center',
-              getAvatarFallbackColor(groupId),
-            )}
-          >
-            <span className="text-white text-lg">{name?.[0].toUpperCase()}</span>
-          </div>
         )}
       </Avatar>
     );
