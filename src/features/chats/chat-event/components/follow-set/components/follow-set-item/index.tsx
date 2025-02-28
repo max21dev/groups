@@ -14,7 +14,7 @@ export const FollowSetItem = ({ pubkey }: { pubkey: string }) => {
         className="flex items-center gap-2 p-2 rounded-md bg-black bg-opacity-20 hover:bg-opacity-25 hover:cursor-pointer"
         onClick={openModal}
       >
-        <span className="[&_*]:w-8 [&_*]:h-8">
+        <span className="[&_span]:w-8 [&_span]:h-8">
           <UserAvatar pubkey={pubkey} />
         </span>
         <span className="text-sm">

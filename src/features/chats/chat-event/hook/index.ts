@@ -3,7 +3,7 @@ import { useNdk, useProfile } from 'nostr-hooks';
 import { useEffect, useState } from 'react';
 
 import { useHomePage } from '@/pages/home/hooks';
-import { useLazyLoad } from '@/shared/hooks/use-lazy-load';
+import { useLazyLoad } from '@/shared/hooks';
 
 import { fetchReactions } from '../utils';
 
@@ -14,6 +14,7 @@ type EventCategory =
   | 'long-form-content'
   | 'poll'
   | 'picture'
+  | 'video'
   | 'live-stream'
   | 'highlight';
 
@@ -39,6 +40,8 @@ export const useChatEvent = (event: string) => {
           setCategory('note');
         } else if (event.kind === 20) {
           setCategory('picture');
+        } else if (event.kind === 21) {
+          setCategory('video');
         } else if (event.kind === 1068) {
           setCategory('poll');
         } else if (event.kind === 9802) {

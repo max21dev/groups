@@ -7,3 +7,4 @@ export * from './live-stream';
 export * from './long-form-content';
 export * from './note';
 export * from './picture';
+export * from './video';
