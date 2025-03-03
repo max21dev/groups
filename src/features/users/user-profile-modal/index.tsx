@@ -1,13 +1,14 @@
-import { NDKUser } from '@nostr-dev-kit/ndk';
 import { CheckIcon, Copy, ExternalLink } from 'lucide-react';
+
+import { NDKUser } from '@nostr-dev-kit/ndk';
 import { useNdk, useProfile } from 'nostr-hooks';
 import { useEffect, useState } from 'react';
 
+import { UserAvatar } from '@/features/users';
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
 import { Input } from '@/shared/components/ui/input';
-
 import { useCopyToClipboard } from '@/shared/hooks';
-import { cn, getAvatarFallbackColor } from '@/shared/utils';
 
 type UserProfileModalProps = {
   pubkey: string;
@@ -17,7 +18,6 @@ type UserProfileModalProps = {
 
 export const UserProfileModal = ({ pubkey, isOpen, onClose }: UserProfileModalProps) => {
   const [user, setUser] = useState<NDKUser>();
-  const [imageError, setImageError] = useState(false);
 
   const { profile } = useProfile({ pubkey });
 
@@ -38,23 +38,10 @@ export const UserProfileModal = ({ pubkey, isOpen, onClose }: UserProfileModalPr
         </DialogHeader>
         <div className="p-4">
           <div className="flex flex-col items-center gap-2">
-            {profile?.image && !imageError ? (
-              <img
-                src={profile.image}
-                alt="User Avatar"
-                className="rounded-full w-24 h-24"
-                onError={() => setImageError(true)}
-              />
-            ) : (
-              <div
-                className={cn(
-                  'flex justify-center items-center text-2xl text-primary-foreground rounded-full w-24 h-24',
-                  getAvatarFallbackColor(pubkey),
-                )}
-              >
-                {pubkey.slice(0, 2).toUpperCase()}
-              </div>
-            )}
+            <div className="h-24 w-24 text-2xl [&_span]:w-full [&_span]:h-full">
+              <UserAvatar pubkey={user?.pubkey || ''} width={160} height={160} />
+            </div>
+
             <p className="mt-4 text-xl font-semibold">{profile?.displayName || profile?.name}</p>
             <p className="text-gray-500 break-words max-w-80">{profile?.nip05}</p>
             {user?.npub && (

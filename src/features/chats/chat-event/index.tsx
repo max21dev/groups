@@ -20,6 +20,7 @@ import {
   LongFormContent,
   Note,
   Picture,
+  Video,
 } from './components';
 import { useChatEvent } from './hook';
 
@@ -121,6 +122,7 @@ export const ChatEvent = memo(
           {category === 'highlight' && <Highlight event={eventData} />}
           {category === 'live-stream' && <LiveStream event={eventData} />}
           {category === 'picture' && <Picture event={eventData} />}
+          {category === 'video' && <Video event={eventData} />}
 
           <div className="flex justify-between items-center mt-2">
             {category !== 'group' && reactions && reactions.length > 0 && (
@@ -140,7 +142,7 @@ export const ChatEvent = memo(
             )}
           </div>
 
-          {!isThreadsVisible && isChatThread && <ChatThreadComments parentId={event} />}
+          {!isThreadsVisible && isChatThread && <ChatThreadComments parentId={eventData.id} />}
         </div>
       </>
     );

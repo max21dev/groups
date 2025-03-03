@@ -5,24 +5,56 @@ import { UserAvatar } from '@/features/users';
 
 import { Badge } from '@/shared/components/ui/badge.tsx';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card.tsx';
+import { Skeleton } from '@/shared/components/ui/skeleton';
 
-import { useActiveGroup, useActiveRelay } from '@/shared/hooks';
+import { useActiveGroup, useActiveRelay, useLazyLoad } from '@/shared/hooks';
 
 import { displayTime, ellipsis } from '@/shared/utils';
 
 export const GroupWidget = ({ groupId }: { groupId: string }) => {
+  const { ref: cardRef, hasEnteredViewport } = useLazyLoad<HTMLDivElement>();
   const { activeRelay } = useActiveRelay();
   const { setActiveGroupId } = useActiveGroup();
 
-  const { metadata } = useGroupMetadata(activeRelay, groupId);
-  const { chats } = useGroupChats(activeRelay, groupId, { limit: 1 });
+  const { metadata } = useGroupMetadata(
+    hasEnteredViewport ? activeRelay : undefined,
+    hasEnteredViewport ? groupId : undefined,
+  );
+
+  const { chats } = useGroupChats(
+    hasEnteredViewport ? activeRelay : undefined,
+    hasEnteredViewport ? groupId : undefined,
+    hasEnteredViewport ? { limit: 1 } : undefined,
+  );
 
   const lastChat = chats && chats.length > 0 ? chats[chats.length - 1] : undefined;
 
-  if (!metadata) return null;
+  if (!metadata) {
+    return (
+      <Card ref={cardRef} className="shadow-md min-h-56 pb-4">
+        <CardHeader className="flex flex-row gap-2 items-center">
+          <Skeleton className="w-10 h-10 rounded-full" />
+          <Skeleton className="h-4 w-32" />
+        </CardHeader>
+
+        <CardContent className="p-4 pt-0 h-2/3 flex flex-col justify-between">
+          <div>
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-4 w-16 mt-2" />
+          </div>
+          <div className="flex items-center text-xs mt-2 mb-1 text-gray-500">
+            <Skeleton className="w-4 h-4 rounded-full" />
+            <Skeleton className="h-4 w-20 ml-2" />
+            <Skeleton className="h-4 w-10 ml-auto" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card
+      ref={cardRef}
       className="shadow-md justify-between hover:bg-gradient-to-r from-gray-400 to-green-100 cursor-pointer min-h-56"
       onClick={() => setActiveGroupId(groupId)}
     >

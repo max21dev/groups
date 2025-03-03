@@ -44,7 +44,7 @@ export const Poll = ({ poll }: { poll: NDKEvent }) => {
         ))}
       </ul>
 
-      <div className="flex justify-between items-end">
+      <div className="flex justify-between items-end gap-2">
         {endsAt && (
           <p className="w-fit text-xs text-muted-foreground">
             {Date.now() > endsAt * 1000

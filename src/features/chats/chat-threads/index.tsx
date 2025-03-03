@@ -1,10 +1,10 @@
 import { memo } from 'react';
 
 import { ChatEvent } from '@/features/chats';
+import { SendChatThread } from '@/features/chats/chat-threads/components';
 
 import { Spinner } from '@/shared/components/spinner';
-
-import { SendChatThread } from '@/features/chats/chat-threads/components';
+import { getNostrLink } from '@/shared/utils';
 
 import { useChatThreads } from './hooks';
 
@@ -22,7 +22,13 @@ export const ChatThreads = memo(() => {
       )}
 
       <div className="flex flex-col-reverse gap-2 items-center w-full sm:w-3/4">
-        {threads?.map((thread) => <ChatEvent key={thread.id} event={thread.id} isChatThread />)}
+        {threads?.map((thread) => (
+          <ChatEvent
+            key={thread.id}
+            event={getNostrLink(thread.id, thread.pubkey, 11) || ''}
+            isChatThread
+          />
+        ))}
       </div>
     </div>
   );
