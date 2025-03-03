@@ -1,6 +1,7 @@
 import { ChatEvent } from '@/features/chats/chat-event';
 
 import { Spinner } from '@/shared/components/spinner';
+import { getNostrLink } from '@/shared/utils';
 
 import { SendChatPoll } from './components';
 import { useChatPolls } from './hooks';
@@ -22,11 +23,13 @@ export const ChatPolls = ({
 
       {isLoadingPolls && <Spinner />}
 
-      {!isLoadingPolls && !polls && <div className="w-full p-2 text-center">No polls found</div>}
+      {!isLoadingPolls && !polls.length && (
+        <div className="w-full p-2 text-center">No polls found</div>
+      )}
 
       <div className="flex flex-col gap-2 items-center w-full sm:w-3/4">
         {polls.map((poll) => (
-          <ChatEvent key={poll.id} event={poll.id} />
+          <ChatEvent key={poll.id} event={getNostrLink(poll.id, poll.pubkey, poll.kind) || ''} />
         ))}
       </div>
     </div>

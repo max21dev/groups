@@ -8,10 +8,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip';
-
 import { cn, getAvatarFallbackColor, loader } from '@/shared/utils';
 
-export const UserAvatar = forwardRef<HTMLDivElement, { pubkey: string }>(({ pubkey }, ref) => {
+export const UserAvatar = forwardRef<
+  HTMLDivElement,
+  { pubkey: string; width?: number; height?: number }
+>(({ pubkey, width = 50, height = 50 }, ref) => {
   const { profile } = useProfile({ pubkey });
 
   return (
@@ -19,11 +21,12 @@ export const UserAvatar = forwardRef<HTMLDivElement, { pubkey: string }>(({ pubk
       <Tooltip>
         <TooltipTrigger asChild>
           <Avatar ref={ref}>
-            <AvatarImage src={loader(profile?.image || '', { w: 50, h: 50 })} alt={profile?.name} />
+            <AvatarImage
+              src={loader(profile?.image || '', { w: width, h: height })}
+              alt={profile?.name}
+            />
 
-            <AvatarFallback
-              className={cn('text-primary-foreground', getAvatarFallbackColor(pubkey))}
-            >
+            <AvatarFallback className={cn('text-white', getAvatarFallbackColor(pubkey))}>
               {pubkey.slice(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>

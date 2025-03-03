@@ -17,11 +17,11 @@ export type UploadMediaMenuProps = {
 };
 
 export const UploadMediaMenu = ({
-                                  openUploadMediaDialog,
-                                  isUploadingMedia,
-                                  openUploadToBlossomDialog,
-                                  isUploadingToBlossom,
-                                }: UploadMediaMenuProps) => {
+  openUploadMediaDialog,
+  isUploadingMedia,
+  openUploadToBlossomDialog,
+  isUploadingToBlossom,
+}: UploadMediaMenuProps) => {
   const isUploading = isUploadingMedia || isUploadingToBlossom;
 
   return (
@@ -43,7 +43,7 @@ export const UploadMediaMenu = ({
         <DropdownMenuItem>
           <Button
             variant="ghost"
-            className="w-full flex items-center gap-2"
+            className="w-full flex justify-start items-center gap-2"
             onClick={openUploadMediaDialog}
             disabled={isUploadingMedia}
           >
@@ -54,7 +54,7 @@ export const UploadMediaMenu = ({
         <DropdownMenuItem>
           <Button
             variant="ghost"
-            className="w-full flex items-center gap-2"
+            className="w-full flex justify-start items-center gap-2"
             onClick={openUploadToBlossomDialog}
             disabled={isUploadingToBlossom}
           >
