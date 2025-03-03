@@ -1,12 +1,12 @@
-import { NDKUserProfile } from '@nostr-dev-kit/ndk';
 import { CheckIcon, Copy } from 'lucide-react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
+import { NDKUserProfile } from '@nostr-dev-kit/ndk';
+
+import { UserAvatar } from '@/features/users';
+
 import { Input } from '@/shared/components/ui/input';
-
 import { useCopyToClipboard } from '@/shared/hooks';
-import { cn, getAvatarFallbackColor, loader } from '@/shared/utils';
-
+import { cn } from '@/shared/utils';
 import { formatTimestampToDate } from '@/shared/utils/date';
 
 export const UserInfo = ({
@@ -39,15 +39,9 @@ export const UserInfo = ({
         )}
       </div>
       <div className="w-full relative">
-        <Avatar className="w-36 h-36 absolute -top-20 left-6 border-4 bg-white border-white dark:border-slate-950 dark:bg-slate-950 dark:[&_*]:text-white">
-          <AvatarImage src={loader(profile?.image || '', { w: 100, h: 100 })} alt={profile?.name} />
-
-          <AvatarFallback
-            className={cn('text-primary-foreground text-2xl', getAvatarFallbackColor(pubkey))}
-          >
-            {pubkey.slice(0, 2).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
+        <div className="w-36 h-36 absolute -top-20 left-6 rounded-full border-4 border-primary-foreground bg-primary-foreground text-2xl [&_span]:w-full [&_span]:h-full">
+          <UserAvatar pubkey={pubkey} width={240} height={240} />
+        </div>
       </div>
       <div className="mt-16 px-8 pb-4 h-full flex flex-col gap-2">
         <p className="text-xl font-semibold">{profile?.displayName || profile?.name}</p>
