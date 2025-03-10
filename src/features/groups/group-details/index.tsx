@@ -9,6 +9,7 @@ import {
   GroupLinkButton,
   GroupMetadataForm,
   GroupNotification,
+  JoinRequests,
 } from '@/features/groups';
 import { UserInfoRow } from '@/features/users';
 
@@ -31,6 +32,8 @@ export const GroupDetails = memo(
           </Button>
 
           <GroupLinkButton />
+
+          <JoinRequests relay={relay} groupId={groupId} />
 
           <GroupLeaveButton relay={relay} groupId={groupId} />
 
