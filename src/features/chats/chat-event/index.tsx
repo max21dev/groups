@@ -1,3 +1,4 @@
+import { CheckIcon, Copy, OctagonAlertIcon } from 'lucide-react';
 import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,6 +9,7 @@ import { UserAvatar } from '@/features/users';
 
 import { Button } from '@/shared/components/ui/button';
 import { Skeleton } from '@/shared/components/ui/skeleton';
+import { useCopyToClipboard } from '@/shared/hooks';
 import { cn, ellipsis, formatTimestampToDate } from '@/shared/utils';
 
 import {
@@ -46,6 +48,7 @@ export const ChatEvent = memo(
     } = useChatEvent(event);
 
     const navigate = useNavigate();
+    const { copyToClipboard, hasCopied } = useCopyToClipboard();
 
     if (eventData === undefined) {
       return (
@@ -68,7 +71,30 @@ export const ChatEvent = memo(
     }
 
     if (eventData === null) {
-      return <p className="text-xs">{event}</p>;
+      return (
+        <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-primary/10">
+          <p className="flex items-center gap-1 text-sm mb-2">
+            <OctagonAlertIcon size={18} />
+            Event not found.
+          </p>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => copyToClipboard(event)}
+            className="text-xs w-full bg-primary/15 hover:bg-primary/25 text-current hover:text-current"
+          >
+            {hasCopied ? (
+              <>
+                <CheckIcon className="text-green-600 me-1.5" size={15} /> Copied!
+              </>
+            ) : (
+              <>
+                <Copy className="me-1.5" size={15} /> Copy Event ID
+              </>
+            )}
+          </Button>
+        </div>
+      );
     }
 
     return (
