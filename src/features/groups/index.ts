@@ -2,6 +2,7 @@ export * from './group-avatar';
 export * from './group-bookmark';
 export * from './group-delete-button';
 export * from './group-details';
+export * from './group-join-requests';
 export * from './group-leave-button';
 export * from './group-link-button';
 export * from './group-metadata-form';
