@@ -31,6 +31,7 @@ export const ChatContent = ({
               alt="chat"
               className="max-w-full mx-auto h-40 object-contain rounded-lg mt-2 cursor-pointer"
               onClick={() => setSelectedImage(part.content)}
+              loading="lazy"
             />
             {selectedImage && (
               <div

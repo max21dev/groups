@@ -34,13 +34,13 @@ const categorizePart = (part: string): CategorizedChatContent => {
     }
   }
 
+  if (imageRegex.test(part)) {
+    return { category: 'image', content: part };
+  }
+  if (videoRegex.test(part) || youtubeRegex.test(part)) {
+    return { category: 'video', content: part };
+  }
   if (urlRegex.test(part)) {
-    if (imageRegex.test(part)) {
-      return { category: 'image', content: part };
-    }
-    if (videoRegex.test(part) || youtubeRegex.test(part)) {
-      return { category: 'video', content: part };
-    }
     return { category: 'url', content: part };
   }
 
