@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { Copy, SmilePlusIcon, Trash2, Undo, Zap } from 'lucide-react';
+import { BanIcon, Copy, SmilePlusIcon, Trash2, Undo, Zap } from 'lucide-react';
 import { memo, useState } from 'react';
 
 import {
@@ -47,6 +47,8 @@ export const ChatListItem = memo(
       deleteChat,
       categorizedReactions,
       copyChatLink,
+      isAdmin,
+      removeUser,
     } = useChatListItem({
       topChat,
       bottomChat,
@@ -131,9 +133,9 @@ export const ChatListItem = memo(
                       <ChatContent categorizedChatContent={categorizedChatContent} />
                     </div>
 
-                    <div className="ml-auto flex gap-2 items-center text-end text-xs font-light cursor-default">
+                    <div className="ml-auto mt-auto flex gap-2 items-center text-end text-xs font-light cursor-default">
                       {categorizedReactions && (
-                        <div className="flex gap-1">
+                        <div className="flex flex-wrap gap-1">
                           {Object.entries(categorizedReactions).map(([content, reactions]) => (
                             <div
                               key={reactions
@@ -159,7 +161,9 @@ export const ChatListItem = memo(
                           ))}
                         </div>
                       )}
-                      <span>{format(new Date(chat.timestamp * 1000), 'HH:mm')}</span>
+                      <span className="ml-auto mt-auto">
+                        {format(new Date(chat.timestamp * 1000), 'HH:mm')}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -188,6 +192,12 @@ export const ChatListItem = memo(
                     <SmilePlusIcon className="h-4 w-4 mr-3" />
                     React
                   </ContextMenuItem>
+                  {isAdmin && !sameAsCurrentUser && (
+                    <ContextMenuItem onClick={() => removeUser(chat.pubkey)}>
+                      <BanIcon className="h-4 w-4 mr-3" />
+                      Remove User
+                    </ContextMenuItem>
+                  )}
                   <ContextMenuItem
                     onClick={() => {
                       setZapTarget(chatsEvents?.find((e) => e.id === chat.id));

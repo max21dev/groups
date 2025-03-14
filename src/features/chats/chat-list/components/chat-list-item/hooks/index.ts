@@ -3,6 +3,7 @@ import {
   deleteGroupEvent,
   Nip29GroupChat,
   Nip29GroupReaction,
+  removeGroupUser,
   sendGroupReaction,
   useGroupReactions,
 } from 'nostr-hooks/nip29';
@@ -146,6 +147,25 @@ export const useChatListItem = ({
     [activeUser, activeGroupId, activeRelay, chatsEvents, setDeletedChats, toast],
   );
 
+  const removeUser = useCallback(
+    (pubkey: string) => {
+      activeGroupId &&
+        activeRelay &&
+        removeGroupUser({
+          relay: activeRelay,
+          groupId: activeGroupId,
+          pubkey,
+          onSuccess: () => {
+            toast({ title: 'Success', description: 'User removed successfully' });
+          },
+          onError: () => {
+            toast({ title: 'Error', description: 'Failed to remove user', variant: 'destructive' });
+          },
+        });
+    },
+    [activeRelay, activeGroupId, toast],
+  );
+
   const copyChatLink = (chatId: string) => {
     copyToClipboard(
       `${window.location.origin}/?relay=${activeRelay}&groupId=${activeGroupId}&chatId=${chatId}`,
@@ -171,5 +191,7 @@ export const useChatListItem = ({
     sendReaction,
     categorizedReactions,
     copyChatLink,
+    isAdmin,
+    removeUser,
   };
 };
