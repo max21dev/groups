@@ -78,9 +78,6 @@ export function UserPage() {
               <div className="flex flex-col w-full h-full">
                 {!activeDmId && (
                   <>
-                    {/* <ChatTopBar />
-                    <ChatList key={`${activeRelay}-${activeDmId}`} /> */}
-
                     <div className="flex flex-col mt-auto items-center gap-2 p-2">
                       <ChatBottomBar />
                     </div>
