@@ -46,7 +46,6 @@ export const ChatTopBar = () => {
           />
           <GroupAvatar relay={activeRelay} groupId={activeGroupId} />
           <div className="flex flex-col">
-            {/* <span className="font-light text-xs">{group?.id}</span> */}
             <span className="font-bold mt-0 mb-0">{metadata?.name}</span>
             <span className="text-xs font-light text-muted-foreground">
               {metadata?.isPublic ? 'Public' : 'Private'} and {metadata?.isOpen ? 'Open' : 'Closed'}
