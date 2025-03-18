@@ -4,6 +4,7 @@ import ReactPlayer from 'react-player';
 import { ChatEvent } from '@/features/chats';
 import { UserMention } from '@/features/users/user-mention';
 
+import { Markdown } from '@/shared/components/markdown';
 import { loader } from '@/shared/utils';
 
 import { CategorizedChatContent } from '../../types';
@@ -18,11 +19,7 @@ export const ChatContent = ({
   return categorizedChatContent.map((part, i) => {
     switch (part.category) {
       case 'text':
-        return (
-          <p key={i} className="text-sm">
-            {part.content}
-          </p>
-        );
+        return <Markdown key={i} content={part.content} className="text-sm" />;
       case 'image':
         return (
           <div key={i}>
