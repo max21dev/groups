@@ -85,7 +85,7 @@ export const ChatListItem = memo(
               <ContextMenuTrigger>
                 <div
                   className={cn(
-                    'p-2 mt-1 rounded-lg max-w-xl max-sm:max-w-72 whitespace-pre-wrap',
+                    'p-2 mt-1 rounded-lg max-w-[75vw] sm:max-w-[45vw] whitespace-pre-wrap',
                     sameAsCurrentUser
                       ? 'mr-2 bg-blue text-blue-foreground'
                       : 'bg-secondary text-secondary-foreground',
