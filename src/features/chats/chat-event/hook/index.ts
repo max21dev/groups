@@ -9,6 +9,7 @@ import { fetchReactions } from '../utils';
 
 type EventCategory =
   | 'follow-set'
+  | 'emoji-set'
   | 'group'
   | 'note'
   | 'long-form-content'
@@ -50,6 +51,8 @@ export const useChatEvent = (event: string) => {
           setCategory('follow-set');
         } else if (event.kind === 30023) {
           setCategory('long-form-content');
+        } else if (event.kind === 30030) {
+          setCategory('emoji-set');
         } else if (event.kind === 30311) {
           setCategory('live-stream');
         } else if (event.kind >= 39000 && event.kind <= 39009) {

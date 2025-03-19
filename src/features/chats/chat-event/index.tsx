@@ -16,6 +16,7 @@ import {
   AddEventReaction,
   ChatEventMenu,
   ChatEventReactions,
+  EmojiSet,
   FollowSet,
   Highlight,
   LiveStream,
@@ -141,6 +142,7 @@ export const ChatEvent = memo(
             </div>
           )}
           {category === 'follow-set' && <FollowSet tags={eventData.tags} address={event} />}
+          {category === 'emoji-set' && <EmojiSet event={eventData} />}
           {category === 'group' && <GroupWidget groupId={eventData.tags[0][1]} />}
           {category === 'note' && <Note content={eventData.content} />}
           {category === 'poll' && <Poll poll={eventData} />}
