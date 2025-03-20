@@ -24,7 +24,7 @@ import {
 import { useStore } from '@/shared/store';
 
 import { ChatListItemProps } from '../types';
-import { categorizeChatContent, fetchFirstContentImage } from '../utils';
+import { categorizeChatContent } from '../utils';
 
 export const useChatListItem = ({
   chat,
@@ -78,16 +78,6 @@ export const useChatListItem = ({
   const categorizedChatContent = useMemo(
     () => categorizeChatContent(chat?.content || ''),
     [chat?.content],
-  );
-
-  // TODO: refactor replies to new component
-  const reply = chats?.find((e) => e.id === chat?.parentId);
-
-  const { profile: replyAuthorProfile } = useProfile({ pubkey: reply?.pubkey });
-
-  const firstReplyImageUrl = useMemo(
-    () => fetchFirstContentImage(reply?.content || ''),
-    [reply?.content],
   );
 
   const { toast } = useToast();
@@ -182,9 +172,6 @@ export const useChatListItem = ({
     sameAsCurrentUser,
     setReplyTo,
     categorizedChatContent,
-    firstReplyImageUrl,
-    replyAuthorProfile,
-    reply,
     setZapTarget,
     openZapModal,
     activeUser,
