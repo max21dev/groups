@@ -2,19 +2,18 @@ import { format } from 'date-fns';
 import { BanIcon, Copy, SmilePlusIcon, Trash2, Undo, Zap } from 'lucide-react';
 import { memo, useState } from 'react';
 
+import { UserAvatar, UserProfileModal } from '@/features/users';
+import { useUserProfileModal } from '@/features/users/user-profile-modal/hooks';
+
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
 } from '@/shared/components/ui/context-menu';
+import { cn } from '@/shared/utils';
 
-import { UserAvatar, UserProfileModal } from '@/features/users';
-import { useUserProfileModal } from '@/features/users/user-profile-modal/hooks';
-
-import { cn, ellipsis, loader } from '@/shared/utils';
-
-import { ChatContent, ChatListItemReactions } from './components';
+import { ChatContent, ChatListItemReactions, ChatReply } from './components';
 import { useChatListItem } from './hooks';
 import { ChatListItemProps } from './types';
 
@@ -37,9 +36,6 @@ export const ChatListItem = memo(
       sameAsCurrentUser,
       setReplyTo,
       categorizedChatContent,
-      firstReplyImageUrl,
-      replyAuthorProfile,
-      reply,
       setZapTarget,
       openZapModal,
       activeUser,
@@ -98,28 +94,7 @@ export const ChatListItem = memo(
                   )}
 
                   {chat.parentId && (
-                    <div
-                      className="mb-2 text-xs bg-primary/20 cursor-pointer border-l-4 border-primary/25 rounded-lg p-1 flex items-start gap-2"
-                      onClick={() => scrollToChat(chat.parentId || '')}
-                    >
-                      {firstReplyImageUrl && (
-                        <img
-                          className="rounded-sm w-8 h-8"
-                          src={loader(firstReplyImageUrl, { w: 50, h: 50 })}
-                          alt="Reply Chat Image"
-                        />
-                      )}
-                      <div>
-                        <div className="text-xs font-semibold opacity-60">
-                          {replyAuthorProfile?.displayName
-                            ? replyAuthorProfile.displayName
-                            : reply?.pubkey?.slice(0, 5) + '...'}
-                        </div>
-                        <div className="[overflow-wrap:anywhere]">
-                          {ellipsis(reply?.content || '', 50)}
-                        </div>
-                      </div>
-                    </div>
+                    <ChatReply replyId={chat.parentId} scrollToChat={scrollToChat} />
                   )}
 
                   <div

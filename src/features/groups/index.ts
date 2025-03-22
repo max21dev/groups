@@ -11,6 +11,7 @@ export * from './group-widget';
 export * from './groups-filter-dropdown';
 export * from './groups-list';
 export * from './groups-list-item';
+export * from './groups-list-menu';
 export * from './groups-list-pinned';
 export * from './groups-list-widget';
 export * from './groups-search';
