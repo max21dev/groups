@@ -2,8 +2,19 @@ import { NDKEvent } from '@nostr-dev-kit/ndk';
 import { useMemo } from 'react';
 
 import { UserAvatar } from '@/features/users';
+import { useAddEventReaction } from '../add-event-reaction/hooks';
 
-export const ChatEventReactions = ({ reaction }: { reaction: NDKEvent[] }) => {
+export const ChatEventReactions = ({
+  reaction,
+  refreshReactions,
+  eventId,
+  eventPubkey,
+}: {
+  reaction: NDKEvent[];
+  refreshReactions: () => Promise<void>;
+  eventId: string;
+  eventPubkey: string;
+}) => {
   const groupedReactions = useMemo(
     () =>
       reaction.reduce(
@@ -19,6 +30,8 @@ export const ChatEventReactions = ({ reaction }: { reaction: NDKEvent[] }) => {
     [reaction],
   );
 
+  const { addEventReaction } = useAddEventReaction(refreshReactions);
+
   return (
     <div className="flex flex-wrap gap-1 text-xs text-primary">
       {Object.entries(groupedReactions).map(([content, pubkeys]) => (
@@ -26,7 +39,16 @@ export const ChatEventReactions = ({ reaction }: { reaction: NDKEvent[] }) => {
           key={`reaction-${content}-${pubkeys.join('-')}`}
           className="flex items-center bg-gray-100 dark:bg-slate-900 p-1 rounded-2xl"
         >
-          <div className="flex items-center">
+          <div
+            className="flex items-center hover:cursor-pointer"
+            onClick={() =>
+              addEventReaction({
+                eventId,
+                pubkey: eventPubkey,
+                content,
+              })
+            }
+          >
             {pubkeys.length > 3 ? (
               <span className="font-medium ml-1 -mr-1">{pubkeys.length}</span>
             ) : (
