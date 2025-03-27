@@ -16,6 +16,7 @@ import {
   AddEventReaction,
   ChatEventMenu,
   ChatEventReactions,
+  ChatMessageEvent,
   EmojiSet,
   FollowSet,
   Highlight,
@@ -26,6 +27,7 @@ import {
   Video,
 } from './components';
 import { useChatEvent } from './hook';
+import { isExcludedCategory } from './utils';
 
 export const ChatEvent = memo(
   ({
@@ -98,6 +100,15 @@ export const ChatEvent = memo(
       );
     }
 
+    if (category && isExcludedCategory(category)) {
+      return (
+        <div ref={eventRef}>
+          {category === 'group' && <GroupWidget groupId={eventData.tags[0][1]} />}
+          {category === 'chat-message' && <ChatMessageEvent event={eventData} />}
+        </div>
+      );
+    }
+
     return (
       <>
         {!isChatsPage && isChatThread && !isThreadsVisible && (
@@ -111,39 +122,35 @@ export const ChatEvent = memo(
           ref={eventRef}
           className={cn(
             'w-full rounded-xl p-2 bg-primary/10',
-            category === 'group' && 'p-0',
             isChatsPage
               ? 'max-w-80 [&_.set-max-h]:max-h-80'
               : 'max-w-2xl [&_.set-max-h]:max-h-[75vh]',
           )}
         >
-          {category !== 'group' && (
-            <div className="flex items-center gap-2 mb-2">
-              <UserAvatar pubkey={eventData.pubkey} />
-              <div className="flex flex-col">
-                <span>
-                  {profile?.name ||
-                    profile?.displayName ||
-                    profile?.nip05 ||
-                    ellipsis(eventData.pubkey, 4)}
-                </span>
-                <span className="text-xs">
-                  {eventData.created_at && formatTimestampToDate(eventData.created_at)}
-                </span>
-              </div>
-              <div className="ml-auto">
-                <ChatEventMenu
-                  event={event}
-                  isChatThread={isChatThread}
-                  deleteThreadComment={deleteThreadComment}
-                  pubkey={eventData.pubkey}
-                />
-              </div>
+          <div className="flex items-center gap-2 mb-2">
+            <UserAvatar pubkey={eventData.pubkey} />
+            <div className="flex flex-col">
+              <span>
+                {profile?.name ||
+                  profile?.displayName ||
+                  profile?.nip05 ||
+                  ellipsis(eventData.pubkey, 4)}
+              </span>
+              <span className="text-xs">
+                {eventData.created_at && formatTimestampToDate(eventData.created_at)}
+              </span>
             </div>
-          )}
+            <div className="ml-auto">
+              <ChatEventMenu
+                event={event}
+                isChatThread={isChatThread}
+                deleteThreadComment={deleteThreadComment}
+                pubkey={eventData.pubkey}
+              />
+            </div>
+          </div>
           {category === 'follow-set' && <FollowSet tags={eventData.tags} address={event} />}
           {category === 'emoji-set' && <EmojiSet event={eventData} />}
-          {category === 'group' && <GroupWidget groupId={eventData.tags[0][1]} />}
           {category === 'note' && <Note content={eventData.content} />}
           {category === 'poll' && <Poll poll={eventData} />}
           {category === 'long-form-content' && <LongFormContent content={eventData.content} />}
@@ -153,11 +160,16 @@ export const ChatEvent = memo(
           {category === 'video' && <Video event={eventData} />}
 
           <div className="flex justify-between items-center mt-2">
-            {category !== 'group' && reactions && reactions.length > 0 && (
-              <ChatEventReactions reaction={reactions} />
+            {reactions && reactions.length > 0 && (
+              <ChatEventReactions
+                eventId={eventData.id}
+                eventPubkey={eventData.pubkey}
+                reaction={reactions}
+                refreshReactions={refreshReactions}
+              />
             )}
 
-            {category !== 'group' && !isChatsPage && (
+            {!isChatsPage && (
               <div className="flex ms-auto">
                 <AddEventReaction
                   eventId={eventData.id}

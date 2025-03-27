@@ -117,7 +117,11 @@ export const ChatListItem = memo(
                                 .map((r) => r.id)
                                 .join('-')
                                 .substring(0, 10)}
-                              className="flex items-center bg-gray-100 dark:bg-slate-900 p-1 rounded-2xl"
+                              className="flex items-center bg-gray-100 dark:bg-slate-900 p-1 rounded-2xl hover:cursor-pointer"
+                              onClick={() => {
+                                if (!activeUser) return;
+                                sendReaction(content, chat.id);
+                              }}
                             >
                               {reactions.length < 3 ? (
                                 reactions.map((reaction) => (
