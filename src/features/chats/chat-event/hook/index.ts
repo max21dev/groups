@@ -5,21 +5,10 @@ import { useEffect, useState } from 'react';
 import { useHomePage } from '@/pages/home/hooks';
 import { useLazyLoad } from '@/shared/hooks';
 
-import { fetchReactions } from '../utils';
+import { EventCategory } from '../types';
+import { EVENT_CATEGORY_MAP, fetchReactions } from '../utils';
 
-type EventCategory =
-  | 'follow-set'
-  | 'emoji-set'
-  | 'group'
-  | 'note'
-  | 'long-form-content'
-  | 'poll'
-  | 'picture'
-  | 'video'
-  | 'live-stream'
-  | 'highlight';
-
-export const useChatEvent = (event: string) => {
+export const useChatEvent = (eventId: string) => {
   const { ref: eventRef, hasEnteredViewport } = useLazyLoad<HTMLDivElement>();
   const [eventData, setEventData] = useState<NDKEvent | null | undefined>(undefined);
   const [reactions, setReactions] = useState<NDKEvent[] | null | undefined>([]);
@@ -28,40 +17,22 @@ export const useChatEvent = (event: string) => {
 
   const { ndk } = useNdk();
 
-  const { isThreadsVisible, isPollsVisible, event: eventId } = useHomePage();
+  const { isThreadsVisible, isPollsVisible, event } = useHomePage();
 
-  const isChatsPage = !(isThreadsVisible || isPollsVisible || !!eventId);
+  const isChatsPage = !(isThreadsVisible || isPollsVisible || !!event);
 
   useEffect(() => {
     if (!hasEnteredViewport || !ndk) return;
 
-    ndk.fetchEvent(event).then(async (event) => {
-      if (event && event.kind) {
-        if (event.kind === 1 || event.kind === 11 || event.kind === 1111) {
-          setCategory('note');
-        } else if (event.kind === 20) {
-          setCategory('picture');
-        } else if (event.kind === 21) {
-          setCategory('video');
-        } else if (event.kind === 1068) {
-          setCategory('poll');
-        } else if (event.kind === 9802) {
-          setCategory('highlight');
-        } else if (event.kind === 30000) {
-          setCategory('follow-set');
-        } else if (event.kind === 30023) {
-          setCategory('long-form-content');
-        } else if (event.kind === 30030) {
-          setCategory('emoji-set');
-        } else if (event.kind === 30311) {
-          setCategory('live-stream');
-        } else if (event.kind >= 39000 && event.kind <= 39009) {
-          setCategory('group');
-        }
+    ndk.fetchEvent(eventId).then(async (fetchedEvent) => {
+      if (fetchedEvent && fetchedEvent.kind) {
+        const mappedCategory = EVENT_CATEGORY_MAP[fetchedEvent.kind];
 
-        setEventData(event);
+        setCategory(mappedCategory ?? null);
 
-        const fetchedReactions = await fetchReactions(ndk, event.id);
+        setEventData(fetchedEvent);
+
+        const fetchedReactions = await fetchReactions(ndk, fetchedEvent.id);
         setReactions(fetchedReactions);
       } else {
         setEventData(null);
@@ -69,7 +40,7 @@ export const useChatEvent = (event: string) => {
         setReactions([]);
       }
     });
-  }, [event, ndk, hasEnteredViewport]);
+  }, [eventId, ndk, hasEnteredViewport]);
 
   const refreshReactions = async () => {
     if (!eventData || !ndk) return;
