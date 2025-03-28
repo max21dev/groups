@@ -13,12 +13,10 @@ import { useActiveGroup, useActiveRelay, useCopyToClipboard } from '@/shared/hoo
 
 export const ChatEventMenu = ({
   event,
-  isChatThread,
   pubkey,
   deleteThreadComment,
 }: {
   event: string;
-  isChatThread?: boolean;
   deleteThreadComment?: (commentId: string) => void;
   pubkey?: string;
 }) => {
@@ -40,7 +38,7 @@ export const ChatEventMenu = ({
         {!eventId && (
           <DropdownMenuItem>
             <Link
-              to={`/?relay=${activeRelay}&groupId=${activeGroupId}&eventId=${event}${isChatThread ? '&chatThread=true' : ''}`}
+              to={`/?relay=${activeRelay}&groupId=${activeGroupId}&eventId=${event}`}
               className="flex items-center gap-2 w-full"
             >
               <MaximizeIcon size={18} />

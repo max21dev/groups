@@ -55,13 +55,13 @@ export const ChatEventReactions = ({
               pubkeys.map((pubkey, index) => (
                 <div
                   key={`avatar-${content}-${pubkey}-${index}`}
-                  className="-mr-1 w-4 h-4 [&_*]:h-full [&_*]:w-full"
+                  className="-mr-1 [&_span]:w-4 [&_span]:h-4"
                 >
                   <UserAvatar pubkey={pubkey} />
                 </div>
               ))
             )}
-            <span className="ml-2">{content}</span>
+            <span className="ml-2 max-w-24 overflow-hidden text-nowrap">{content}</span>
           </div>
         </div>
       ))}
