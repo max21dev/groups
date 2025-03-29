@@ -15,6 +15,7 @@ import { cn, ellipsis, formatTimestampToDate } from '@/shared/utils';
 import {
   AddEventReaction,
   ChatEventMenu,
+  ChatEventObject,
   ChatEventReactions,
   ChatMessageEvent,
   EmojiSet,
@@ -32,11 +33,9 @@ import { isExcludedCategory } from './utils';
 export const ChatEvent = memo(
   ({
     event,
-    isChatThread,
     deleteThreadComment,
   }: {
     event: string;
-    isChatThread?: boolean;
     deleteThreadComment?: (commentId: string) => void;
   }) => {
     const {
@@ -75,7 +74,7 @@ export const ChatEvent = memo(
 
     if (eventData === null) {
       return (
-        <div className="flex flex-col items-center justify-center p-4 rounded-lg bg-primary/10">
+        <div className="w-full flex flex-col items-center justify-center p-4 rounded-lg bg-primary/10">
           <p className="flex items-center gap-1 text-sm mb-2">
             <OctagonAlertIcon size={18} />
             Event not found.
@@ -111,7 +110,7 @@ export const ChatEvent = memo(
 
     return (
       <>
-        {!isChatsPage && isChatThread && !isThreadsVisible && (
+        {!isChatsPage && category === 'thread' && !isThreadsVisible && (
           <div className="w-full max-w-2xl">
             <Button variant="outline" className="me-auto mb-2" onClick={() => navigate(-1)}>
               Back to threads
@@ -143,7 +142,6 @@ export const ChatEvent = memo(
             <div className="ml-auto">
               <ChatEventMenu
                 event={event}
-                isChatThread={isChatThread}
                 deleteThreadComment={deleteThreadComment}
                 pubkey={eventData.pubkey}
               />
@@ -151,13 +149,14 @@ export const ChatEvent = memo(
           </div>
           {category === 'follow-set' && <FollowSet tags={eventData.tags} address={event} />}
           {category === 'emoji-set' && <EmojiSet event={eventData} />}
-          {category === 'note' && <Note content={eventData.content} />}
+          {(category === 'note' || category === 'thread') && <Note content={eventData.content} />}
           {category === 'poll' && <Poll poll={eventData} />}
           {category === 'long-form-content' && <LongFormContent content={eventData.content} />}
           {category === 'highlight' && <Highlight event={eventData} />}
           {category === 'live-stream' && <LiveStream event={eventData} />}
           {category === 'picture' && <Picture event={eventData} />}
           {category === 'video' && <Video event={eventData} />}
+          {category === null && <ChatEventObject event={eventData} />}
 
           <div className="flex justify-between items-center mt-2">
             {reactions && reactions.length > 0 && (
@@ -182,11 +181,14 @@ export const ChatEvent = memo(
             )}
           </div>
 
-          {!isThreadsVisible && isChatThread && <ChatThreadComments parentId={eventData.id} />}
+          {!isThreadsVisible && !isChatsPage && category === 'thread' && (
+            <ChatThreadComments parentId={eventData.id} />
+          )}
         </div>
       </>
     );
   },
   (prevProps, nextProps) =>
-    prevProps.event === nextProps.event && prevProps.isChatThread === nextProps.isChatThread,
+    prevProps.event === nextProps.event &&
+    prevProps.deleteThreadComment === nextProps.deleteThreadComment,
 );
