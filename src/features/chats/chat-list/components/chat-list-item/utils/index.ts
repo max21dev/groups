@@ -2,10 +2,10 @@ import { parse } from 'nostr-tools/nip21';
 import { CategorizedChatContent } from '../types';
 
 // Regular expressions for various content types
-const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/g;
-const imageRegex = /\.(jpg|jpeg|png|gif|bmp|svg|webp)$/i;
-const videoRegex = /\.(mp4|mov)$/i;
-const youtubeRegex = /https?:\/\/(www\.)?youtube\.com\/watch\?v=[\w-]+$/i;
+const urlRegex = /https?:\/\/[^\s<>"')\],]+(?=[\s<>"')\],]|$)/gi;
+const imageRegex = /\.(jpg|jpeg|png|gif|bmp|svg|webp)(\?.*)?$/i;
+const videoRegex = /\.(mp4|mov)(\?.*)?$/i;
+const youtubeRegex = /https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+/i;
 const nostrRegex = /nostr:[a-z0-9]+/i;
 const mentionRegex = /^npub1[0-9a-z]+$/i;
 const noteRegex = /^note1[0-9a-z]+$/i;

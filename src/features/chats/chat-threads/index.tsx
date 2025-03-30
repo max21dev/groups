@@ -23,11 +23,7 @@ export const ChatThreads = memo(() => {
 
       <div className="flex flex-col-reverse gap-2 items-center w-full sm:w-3/4">
         {threads?.map((thread) => (
-          <ChatEvent
-            key={thread.id}
-            event={getNostrLink(thread.id, thread.pubkey, 11) || ''}
-            isChatThread
-          />
+          <ChatEvent key={thread.id} event={getNostrLink(thread.id, thread.pubkey, 11) || ''} />
         ))}
       </div>
     </div>

@@ -60,7 +60,7 @@ export const GroupsSearch = () => {
           setSearchTerm('');
         }}
       >
-        <DialogContent className="sm:max-w-[425px] h-80 flex flex-col">
+        <DialogContent className="sm:max-w-[425px] top-44 h-80 flex flex-col">
           <DialogHeader>
             <DialogTitle className="mt-2">
               <Search
