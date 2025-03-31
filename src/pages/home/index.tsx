@@ -33,7 +33,6 @@ export function HomePage() {
     event,
     isThreadsVisible,
     isPollsVisible,
-    isChatThread,
     activeRelay,
   } = useHomePage();
 
@@ -85,7 +84,7 @@ export function HomePage() {
           <div className="flex flex-col w-full h-full">
             {event ? (
               <div className="flex flex-col items-center px-2 py-8 h-full overflow-y-auto">
-                <ChatEvent event={event} isChatThread={isChatThread} />
+                <ChatEvent event={event} />
               </div>
             ) : !activeGroupId ? (
               <div className="flex flex-col justify-center items-center h-full">
