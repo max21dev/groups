@@ -18,7 +18,6 @@ export const useHomePage = () => {
   const isPollsVisible = !!useMatch('/polls');
 
   const [searchParams] = useSearchParams();
-  const isChatThread = !!searchParams.get('chatThread');
   const event = searchParams.get('eventId');
 
   return {
@@ -30,6 +29,5 @@ export const useHomePage = () => {
     event,
     isThreadsVisible,
     isPollsVisible,
-    isChatThread,
   };
 };

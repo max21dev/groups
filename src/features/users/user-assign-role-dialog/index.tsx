@@ -1,18 +1,19 @@
-import React, { useCallback, useState } from 'react';
 import { putGroupUser, useGroupRoles } from 'nostr-hooks/nip29';
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from '@/shared/components/ui/dialog';
+import React, { useCallback, useState } from 'react';
+
 import { Button } from '@/shared/components/ui/button';
 import { Checkbox } from '@/shared/components/ui/checkbox';
-import { useActiveGroup, useActiveRelay } from '@/shared/hooks';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/shared/components/ui/dialog';
 import { toast } from '@/shared/components/ui/use-toast.ts';
+import { useActiveGroup, useActiveRelay } from '@/shared/hooks';
 
 interface UserAssignRoleDialogProps {
   userPubKey: string;
@@ -57,12 +58,13 @@ export const UserAssignRoleDialog: React.FC<UserAssignRoleDialogProps> = ({
         onError: () => {
           toast({
             title: 'Error',
-            description: 'Failed to set new roles, Please make sure you have correct rights for this action!',
+            description:
+              'Failed to set new roles, Please make sure you have correct rights for this action!',
             variant: 'destructive',
           });
         },
       });
-  }, [activeRelay, activeGroupId, userPubKey, roles, toast]);
+  }, [activeRelay, activeGroupId, userPubKey, roles, toast, selectedRoles]);
 
   return (
     <div>

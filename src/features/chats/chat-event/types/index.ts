@@ -4,6 +4,7 @@ export type EventCategory =
   | 'group'
   | 'chat-message'
   | 'note'
+  | 'thread'
   | 'long-form-content'
   | 'poll'
   | 'picture'

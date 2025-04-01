@@ -4,7 +4,7 @@ import { EventCategory } from '../types';
 
 export const EVENT_CATEGORY_MAP: Record<number, EventCategory> = {
   1: 'note',
-  11: 'note',
+  11: 'thread',
   1111: 'note',
   9: 'chat-message',
   20: 'picture',

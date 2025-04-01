@@ -104,11 +104,16 @@ export const ChatListItem = memo(
                       categorizedReactions && 'flex-col',
                     )}
                   >
-                    <div className="[overflow-wrap:anywhere] self-start">
+                    <div className="w-full [overflow-wrap:anywhere] self-start">
                       <ChatContent categorizedChatContent={categorizedChatContent} />
                     </div>
 
-                    <div className="ml-auto mt-auto flex gap-2 items-center text-end text-xs font-light cursor-default">
+                    <div
+                      className={cn(
+                        categorizedReactions && 'w-full',
+                        'ml-auto mt-auto flex gap-2 items-center text-end text-xs font-light cursor-default',
+                      )}
+                    >
                       {categorizedReactions && (
                         <div className="flex flex-wrap gap-1">
                           {Object.entries(categorizedReactions).map(([content, reactions]) => (
@@ -127,7 +132,7 @@ export const ChatListItem = memo(
                                 reactions.map((reaction) => (
                                   <div
                                     key={reaction.id}
-                                    className="-mr-1 w-4 h-4 [&_*]:h-full [&_*]:w-full"
+                                    className="-mr-1 [&_span]:w-4 [&_span]:h-4"
                                   >
                                     <UserAvatar pubkey={reaction.pubkey} />
                                   </div>
@@ -135,7 +140,7 @@ export const ChatListItem = memo(
                               ) : (
                                 <span className="font-medium ml-1 -mr-1">{reactions.length}</span>
                               )}
-                              <span className="ml-2">{content}</span>
+                              <span className="ml-2 max-w-24 overflow-hidden">{content}</span>
                             </div>
                           ))}
                         </div>

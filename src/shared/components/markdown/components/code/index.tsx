@@ -27,7 +27,7 @@ export const Code: React.FC<CustomCodeProps> = ({ inline, children, className, .
 
   if (inline) {
     return (
-      <code className="bg-primary/20 font-mono font-thin px-1 rounded-md" {...props}>
+      <code className="bg-primary/20 font-mono font-thin px-1 py-0.5 rounded-md" {...props}>
         {children}
       </code>
     );
@@ -62,8 +62,8 @@ export const Code: React.FC<CustomCodeProps> = ({ inline, children, className, .
         </TooltipProvider>
       </div>
 
-      <pre className="max-w-[70vw] sm:max-w-[40vw] overflow-x-auto font-mono text-xs p-2">
-        <code className="bg-transparent leading-relaxed font-thin" {...props}>
+      <pre className="max-w-[70vw] sm:max-w-[40vw] overflow-x-auto font-mono p-2">
+        <code className="bg-transparent leading-relaxed font-thin text-xs" {...props}>
           {children}
         </code>
       </pre>

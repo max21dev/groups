@@ -1,5 +1,6 @@
 export * from './add-event-reaction';
 export * from './chat-event-menu';
+export * from './chat-event-object';
 export * from './chat-event-reactions';
 export * from './chat-message-event';
 export * from './emoji-set';
