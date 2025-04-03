@@ -63,7 +63,7 @@ export const ChatContent = ({
           </a>
         );
       case 'mention':
-        return <UserMention key={i} npub={part.content} />;
+        return <UserMention key={i} userIdentifier={part.content} />;
       case 'event':
         return <ChatEvent key={i} event={part.content} />;
       default:
