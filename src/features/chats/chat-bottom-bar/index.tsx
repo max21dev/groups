@@ -30,6 +30,7 @@ export const ChatBottomBar = () => {
     openLoginModal,
     activeRelay,
     activeGroupId,
+    isCommunity,
     isUploadingToBlossom,
     openUploadToBlossomDialog,
   } = useChatBottomBar();
@@ -38,7 +39,7 @@ export const ChatBottomBar = () => {
     return <LoginButton openLoginModal={openLoginModal} />;
   }
 
-  if (!isMember && !isAdmin) {
+  if (!isCommunity && !isMember && !isAdmin) {
     return <JoinRequestButton relay={activeRelay} groupId={activeGroupId} />;
   }
 
