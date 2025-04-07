@@ -40,7 +40,7 @@ export const useChatListItem = ({
   const { setZapTarget, openZapModal } = useZapModalState();
 
   const { activeRelay } = useActiveRelay();
-  const { activeGroupId } = useActiveGroup();
+  const { activeGroupId, isCommunity } = useActiveGroup();
 
   const { copyToClipboard } = useCopyToClipboard();
 
@@ -86,7 +86,7 @@ export const useChatListItem = ({
     (content: string, targetId: string) => {
       if (!activeGroupId || !activeRelay) return;
 
-      if (!isAdmin && !isMember) {
+      if (!isCommunity && !isAdmin && !isMember) {
         sendJoinRequest();
       }
 
@@ -99,7 +99,7 @@ export const useChatListItem = ({
         },
       });
     },
-    [activeGroupId, activeRelay, isAdmin, isMember, sendJoinRequest, toast],
+    [activeGroupId, activeRelay, isAdmin, isMember, isCommunity, sendJoinRequest, toast],
   );
 
   const deleteChat = useCallback(
