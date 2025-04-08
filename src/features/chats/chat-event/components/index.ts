@@ -3,6 +3,7 @@ export * from './chat-event-menu';
 export * from './chat-event-object';
 export * from './chat-event-reactions';
 export * from './chat-message-event';
+export * from './community';
 export * from './emoji-set';
 export * from './follow-set';
 export * from './highlight';
