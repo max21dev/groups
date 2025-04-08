@@ -2,6 +2,7 @@ import { ArrowLeft, CheckIcon, Info, Share2 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 import { GroupAvatar, GroupBookmark, GroupDetails } from '@/features/groups';
+import { UserAvatar, UserName } from '@/features/users';
 
 import { Button } from '@/shared/components/ui/button';
 import {
@@ -12,14 +13,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/shared/components/ui/sheet';
-
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip.tsx';
-
 import { cn } from '@/shared/utils';
 
 import { useChatTopBar } from './hooks';
@@ -32,6 +31,7 @@ export const ChatTopBar = () => {
     activeGroupId,
     activeRelay,
     setActiveGroupId,
+    isCommunity,
     copyToClipboard,
     hasCopied,
   } = useChatTopBar();
@@ -44,11 +44,21 @@ export const ChatTopBar = () => {
             className="sm:hidden hover:cursor-pointer"
             onClick={() => setActiveGroupId(undefined)}
           />
-          <GroupAvatar relay={activeRelay} groupId={activeGroupId} />
+          {isCommunity ? (
+            <UserAvatar pubkey={activeGroupId || ''} />
+          ) : (
+            <GroupAvatar relay={activeRelay} groupId={activeGroupId} />
+          )}
           <div className="flex flex-col">
-            <span className="font-bold mt-0 mb-0">{metadata?.name}</span>
+            <span className="font-bold mt-0 mb-0">
+              {isCommunity ? <UserName pubkey={activeGroupId} length={20} /> : metadata?.name}
+            </span>
             <span className="text-xs font-light text-muted-foreground">
-              {metadata?.isPublic ? 'Public' : 'Private'} and {metadata?.isOpen ? 'Open' : 'Closed'}
+              {isCommunity
+                ? 'Community'
+                : `${metadata?.isPublic ? 'Public' : 'Private'} and ${
+                    metadata?.isOpen ? 'Open' : 'Closed'
+                  }`}
             </span>
           </div>
         </div>
