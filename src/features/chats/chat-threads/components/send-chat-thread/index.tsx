@@ -21,13 +21,14 @@ export const SendChatThread = () => {
     handleSend,
     isAdmin,
     isMember,
+    isCommunity,
     textareaRef,
     activeUser,
     openUploadMediaDialog,
     isUploadingMedia,
   } = useSendChatThread(() => setIsSendThreadModalOpen(false));
 
-  if (!activeUser || (!isMember && !isAdmin)) {
+  if (!activeUser || (!isCommunity && !isMember && !isAdmin)) {
     return null;
   }
 

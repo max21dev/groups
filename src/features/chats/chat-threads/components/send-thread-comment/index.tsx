@@ -24,6 +24,7 @@ export const SendThreadComment = ({ rootId }: { rootId: string }) => {
     openLoginModal,
     activeGroupId,
     activeRelay,
+    isCommunity,
   } = useSendThreadComment(rootId);
 
   if (!activeUser) {
@@ -39,7 +40,7 @@ export const SendThreadComment = ({ rootId }: { rootId: string }) => {
     );
   }
 
-  if (!isMember && !isAdmin) {
+  if (!isCommunity && !isMember && !isAdmin) {
     return (
       <div className="w-full h-full my-2 flex items-center justify-center">
         <JoinRequestButton
@@ -67,7 +68,7 @@ export const SendThreadComment = ({ rootId }: { rootId: string }) => {
         placeholder="Add a comment..."
       />
       <EmojiButton message={content} setMessage={setContent} textareaRef={textareaRef} />
-      <SendButton handleSend={handleSend} disabled={content.trim() === '' ? true : false} />
+      <SendButton handleSend={handleSend} disabled={content.trim() === ''} />
     </div>
   );
 };
