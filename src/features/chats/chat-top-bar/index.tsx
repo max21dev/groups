@@ -1,7 +1,7 @@
 import { ArrowLeft, CheckIcon, Info, Share2 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
-import { GroupAvatar, GroupBookmark, GroupDetails } from '@/features/groups';
+import { CommunityDetails, GroupAvatar, GroupBookmark, GroupDetails } from '@/features/groups';
 import { UserAvatar, UserName } from '@/features/users';
 
 import { Button } from '@/shared/components/ui/button';
@@ -101,7 +101,11 @@ export const ChatTopBar = () => {
               </SheetHeader>
               {isGroupDetailsOpen && activeGroupId && (
                 <div className="grid gap-4 py-4">
-                  <GroupDetails relay={activeRelay} groupId={activeGroupId} />
+                  {isCommunity ? (
+                    <CommunityDetails relay={activeRelay} pubkey={activeGroupId} />
+                  ) : (
+                    <GroupDetails relay={activeRelay} groupId={activeGroupId} />
+                  )}
                 </div>
               )}
             </SheetContent>
