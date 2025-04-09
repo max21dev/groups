@@ -8,6 +8,7 @@ const videoRegex = /\.(mp4|mov)(\?.*)?$/i;
 const youtubeRegex = /https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+/i;
 const nostrRegex = /nostr:[a-z0-9]+/i;
 const mentionRegex = /^npub1[0-9a-z]+$/i;
+const profileRegex = /^nprofile1[0-9a-z]+$/i;
 const noteRegex = /^note1[0-9a-z]+$/i;
 const addressRegex = /^naddr1[0-9a-z]+$/i;
 const eventRegex = /^nevent1[0-9a-z]+$/i;
@@ -25,7 +26,7 @@ const categorizePart = (part: string): CategorizedChatContent => {
         ) {
           return { category: 'event', content: parsed.value };
         }
-        if (mentionRegex.test(parsed?.value)) {
+        if (mentionRegex.test(parsed?.value) || profileRegex.test(parsed?.value)) {
           return { category: 'mention', content: parsed.value };
         }
       }

@@ -1,5 +1,6 @@
 export * from './group-avatar';
 export * from './group-bookmark';
+export * from './group-community-details';
 export * from './group-delete-button';
 export * from './group-details';
 export * from './group-join-requests';

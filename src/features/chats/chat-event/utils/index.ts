@@ -11,6 +11,7 @@ export const EVENT_CATEGORY_MAP: Record<number, EventCategory> = {
   21: 'video',
   1068: 'poll',
   9802: 'highlight',
+  10222: 'community',
   30000: 'follow-set',
   30023: 'long-form-content',
   30030: 'emoji-set',

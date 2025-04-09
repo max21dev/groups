@@ -21,7 +21,7 @@ export const useSendContent = (
   const [isAdmin, setIsAdmin] = useState(false);
 
   const { openLoginModal } = useLoginModalState();
-  const { activeGroupId } = useActiveGroup();
+  const { activeGroupId, isCommunity } = useActiveGroup();
   const { activeRelay } = useActiveRelay();
   const { activeUser } = useActiveUser();
   const { members } = useGroupMembers(activeRelay, activeGroupId);
@@ -97,6 +97,7 @@ export const useSendContent = (
     activeUser,
     activeRelay,
     activeGroupId,
+    isCommunity,
     openLoginModal,
     isUploadingToBlossom,
     openUploadToBlossomDialog,

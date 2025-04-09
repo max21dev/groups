@@ -10,4 +10,5 @@ export type EventCategory =
   | 'picture'
   | 'video'
   | 'live-stream'
-  | 'highlight';
+  | 'highlight'
+  | 'community';

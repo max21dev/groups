@@ -18,6 +18,7 @@ import {
   ChatEventObject,
   ChatEventReactions,
   ChatMessageEvent,
+  Community,
   EmojiSet,
   FollowSet,
   Highlight,
@@ -156,6 +157,7 @@ export const ChatEvent = memo(
           {category === 'live-stream' && <LiveStream event={eventData} />}
           {category === 'picture' && <Picture event={eventData} />}
           {category === 'video' && <Video event={eventData} />}
+          {category === 'community' && <Community event={eventData} />}
           {category === null && <ChatEventObject event={eventData} />}
 
           <div className="flex justify-between items-center mt-2">

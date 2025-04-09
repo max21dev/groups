@@ -53,6 +53,7 @@ export const SendChatPoll = ({
     openLoginModal,
     isMember,
     isAdmin,
+    isCommunity,
   } = useSendChatPoll(relay, groupId, pubkey, () => setIsSendPollModalOpen(false));
 
   if (!activeUser) {
@@ -68,7 +69,7 @@ export const SendChatPoll = ({
     );
   }
 
-  if (!isMember && !isAdmin) {
+  if (!isCommunity && !isMember && !isAdmin) {
     return (
       <div className="w-full h-full flex items-center justify-center">
         <JoinRequestButton

@@ -4,3 +4,4 @@ export * from './ellipsis';
 export * from './getAvatarFallbackColor';
 export * from './getNostrLink';
 export * from './loader';
+export * from './validatePubkey';

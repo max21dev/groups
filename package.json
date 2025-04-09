@@ -1,7 +1,7 @@
 {
   "name": "groups",
   "private": true,
-  "version": "0.2.7",
+  "version": "0.3.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -72,6 +72,7 @@
     "react-textarea-autosize": "^8.5.4",
     "remark-breaks": "^4.0.0",
     "remark-gfm": "^4.0.1",
+    "secp256k1": "^5.0.1",
     "sonner": "^1.4.0",
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",
@@ -84,6 +85,7 @@
     "@types/node": "^22.0.0",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
+    "@types/secp256k1": "^4.0.6",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
     "@typescript-eslint/parser": "^6.14.0",
     "@vitejs/plugin-react": "^4.2.1",

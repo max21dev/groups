@@ -1,9 +1,12 @@
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
+import { useCommunity } from '@/shared/hooks';
+
 export const useActiveGroup = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const groupId = useMemo(() => searchParams.get('groupId') || undefined, [searchParams]);
+  const { isCommunity } = useCommunity(groupId);
 
   const setActiveGroupId = (groupId: string | undefined) => {
     if (groupId) {
@@ -21,5 +24,5 @@ export const useActiveGroup = () => {
     }
   };
 
-  return { activeGroupId: groupId, setActiveGroupId };
+  return { activeGroupId: groupId, setActiveGroupId, isCommunity };
 };

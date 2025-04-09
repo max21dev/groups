@@ -21,6 +21,7 @@ export const useChatBottomBar = () => {
     isUploadingMedia,
     activeUser,
     activeGroupId,
+    isCommunity,
     activeRelay,
     openLoginModal,
     isMember,
@@ -63,6 +64,7 @@ export const useChatBottomBar = () => {
     isUploadingMedia,
     activeRelay,
     activeGroupId,
+    isCommunity,
     isUploadingToBlossom,
     openUploadToBlossomDialog,
   };
