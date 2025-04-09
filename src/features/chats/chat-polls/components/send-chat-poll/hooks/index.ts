@@ -35,7 +35,7 @@ export const useSendChatPoll = (
   const { ndk } = useNdk();
   const { activeUser } = useActiveUser();
   const { activeRelay } = useActiveRelay();
-  const { activeGroupId } = useActiveGroup();
+  const { activeGroupId, isCommunity } = useActiveGroup();
   const { openLoginModal } = useLoginModalState();
   const { isMember, isAdmin } = useChatBottomBar();
   const { toast } = useToast();
@@ -169,5 +169,6 @@ export const useSendChatPoll = (
     openLoginModal,
     isMember,
     isAdmin,
+    isCommunity,
   };
 };

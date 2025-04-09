@@ -23,7 +23,7 @@ export const usePoll = (poll: NDKEvent) => {
 
   const { votes, isLoadingVotes, setVotes, setIsLoadingVotes } = usePollsStore();
   const { ndk } = useNdk();
-  const { activeGroupId } = useActiveGroup();
+  const { activeGroupId, isCommunity } = useActiveGroup();
   const { activeRelay } = useActiveRelay();
   const { activeUser } = useActiveUser();
   const { isMember, isAdmin } = useChatBottomBar();
@@ -160,7 +160,7 @@ export const usePoll = (poll: NDKEvent) => {
   const canVote = useMemo(() => {
     if (!activeUser) return false;
     if (voters.has(activeUser.pubkey)) return false;
-    if (!isMember && !isAdmin) return false;
+    if (!isCommunity && !isMember && !isAdmin) return false;
     if (endsAt && endsAt * 1000 <= Date.now()) return false;
     return true;
   }, [activeUser, isMember, isAdmin, endsAt, voters]);
