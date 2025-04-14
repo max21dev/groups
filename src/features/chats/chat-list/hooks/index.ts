@@ -1,9 +1,15 @@
 import { useActiveUser } from 'nostr-hooks';
-import { useGroupChats, useGroupJoinRequests, useGroupLeaveRequests } from 'nostr-hooks/nip29';
+import {
+  Nip29GroupChat,
+  useGroupChats,
+  useGroupJoinRequests,
+  useGroupLeaveRequests,
+} from 'nostr-hooks/nip29';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { useActiveGroup, useActiveRelay } from '@/shared/hooks';
+import { getGroupMessagesByGroupId, saveGroupMessage } from '@/shared/lib/db/groupCache';
 
 export const useChatList = () => {
   const chatsContainerRef = useRef<HTMLDivElement>(null);
@@ -26,13 +32,44 @@ export const useChatList = () => {
 
   const { activeUser } = useActiveUser();
 
-  const processedChats = useMemo(
-    () => chats?.filter((chat) => !deletedChats.includes(chat.id)),
-    [chats, deletedChats],
-  );
+  const [cachedChats, setCachedChats] = useState<Nip29GroupChat[]>([]);
 
-  const topChat = useMemo(() => processedChats?.[0], [processedChats]);
-  const bottomChat = useMemo(() => processedChats?.[processedChats.length - 1], [processedChats]);
+  const loadCachedMessages = async (groupId: string) => {
+    const cached = await getGroupMessagesByGroupId(groupId);
+    setCachedChats(cached);
+  };
+
+  useEffect(() => {
+    if (activeGroupId) {
+      loadCachedMessages(activeGroupId);
+    }
+  }, [activeGroupId]);
+
+  useEffect(() => {
+    if (activeGroupId && chats && chats.length > 0) {
+      chats.forEach((chat) => {
+        saveGroupMessage(chat, activeGroupId);
+      });
+
+      getGroupMessagesByGroupId(activeGroupId).then((cached) => {
+        if (
+          cached.length !== cachedChats.length ||
+          (cached.length > 0 &&
+            cached[cached.length - 1].id !== cachedChats[cachedChats.length - 1]?.id)
+        ) {
+          setCachedChats(cached);
+        }
+      });
+    }
+  }, [activeGroupId, chats]);
+
+  const displayedChats = useMemo(() => {
+    const source = cachedChats && cachedChats.length > 0 ? cachedChats : chats || [];
+    return source.filter((chat) => !deletedChats.includes(chat.id));
+  }, [cachedChats, chats, deletedChats]);
+
+  const topChat = useMemo(() => displayedChats?.[0], [displayedChats]);
+  const bottomChat = useMemo(() => displayedChats?.[displayedChats.length - 1], [displayedChats]);
 
   useEffect(() => {
     if (chatsContainerRef.current) {
@@ -49,7 +86,7 @@ export const useChatList = () => {
     if (chatId) {
       scrollToChat(chatId);
     }
-  }, [processedChats, chatId]);
+  }, [displayedChats, chatId]);
 
   const scrollToChat = (chatId: string) => {
     const chatElement = chatRefs.current[chatId];
@@ -69,7 +106,7 @@ export const useChatList = () => {
     chatRefs,
     setDeletedChats,
     activeUser,
-    processedChats,
+    processedChats: displayedChats,
     chatsEvents,
     scrollToChat,
     loadMore: loadMoreChats,
