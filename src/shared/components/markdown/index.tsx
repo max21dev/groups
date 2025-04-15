@@ -1,5 +1,4 @@
 import ReactMarkdown from 'react-markdown';
-import remarkBreaks from 'remark-breaks';
 import remarkGfm from 'remark-gfm';
 
 import { cn } from '@/shared/utils';
@@ -11,13 +10,13 @@ export const Markdown = ({ content, className }: { content: string; className?: 
   return (
     <div className={cn('prose prose-invert max-w-full relative z-0', className)}>
       <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkBreaks]}
+        remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeInlineCodeProperty]}
         components={{
           a: ({ node, ...props }) => (
             <a
               {...props}
-              className="text-blue-400 hover:underline"
+              className="text-pink-400 underline"
               target="_blank"
               rel="noopener noreferrer"
             />
