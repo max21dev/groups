@@ -75,7 +75,7 @@ export const ChatEvent = memo(
 
     if (eventData === null) {
       return (
-        <div className="w-full flex flex-col items-center justify-center p-4 rounded-lg bg-primary/10">
+        <div className="w-full max-w-2xl flex flex-col items-center justify-center p-4 rounded-lg bg-primary/10">
           <p className="flex items-center gap-1 text-sm mb-2">
             <OctagonAlertIcon size={18} />
             Event not found.

@@ -27,7 +27,11 @@ const categorizePart = (part: string): CategorizedChatContent => {
           return { category: 'event', content: parsed.value };
         }
         if (mentionRegex.test(parsed?.value) || profileRegex.test(parsed?.value)) {
-          return { category: 'mention', content: parsed.value };
+          const id = parsed.value;
+          return {
+            category: 'text',
+            content: `[@${id}](/user/${id})`,
+          };
         }
       }
     } catch {

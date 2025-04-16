@@ -2,7 +2,6 @@ import { useState } from 'react';
 import ReactPlayer from 'react-player';
 
 import { ChatEvent } from '@/features/chats';
-import { UserMention } from '@/features/users/user-mention';
 
 import { Markdown } from '@/shared/components/markdown';
 import { loader } from '@/shared/utils';
@@ -63,9 +62,6 @@ export const ChatContent = ({
               <ReactPlayer url={part.content} controls width="100%" />
             </div>,
           );
-          break;
-        case 'mention':
-          elements.push(<UserMention key={i} userIdentifier={part.content} />);
           break;
         case 'event':
           elements.push(<ChatEvent key={i} event={part.content} />);
