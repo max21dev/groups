@@ -15,14 +15,16 @@ export const useChatList = () => {
   const chatsContainerRef = useRef<HTMLDivElement>(null);
   const chatRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
+  const [isLoadingCachedMessages, setIsLoadingCachedMessages] = useState(false);
+  const [displayedMessages, setDisplayedMessages] = useState<Nip29GroupChat[]>([]);
   const [deletedChats, setDeletedChats] = useState<string[]>([]);
 
   const [searchParams] = useSearchParams();
-
   const chatId = searchParams.get('chatId');
 
   const { activeGroupId } = useActiveGroup();
   const { activeRelay } = useActiveRelay();
+  const { activeUser } = useActiveUser();
 
   const { chats, chatsEvents, hasMoreChats, loadMoreChats } = useGroupChats(
     activeRelay,
@@ -30,46 +32,49 @@ export const useChatList = () => {
     { limit: 100 },
   );
 
-  const { activeUser } = useActiveUser();
-
-  const [cachedChats, setCachedChats] = useState<Nip29GroupChat[]>([]);
-
-  const loadCachedMessages = async (groupId: string) => {
-    const cached = await getGroupMessagesByGroupId(groupId);
-    setCachedChats(cached);
-  };
-
   useEffect(() => {
     if (activeGroupId) {
-      loadCachedMessages(activeGroupId);
+      setIsLoadingCachedMessages(true);
+
+      getGroupMessagesByGroupId(activeGroupId)
+        .then((cached) => {
+          if (cached.length > 0) {
+            setDisplayedMessages(cached);
+          } else {
+            setDisplayedMessages([]);
+          }
+        })
+        .finally(() => {
+          setIsLoadingCachedMessages(false);
+        });
     }
   }, [activeGroupId]);
 
   useEffect(() => {
-    if (activeGroupId && chats && chats.length > 0) {
-      chats.forEach((chat) => {
-        saveGroupMessage(chat, activeGroupId);
-      });
+    if (!activeGroupId || !chats || chats.length === 0 || isLoadingCachedMessages) return;
 
-      getGroupMessagesByGroupId(activeGroupId).then((cached) => {
-        if (
-          cached.length !== cachedChats.length ||
-          (cached.length > 0 &&
-            cached[cached.length - 1].id !== cachedChats[cachedChats.length - 1]?.id)
-        ) {
-          setCachedChats(cached);
-        }
-      });
-    }
-  }, [activeGroupId, chats]);
+    const savePromises = chats.map((chat) => saveGroupMessage(chat, activeGroupId));
 
-  const displayedChats = useMemo(() => {
-    const source = cachedChats && cachedChats.length > 0 ? cachedChats : chats || [];
-    return source.filter((chat) => !deletedChats.includes(chat.id));
-  }, [cachedChats, chats, deletedChats]);
+    Promise.all(savePromises).then(() => {
+      const existingIds = new Set(displayedMessages.map((msg) => msg.id));
+      const newMessages = chats.filter((chat) => !existingIds.has(chat.id));
 
-  const topChat = useMemo(() => displayedChats?.[0], [displayedChats]);
-  const bottomChat = useMemo(() => displayedChats?.[displayedChats.length - 1], [displayedChats]);
+      if (newMessages.length > 0) {
+        const mergedMessages = [...displayedMessages, ...newMessages].sort(
+          (a, b) => a.timestamp - b.timestamp,
+        );
+
+        setDisplayedMessages(mergedMessages);
+      }
+    });
+  }, [activeGroupId, chats, isLoadingCachedMessages, displayedMessages]);
+
+  const processedChats = useMemo(() => {
+    return displayedMessages.filter((chat) => !deletedChats.includes(chat.id));
+  }, [displayedMessages, deletedChats]);
+
+  const topChat = useMemo(() => processedChats[0], [processedChats]);
+  const bottomChat = useMemo(() => processedChats[processedChats.length - 1], [processedChats]);
 
   useEffect(() => {
     if (chatsContainerRef.current) {
@@ -86,7 +91,7 @@ export const useChatList = () => {
     if (chatId) {
       scrollToChat(chatId);
     }
-  }, [displayedChats, chatId]);
+  }, [processedChats, chatId]);
 
   const scrollToChat = (chatId: string) => {
     const chatElement = chatRefs.current[chatId];
@@ -106,7 +111,7 @@ export const useChatList = () => {
     chatRefs,
     setDeletedChats,
     activeUser,
-    processedChats: displayedChats,
+    processedChats,
     chatsEvents,
     scrollToChat,
     loadMore: loadMoreChats,
