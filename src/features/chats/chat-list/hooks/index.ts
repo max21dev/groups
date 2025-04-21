@@ -106,6 +106,16 @@ export const useChatList = () => {
   const { joinRequests } = useGroupJoinRequests(activeRelay, activeGroupId);
   const { leaveRequests } = useGroupLeaveRequests(activeRelay, activeGroupId);
 
+  const filteredJoinRequests = useMemo(() => {
+    if (!joinRequests || !topChat) return [];
+    return joinRequests.filter((req) => req.timestamp >= topChat.timestamp);
+  }, [joinRequests, topChat]);
+
+  const filteredLeaveRequests = useMemo(() => {
+    if (!leaveRequests || !topChat) return [];
+    return leaveRequests.filter((req) => req.timestamp >= topChat.timestamp);
+  }, [leaveRequests, topChat]);
+
   return {
     chatsContainerRef,
     chatRefs,
@@ -118,7 +128,7 @@ export const useChatList = () => {
     hasMore: hasMoreChats,
     topChat,
     bottomChat,
-    joinRequests,
-    leaveRequests,
+    joinRequests: filteredJoinRequests,
+    leaveRequests: filteredLeaveRequests,
   };
 };
