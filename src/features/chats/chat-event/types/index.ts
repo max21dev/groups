@@ -7,6 +7,7 @@ export type EventCategory =
   | 'thread'
   | 'long-form-content'
   | 'poll'
+  | 'code-snippet'
   | 'picture'
   | 'video'
   | 'live-stream'

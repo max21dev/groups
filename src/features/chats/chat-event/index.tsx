@@ -18,6 +18,7 @@ import {
   ChatEventObject,
   ChatEventReactions,
   ChatMessageEvent,
+  CodeSnippet,
   Community,
   EmojiSet,
   FollowSet,
@@ -152,6 +153,7 @@ export const ChatEvent = memo(
           {category === 'emoji-set' && <EmojiSet event={eventData} />}
           {(category === 'note' || category === 'thread') && <Note content={eventData.content} />}
           {category === 'poll' && <Poll poll={eventData} />}
+          {category === 'code-snippet' && <CodeSnippet event={eventData} />}
           {category === 'long-form-content' && <LongFormContent content={eventData.content} />}
           {category === 'highlight' && <Highlight event={eventData} />}
           {category === 'live-stream' && <LiveStream event={eventData} />}
