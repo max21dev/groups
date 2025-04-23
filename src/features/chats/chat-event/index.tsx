@@ -22,6 +22,7 @@ import {
   Community,
   EmojiSet,
   FollowSet,
+  GitRepo,
   Highlight,
   LiveStream,
   LongFormContent,
@@ -160,6 +161,7 @@ export const ChatEvent = memo(
           {category === 'picture' && <Picture event={eventData} />}
           {category === 'video' && <Video event={eventData} />}
           {category === 'community' && <Community event={eventData} />}
+          {category === 'git-repo' && <GitRepo event={eventData} />}
           {category === null && <ChatEventObject event={eventData} />}
 
           <div className="flex justify-between items-center mt-2">

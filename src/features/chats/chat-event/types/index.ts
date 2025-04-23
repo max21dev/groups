@@ -12,4 +12,5 @@ export type EventCategory =
   | 'video'
   | 'live-stream'
   | 'highlight'
+  | 'git-repo'
   | 'community';
