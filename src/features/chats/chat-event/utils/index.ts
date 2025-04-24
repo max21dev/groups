@@ -10,12 +10,14 @@ export const EVENT_CATEGORY_MAP: Record<number, EventCategory> = {
   20: 'picture',
   21: 'video',
   1068: 'poll',
+  1337: 'code-snippet',
   9802: 'highlight',
   10222: 'community',
   30000: 'follow-set',
   30023: 'long-form-content',
   30030: 'emoji-set',
   30311: 'live-stream',
+  30617: 'git-repo',
   39000: 'group',
 };
 

@@ -1,22 +1,30 @@
 import { useActiveUser } from 'nostr-hooks';
-import { useGroupChats, useGroupJoinRequests, useGroupLeaveRequests } from 'nostr-hooks/nip29';
+import {
+  Nip29GroupChat,
+  useGroupChats,
+  useGroupJoinRequests,
+  useGroupLeaveRequests,
+} from 'nostr-hooks/nip29';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { useActiveGroup, useActiveRelay } from '@/shared/hooks';
+import { getGroupMessagesByGroupId, saveGroupMessage } from '@/shared/lib/db/groupCache';
 
 export const useChatList = () => {
   const chatsContainerRef = useRef<HTMLDivElement>(null);
   const chatRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
+  const [isLoadingCachedMessages, setIsLoadingCachedMessages] = useState(false);
+  const [displayedMessages, setDisplayedMessages] = useState<Nip29GroupChat[]>([]);
   const [deletedChats, setDeletedChats] = useState<string[]>([]);
 
   const [searchParams] = useSearchParams();
-
   const chatId = searchParams.get('chatId');
 
   const { activeGroupId } = useActiveGroup();
   const { activeRelay } = useActiveRelay();
+  const { activeUser } = useActiveUser();
 
   const { chats, chatsEvents, hasMoreChats, loadMoreChats } = useGroupChats(
     activeRelay,
@@ -24,15 +32,49 @@ export const useChatList = () => {
     { limit: 100 },
   );
 
-  const { activeUser } = useActiveUser();
+  useEffect(() => {
+    if (activeGroupId) {
+      setIsLoadingCachedMessages(true);
 
-  const processedChats = useMemo(
-    () => chats?.filter((chat) => !deletedChats.includes(chat.id)),
-    [chats, deletedChats],
-  );
+      getGroupMessagesByGroupId(activeGroupId)
+        .then((cached) => {
+          if (cached.length > 0) {
+            setDisplayedMessages(cached);
+          } else {
+            setDisplayedMessages([]);
+          }
+        })
+        .finally(() => {
+          setIsLoadingCachedMessages(false);
+        });
+    }
+  }, [activeGroupId]);
 
-  const topChat = useMemo(() => processedChats?.[0], [processedChats]);
-  const bottomChat = useMemo(() => processedChats?.[processedChats.length - 1], [processedChats]);
+  useEffect(() => {
+    if (!activeGroupId || !chats || chats.length === 0 || isLoadingCachedMessages) return;
+
+    const savePromises = chats.map((chat) => saveGroupMessage(chat, activeGroupId));
+
+    Promise.all(savePromises).then(() => {
+      const existingIds = new Set(displayedMessages.map((msg) => msg.id));
+      const newMessages = chats.filter((chat) => !existingIds.has(chat.id));
+
+      if (newMessages.length > 0) {
+        const mergedMessages = [...displayedMessages, ...newMessages].sort(
+          (a, b) => a.timestamp - b.timestamp,
+        );
+
+        setDisplayedMessages(mergedMessages);
+      }
+    });
+  }, [activeGroupId, chats, isLoadingCachedMessages, displayedMessages]);
+
+  const processedChats = useMemo(() => {
+    return displayedMessages.filter((chat) => !deletedChats.includes(chat.id));
+  }, [displayedMessages, deletedChats]);
+
+  const topChat = useMemo(() => processedChats[0], [processedChats]);
+  const bottomChat = useMemo(() => processedChats[processedChats.length - 1], [processedChats]);
 
   useEffect(() => {
     if (chatsContainerRef.current) {
@@ -64,6 +106,16 @@ export const useChatList = () => {
   const { joinRequests } = useGroupJoinRequests(activeRelay, activeGroupId);
   const { leaveRequests } = useGroupLeaveRequests(activeRelay, activeGroupId);
 
+  const filteredJoinRequests = useMemo(() => {
+    if (!joinRequests || !topChat) return [];
+    return joinRequests.filter((req) => req.timestamp >= topChat.timestamp);
+  }, [joinRequests, topChat]);
+
+  const filteredLeaveRequests = useMemo(() => {
+    if (!leaveRequests || !topChat) return [];
+    return leaveRequests.filter((req) => req.timestamp >= topChat.timestamp);
+  }, [leaveRequests, topChat]);
+
   return {
     chatsContainerRef,
     chatRefs,
@@ -76,7 +128,7 @@ export const useChatList = () => {
     hasMore: hasMoreChats,
     topChat,
     bottomChat,
-    joinRequests,
-    leaveRequests,
+    joinRequests: filteredJoinRequests,
+    leaveRequests: filteredLeaveRequests,
   };
 };

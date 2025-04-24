@@ -18,9 +18,11 @@ import {
   ChatEventObject,
   ChatEventReactions,
   ChatMessageEvent,
+  CodeSnippet,
   Community,
   EmojiSet,
   FollowSet,
+  GitRepo,
   Highlight,
   LiveStream,
   LongFormContent,
@@ -75,7 +77,7 @@ export const ChatEvent = memo(
 
     if (eventData === null) {
       return (
-        <div className="w-full flex flex-col items-center justify-center p-4 rounded-lg bg-primary/10">
+        <div className="w-full max-w-2xl flex flex-col items-center justify-center p-4 rounded-lg bg-primary/10">
           <p className="flex items-center gap-1 text-sm mb-2">
             <OctagonAlertIcon size={18} />
             Event not found.
@@ -152,12 +154,14 @@ export const ChatEvent = memo(
           {category === 'emoji-set' && <EmojiSet event={eventData} />}
           {(category === 'note' || category === 'thread') && <Note content={eventData.content} />}
           {category === 'poll' && <Poll poll={eventData} />}
+          {category === 'code-snippet' && <CodeSnippet event={eventData} />}
           {category === 'long-form-content' && <LongFormContent content={eventData.content} />}
           {category === 'highlight' && <Highlight event={eventData} />}
           {category === 'live-stream' && <LiveStream event={eventData} />}
           {category === 'picture' && <Picture event={eventData} />}
           {category === 'video' && <Video event={eventData} />}
           {category === 'community' && <Community event={eventData} />}
+          {category === 'git-repo' && <GitRepo event={eventData} />}
           {category === null && <ChatEventObject event={eventData} />}
 
           <div className="flex justify-between items-center mt-2">

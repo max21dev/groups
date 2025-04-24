@@ -15,7 +15,10 @@ export const UserMention = ({ userIdentifier }: { userIdentifier: string }) => {
   const { profile } = useProfile({ npub });
 
   return (
-    <Link to={`/user/${npub}`} className={cn('cursor-pointer underline text-[#18c8f1]')}>
+    <Link
+      to={`/user/${npub}`}
+      className={cn('cursor-pointer underline text-[#18c8f1]', !profile && 'break-all')}
+    >
       @{profile?.displayName || profile?.name || profile?.nip05 || npub}
     </Link>
   );

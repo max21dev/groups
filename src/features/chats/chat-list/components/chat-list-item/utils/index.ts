@@ -27,7 +27,11 @@ const categorizePart = (part: string): CategorizedChatContent => {
           return { category: 'event', content: parsed.value };
         }
         if (mentionRegex.test(parsed?.value) || profileRegex.test(parsed?.value)) {
-          return { category: 'mention', content: parsed.value };
+          const id = parsed.value;
+          return {
+            category: 'text',
+            content: `[@${id}](/user/${id})`,
+          };
         }
       }
     } catch {
@@ -42,16 +46,31 @@ const categorizePart = (part: string): CategorizedChatContent => {
     return { category: 'video', content: part };
   }
   if (urlRegex.test(part)) {
-    return { category: 'url', content: part };
+    return {
+      category: 'text',
+      content: `[${part}](${part})`,
+    };
   }
 
   return { category: 'text', content: part };
 };
 
 export const categorizeChatContent = (content: string): CategorizedChatContent[] => {
-  const combinedRegex = new RegExp(`(${urlRegex.source})|(${nostrRegex.source})`, 'gi');
-  const parts = content.split(combinedRegex).filter((part) => part?.trim() !== '');
-  const uniqueParts = Array.from(new Set(parts));
+  const regex = new RegExp(`(${urlRegex.source})|(${nostrRegex.source})`, 'gi');
+  const tokens: string[] = [];
+  let lastIndex = 0;
 
-  return uniqueParts.map(categorizePart);
+  for (const m of content.matchAll(regex)) {
+    const idx = m.index!;
+    if (idx > lastIndex) {
+      tokens.push(content.slice(lastIndex, idx));
+    }
+    tokens.push(m[0]);
+    lastIndex = idx + m[0].length;
+  }
+  if (lastIndex < content.length) {
+    tokens.push(content.slice(lastIndex));
+  }
+
+  return tokens.map(categorizePart);
 };

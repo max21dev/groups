@@ -1,6 +1,7 @@
 import ReactMarkdown from 'react-markdown';
-import remarkBreaks from 'remark-breaks';
 import remarkGfm from 'remark-gfm';
+
+import { UserMention } from '@/features/users/user-mention';
 
 import { cn } from '@/shared/utils';
 
@@ -11,17 +12,26 @@ export const Markdown = ({ content, className }: { content: string; className?: 
   return (
     <div className={cn('prose prose-invert max-w-full relative z-0', className)}>
       <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkBreaks]}
+        remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeInlineCodeProperty]}
         components={{
-          a: ({ node, ...props }) => (
-            <a
-              {...props}
-              className="text-blue-400 hover:underline"
-              target="_blank"
-              rel="noopener noreferrer"
-            />
-          ),
+          a: ({ href, children, ...props }) => {
+            if (href?.startsWith('/user/')) {
+              const id = href.replace('/user/', '');
+              return <UserMention userIdentifier={id} />;
+            }
+            return (
+              <a
+                {...props}
+                href={href}
+                className="text-pink-400 break-all underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {children}
+              </a>
+            );
+          },
           strong: ({ children }) => <strong className="font-bold">{children}</strong>,
           em: ({ children }) => <em className="italic">{children}</em>,
           blockquote: ({ children }) => (
