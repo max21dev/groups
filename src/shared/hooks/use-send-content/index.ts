@@ -19,6 +19,8 @@ export const useSendContent = (
   const [content, setContent] = useState('');
   const [isMember, setIsMember] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [mentionQuery, setMentionQuery] = useState<string | null>(null);
+  const [mentionPosition, setMentionPosition] = useState<number | null>(null);
 
   const { openLoginModal } = useLoginModalState();
   const { activeGroupId, isCommunity } = useActiveGroup();
@@ -37,6 +39,46 @@ export const useSendContent = (
   const { isUploading: isUploadingToBlossom, openUploadDialog: openUploadToBlossomDialog } =
     useBlossomUpload(setContent, ['image/*', 'video/*'], textareaRef, true);
 
+  const handleMention = (text: string, position: number) => {
+    const textBeforeCursor = text.substring(0, position);
+    const mentionMatch = textBeforeCursor.match(/@([^@\s]*)$/);
+
+    if (mentionMatch) {
+      setMentionQuery(mentionMatch[1] || '');
+      setMentionPosition(position - (mentionMatch[1]?.length || 0) - 1);
+    } else {
+      setMentionQuery(null);
+      setMentionPosition(null);
+    }
+  };
+
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newValue = e.target.value;
+    const cursorPosition = e.target.selectionStart;
+    setContent(newValue);
+    handleMention(newValue, cursorPosition);
+  };
+
+  const handleSelectMention = (mention: string) => {
+    if (mentionPosition !== null) {
+      const before = content.substring(0, mentionPosition);
+      const after = content.substring(mentionPosition + (mentionQuery?.length || 0) + 1);
+      const newContent = `${before}${mention} ${after}`;
+      setContent(newContent);
+
+      const newCursorPosition = mentionPosition + mention.length + 1;
+      setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.selectionStart = newCursorPosition;
+          textareaRef.current.selectionEnd = newCursorPosition;
+          textareaRef.current.focus();
+        }
+      }, 0);
+    }
+    setMentionQuery(null);
+    setMentionPosition(null);
+  };
+
   const handleSend = useCallback(() => {
     const trimmedContent = content.trim();
     if (!trimmedContent || !activeRelay || !activeGroupId) return;
@@ -48,6 +90,8 @@ export const useSendContent = (
 
     onSend(activeRelay, activeGroupId, trimmedContent);
     setContent('');
+    setMentionQuery(null);
+    setMentionPosition(null);
     textareaRef.current?.focus();
 
     if (onAfterSend) {
@@ -101,5 +145,8 @@ export const useSendContent = (
     openLoginModal,
     isUploadingToBlossom,
     openUploadToBlossomDialog,
+    mentionQuery,
+    handleContentChange,
+    handleSelectMention,
   };
 };
