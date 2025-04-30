@@ -5,6 +5,7 @@ import {
   InputMessage,
   JoinRequestButton,
   LoginButton,
+  MentionSuggestion,
   ReplyTo,
   SendButton,
   ThumbsUpButton,
@@ -33,6 +34,9 @@ export const ChatBottomBar = () => {
     isCommunity,
     isUploadingToBlossom,
     openUploadToBlossomDialog,
+    mentionQuery,
+    handleContentChange,
+    handleSelectMention,
   } = useChatBottomBar();
 
   if (!activeUser) {
@@ -55,12 +59,24 @@ export const ChatBottomBar = () => {
           openUploadToBlossomDialog={openUploadToBlossomDialog}
         />
 
-        <InputMessage
-          handleKeyPress={handleKeyPress}
-          message={message}
-          setMessage={setMessage}
-          textareaRef={textareaRef}
-        />
+        <div className="flex-1 relative">
+          {mentionQuery !== null && (
+            <MentionSuggestion
+              relay={activeRelay}
+              groupId={activeGroupId}
+              onSelect={handleSelectMention}
+              query={mentionQuery}
+            />
+          )}
+
+          <InputMessage
+            handleKeyPress={handleKeyPress}
+            message={message}
+            setMessage={setMessage}
+            textareaRef={textareaRef}
+            onChange={handleContentChange}
+          />
+        </div>
 
         <EmojiButton message={message} setMessage={setMessage} textareaRef={textareaRef} />
 

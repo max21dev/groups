@@ -28,6 +28,9 @@ export const useChatBottomBar = () => {
     isAdmin,
     isUploadingToBlossom,
     openUploadToBlossomDialog,
+    mentionQuery,
+    handleContentChange,
+    handleSelectMention,
   } = useSendContent((relay, groupId, content) => {
     sendGroupChat({
       relay,
@@ -67,5 +70,8 @@ export const useChatBottomBar = () => {
     isCommunity,
     isUploadingToBlossom,
     openUploadToBlossomDialog,
+    mentionQuery,
+    handleContentChange,
+    handleSelectMention,
   };
 };
