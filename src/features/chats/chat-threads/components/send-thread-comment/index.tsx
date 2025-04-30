@@ -3,6 +3,7 @@ import {
   InputMessage,
   JoinRequestButton,
   LoginButton,
+  MentionSuggestion,
   SendButton,
   UploadImageButton,
 } from '@/features/chats/chat-bottom-bar/components';
@@ -25,6 +26,9 @@ export const SendThreadComment = ({ rootId }: { rootId: string }) => {
     activeGroupId,
     activeRelay,
     isCommunity,
+    mentionQuery,
+    handleContentChange,
+    handleSelectMention,
   } = useSendThreadComment(rootId);
 
   if (!activeUser) {
@@ -60,13 +64,24 @@ export const SendThreadComment = ({ rootId }: { rootId: string }) => {
         isUploadingMedia={isUploadingMedia}
         openUploadMediaDialog={openUploadMediaDialog}
       />
-      <InputMessage
-        handleKeyPress={handleKeyPress}
-        message={content}
-        setMessage={setContent}
-        textareaRef={textareaRef}
-        placeholder="Add a comment..."
-      />
+      <div className="flex-1 relative">
+        {mentionQuery !== null && (
+          <MentionSuggestion
+            relay={activeRelay}
+            groupId={activeGroupId}
+            onSelect={handleSelectMention}
+            query={mentionQuery}
+          />
+        )}
+        <InputMessage
+          handleKeyPress={handleKeyPress}
+          message={content}
+          setMessage={setContent}
+          textareaRef={textareaRef}
+          placeholder="Add a comment..."
+          onChange={handleContentChange}
+        />
+      </div>
       <EmojiButton message={content} setMessage={setContent} textareaRef={textareaRef} />
       <SendButton handleSend={handleSend} disabled={content.trim() === ''} />
     </div>
