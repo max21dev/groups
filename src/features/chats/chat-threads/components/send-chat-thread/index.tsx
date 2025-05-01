@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import {
   InputMessage,
+  MentionSuggestion,
   SendButton,
   UploadImageButton,
 } from '@/features/chats/chat-bottom-bar/components';
@@ -26,6 +27,11 @@ export const SendChatThread = () => {
     activeUser,
     openUploadMediaDialog,
     isUploadingMedia,
+    activeGroupId,
+    activeRelay,
+    mentionQuery,
+    handleContentChange,
+    handleSelectMention,
   } = useSendChatThread(() => setIsSendThreadModalOpen(false));
 
   if (!activeUser || (!isCommunity && !isMember && !isAdmin)) {
@@ -48,14 +54,25 @@ export const SendChatThread = () => {
           <DialogHeader>
             <DialogTitle>New Thread</DialogTitle>
           </DialogHeader>
-          <div className="w-full h-full flex items-center gap-2 [&_*]:min-h-32">
-            <InputMessage
-              handleKeyPress={handleKeyPress}
-              message={content}
-              setMessage={setContent}
-              textareaRef={textareaRef}
-              placeholder="Share your ideas..."
-            />
+          <div className="flex-1 relative">
+            {mentionQuery !== null && (
+              <MentionSuggestion
+                relay={activeRelay}
+                groupId={activeGroupId}
+                onSelect={handleSelectMention}
+                query={mentionQuery}
+              />
+            )}
+            <div className="w-full h-full flex items-center gap-2 [&_*]:min-h-32">
+              <InputMessage
+                handleKeyPress={handleKeyPress}
+                message={content}
+                setMessage={setContent}
+                textareaRef={textareaRef}
+                placeholder="Share your ideas..."
+                onChange={handleContentChange}
+              />
+            </div>
           </div>
           <div className="flex justify-end gap-3 [&_*]:hover:bg-transparent [&_*]:w-fit [&_*]:h-fit">
             <UploadImageButton
