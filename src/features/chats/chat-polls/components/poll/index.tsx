@@ -1,6 +1,6 @@
 import { SendIcon } from 'lucide-react';
 
-import { NDKEvent } from '@nostr-dev-kit/ndk';
+import { NostrEvent } from '@nostr-dev-kit/ndk';
 
 import { ChatContent } from '@/features/chats/chat-list/components/chat-list-item/components';
 import { Vote } from '@/features/chats/chat-polls/components/vote';
@@ -10,7 +10,7 @@ import { formatTimestampToDate } from '@/shared/utils';
 
 import { usePoll } from './hooks';
 
-export const Poll = ({ poll }: { poll: NDKEvent }) => {
+export const Poll = ({ poll }: { poll: NostrEvent }) => {
   const {
     categorizedChatContent,
     options,
@@ -31,7 +31,7 @@ export const Poll = ({ poll }: { poll: NDKEvent }) => {
         {options.map((option) => (
           <Vote
             key={option.id}
-            pollId={poll.id}
+            pollId={poll.id || ''}
             pollType={pollType}
             optionId={option.id}
             label={option.label}
