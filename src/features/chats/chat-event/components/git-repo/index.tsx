@@ -1,4 +1,4 @@
-import { NDKEvent } from '@nostr-dev-kit/ndk';
+import { NostrEvent } from '@nostr-dev-kit/ndk';
 import { CheckIcon, Copy, ExternalLink, FolderGit, GitBranch } from 'lucide-react';
 
 import { Button } from '@/shared/components/ui/button';
@@ -11,7 +11,7 @@ import {
 } from '@/shared/components/ui/tooltip';
 import { useCopyToClipboard } from '@/shared/hooks';
 
-export const GitRepo = ({ event }: { event: NDKEvent }) => {
+export const GitRepo = ({ event }: { event: NostrEvent }) => {
   const { copyToClipboard, hasCopied } = useCopyToClipboard();
 
   const repoIdTag = event.tags.find(([t]) => t === 'd');
