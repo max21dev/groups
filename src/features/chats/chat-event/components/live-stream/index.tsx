@@ -1,9 +1,9 @@
-import { NDKEvent } from '@nostr-dev-kit/ndk';
+import { NostrEvent } from '@nostr-dev-kit/ndk';
 
 import { Button } from '@/shared/components/ui/button';
 import { formatTimestampToDate } from '@/shared/utils';
 
-export const LiveStream = ({ event }: { event: NDKEvent }) => {
+export const LiveStream = ({ event }: { event: NostrEvent }) => {
   const getTagValue = (key: string) => {
     const tag = event.tags.find(([t]) => t === key);
     return tag ? tag[1] : null;
