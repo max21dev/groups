@@ -1,4 +1,4 @@
-import { NDKEvent } from '@nostr-dev-kit/ndk';
+import { NostrEvent } from '@nostr-dev-kit/ndk';
 import { useMemo } from 'react';
 
 import {
@@ -8,7 +8,7 @@ import {
 import { categorizeChatContent } from '@/features/chats/chat-list/components/chat-list-item/utils';
 import { UserAvatar } from '@/features/users';
 
-export const ChatMessageEvent = ({ event }: { event: NDKEvent }) => {
+export const ChatMessageEvent = ({ event }: { event: NostrEvent }) => {
   const parentIdTag = event.tags.find(([t]) => t === 'q');
   const parentId = parentIdTag ? parentIdTag[1] : '';
 

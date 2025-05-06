@@ -1,9 +1,9 @@
-import { NDKEvent } from '@nostr-dev-kit/ndk';
+import { NostrEvent } from '@nostr-dev-kit/ndk';
 import { useMemo } from 'react';
 
 import { Markdown } from '@/shared/components/markdown';
 
-export const CodeSnippet = ({ event }: { event: NDKEvent }) => {
+export const CodeSnippet = ({ event }: { event: NostrEvent }) => {
   const codeContent = event.content || '';
 
   const languageTag = event.tags.find(([t]) => t === 'l');
