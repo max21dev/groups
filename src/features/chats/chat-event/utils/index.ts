@@ -19,6 +19,8 @@ export const EVENT_CATEGORY_MAP: Record<number, EventCategory> = {
   30311: 'live-stream',
   30617: 'git-repo',
   39000: 'group',
+  31989: 'app-recommendation',
+  31990: 'app-recommendation',
 };
 
 export const fetchReactions = async (ndk: any, eventId: string): Promise<NDKEvent[]> => {
