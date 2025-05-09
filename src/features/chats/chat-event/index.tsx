@@ -14,6 +14,7 @@ import { cn, ellipsis, formatTimestampToDate } from '@/shared/utils';
 
 import {
   AddEventReaction,
+  AppRecommendation,
   ChatEventMenu,
   ChatEventObject,
   ChatEventReactions,
@@ -162,6 +163,7 @@ export const ChatEvent = memo(
           {category === 'video' && <Video event={eventData} />}
           {category === 'community' && <Community event={eventData} />}
           {category === 'git-repo' && <GitRepo event={eventData} />}
+          {category === 'app-recommendation' && <AppRecommendation event={eventData} />}
           {category === null && <ChatEventObject event={eventData} />}
 
           <div className="flex justify-between items-center mt-2">

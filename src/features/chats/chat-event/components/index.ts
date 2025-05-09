@@ -1,4 +1,5 @@
 export * from './add-event-reaction';
+export * from './app-recommendation';
 export * from './chat-event-menu';
 export * from './chat-event-object';
 export * from './chat-event-reactions';
