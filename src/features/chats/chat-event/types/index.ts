@@ -13,4 +13,5 @@ export type EventCategory =
   | 'live-stream'
   | 'highlight'
   | 'git-repo'
-  | 'community';
+  | 'community'
+  | 'app-recommendation';
