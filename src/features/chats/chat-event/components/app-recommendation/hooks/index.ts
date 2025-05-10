@@ -124,7 +124,7 @@ export const useAppRecommendation = (event: NostrEvent) => {
       .filter((tag) => tag[0] === 'a')
       .forEach((tag) => {
         if (tag.length >= 4) {
-          const [_, appReference, relay, platform] = tag;
+          const [_, appReference, , platform] = tag; // Omit 'relay'
           if (platform) {
             if (!platforms[platform]) platforms[platform] = [];
             platforms[platform].push(appReference);
