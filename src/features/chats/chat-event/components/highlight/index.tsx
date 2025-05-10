@@ -1,11 +1,11 @@
-import { NDKEvent } from '@nostr-dev-kit/ndk';
+import { NostrEvent } from '@nostr-dev-kit/ndk';
 import { useMemo } from 'react';
 
+import { ChatEvent } from '@/features/chats';
 import { ChatContent } from '@/features/chats/chat-list/components/chat-list-item/components';
 import { categorizeChatContent } from '@/features/chats/chat-list/components/chat-list-item/utils';
-import { ChatEvent } from '@/features/chats';
 
-export const Highlight = ({ event }: { event: NDKEvent }) => {
+export const Highlight = ({ event }: { event: NostrEvent }) => {
   const categorizedChatContent = useMemo(
     () => categorizeChatContent(event.content || ''),
     [event.content],

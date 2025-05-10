@@ -167,7 +167,7 @@ export const ChatEvent = memo(
           <div className="flex justify-between items-center mt-2">
             {reactions && reactions.length > 0 && (
               <ChatEventReactions
-                eventId={eventData.id}
+                eventId={eventData.id || ''}
                 eventPubkey={eventData.pubkey}
                 reaction={reactions}
                 refreshReactions={refreshReactions}
@@ -177,7 +177,7 @@ export const ChatEvent = memo(
             {!isChatsPage && (
               <div className="flex ms-auto">
                 <AddEventReaction
-                  eventId={eventData.id}
+                  eventId={eventData.id || ''}
                   pubkey={eventData.pubkey}
                   content={eventData.content}
                   profile={profile}
@@ -188,7 +188,7 @@ export const ChatEvent = memo(
           </div>
 
           {!isThreadsVisible && !isChatsPage && category === 'thread' && (
-            <ChatThreadComments parentId={eventData.id} />
+            <ChatThreadComments parentId={eventData.id || ''} />
           )}
         </div>
       </>

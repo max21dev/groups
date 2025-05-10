@@ -1,6 +1,6 @@
-import { NDKEvent } from '@nostr-dev-kit/ndk';
+import { NostrEvent } from '@nostr-dev-kit/ndk';
 
-export const getCommunityTags = (event: NDKEvent | null) => {
+export const getCommunityTags = (event: NostrEvent | null) => {
   if (!event) return { relayTags: [], blossomTags: [], mintTags: [] };
 
   const relayTags = event.tags

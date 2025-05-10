@@ -1,4 +1,4 @@
-import { NDKEvent } from '@nostr-dev-kit/ndk';
+import { NostrEvent } from '@nostr-dev-kit/ndk';
 import { useMemo } from 'react';
 import ReactPlayer from 'react-player';
 
@@ -7,7 +7,7 @@ import { categorizeChatContent } from '@/features/chats/chat-list/components/cha
 
 import { loader } from '@/shared/utils';
 
-export const Video = ({ event }: { event: NDKEvent }) => {
+export const Video = ({ event }: { event: NostrEvent }) => {
   const categorizedChatContent = useMemo(
     () => categorizeChatContent(event.content || ''),
     [event.content],

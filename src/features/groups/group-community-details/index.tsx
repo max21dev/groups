@@ -18,7 +18,7 @@ export const CommunityDetails = memo(
     const communityNostrLink = getNostrLink(communityEvent?.id || '', pubkey, communityEvent?.kind);
 
     const { relayTags, blossomTags, mintTags } = useMemo(
-      () => getCommunityTags(communityEvent),
+      () => getCommunityTags(communityEvent?.rawEvent() ?? null),
       [communityEvent],
     );
 

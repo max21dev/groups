@@ -1,4 +1,4 @@
-import { NDKEvent, NDKKind } from '@nostr-dev-kit/ndk';
+import { NDKEvent, NDKKind, NostrEvent } from '@nostr-dev-kit/ndk';
 import { useActiveUser, useNdk } from 'nostr-hooks';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -17,7 +17,7 @@ const OPTION_TAG = 'option';
 const POLL_TYPE_TAG = 'polltype';
 const ENDS_AT_TAG = 'endsAt';
 
-export const usePoll = (poll: NDKEvent) => {
+export const usePoll = (poll: NostrEvent) => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [voters, setVoters] = useState<Set<string>>(new Set());
 
@@ -94,7 +94,7 @@ export const usePoll = (poll: NDKEvent) => {
       .map((tag) => ({
         id: tag[1],
         label: tag[2],
-        votes: votes[poll.id]?.[tag[1]] || 0,
+        votes: (poll.id && votes[poll.id]?.[tag[1]]) || 0,
       }));
   }, [poll.tags, votes, poll.id]);
 

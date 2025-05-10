@@ -1,4 +1,4 @@
-import { NDKEvent } from '@nostr-dev-kit/ndk';
+import { NostrEvent } from '@nostr-dev-kit/ndk';
 import { useMemo } from 'react';
 
 import {
@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip';
 
-export const EmojiSet = ({ event }: { event: NDKEvent }) => {
+export const EmojiSet = ({ event }: { event: NostrEvent }) => {
   const getTagValue = (key: string) => {
     const foundTag = event.tags.find(([tag]) => tag === key);
     return foundTag ? foundTag[1] : null;

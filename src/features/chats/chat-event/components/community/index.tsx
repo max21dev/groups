@@ -1,4 +1,4 @@
-import { NDKEvent } from '@nostr-dev-kit/ndk';
+import { NostrEvent } from '@nostr-dev-kit/ndk';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -6,7 +6,7 @@ import { Button } from '@/shared/components/ui/button';
 
 import { getCommunityTags } from './utils';
 
-export const Community = ({ event }: { event: NDKEvent }) => {
+export const Community = ({ event }: { event: NostrEvent }) => {
   const { relayTags, blossomTags, mintTags } = useMemo(() => getCommunityTags(event), [event]);
 
   return (
