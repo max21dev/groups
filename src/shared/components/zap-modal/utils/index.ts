@@ -25,3 +25,11 @@ export const payInvoiceByWebln = async (invoice: string): Promise<boolean> => {
     return false;
   }
 };
+
+export const safeParsePubkey = (code: string): string => {
+  try {
+    return new URL(code).hostname;
+  } catch {
+    return '';
+  }
+};
