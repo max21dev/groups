@@ -16,6 +16,7 @@ export const useHomePage = () => {
   const { activeUser } = useActiveUser();
   const isThreadsVisible = !!useMatch('/threads');
   const isPollsVisible = !!useMatch('/polls');
+  const isWalletsVisible = !!useMatch('/wallets/*');
 
   const [searchParams] = useSearchParams();
   const event = searchParams.get('eventId');
@@ -29,5 +30,6 @@ export const useHomePage = () => {
     event,
     isThreadsVisible,
     isPollsVisible,
+    isWalletsVisible,
   };
 };
