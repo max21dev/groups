@@ -1,5 +1,7 @@
 import { Loader2 } from 'lucide-react';
 
+import { UserAvatar, UserName } from '@/features/users';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/components/ui/avatar';
 import { Button } from '@/shared/components/ui/button';
 import {
@@ -9,8 +11,18 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/shared/components/ui/dropdown-menu';
 import { Input } from '@/shared/components/ui/input';
 import { Small } from '@/shared/components/ui/typography/small';
+import { ellipsis } from '@/shared/utils';
 
 import { ZAP_AMOUNTS } from './config';
 import { useZapModal } from './hooks';
@@ -27,6 +39,10 @@ export const ZapModal = () => {
     process,
     isZapModalOpen,
     setIsZapModalOpen,
+    walletCodes,
+    selectedWallet,
+    setSelectedWallet,
+    safeParsePubkey,
   } = useZapModal();
 
   return (
@@ -79,6 +95,40 @@ export const ZapModal = () => {
             )}
           </div>
         </div>
+
+        {walletCodes.length > 0 && (
+          <div className="mt-2">
+            <Small>Select Wallet (optional):</Small>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="w-full text-xs">
+                  {selectedWallet ? ellipsis(selectedWallet, 40) : 'Browser Wallet (WebLN)'}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-full">
+                <DropdownMenuLabel>Use</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuRadioGroup
+                  value={selectedWallet}
+                  onValueChange={(val) => setSelectedWallet(val)}
+                >
+                  <DropdownMenuRadioItem value="">Browser (WebLN)</DropdownMenuRadioItem>
+                  {walletCodes.map((code) => {
+                    const pubkey = safeParsePubkey(code);
+                    return (
+                      <DropdownMenuRadioItem key={code} value={code}>
+                        <div className="flex items-center gap-2 [&_span]:w-6 [&_span]:h-6 [&_span]:text-xs">
+                          <UserAvatar pubkey={pubkey} />
+                          <UserName pubkey={pubkey} length={20} className="text-xs" />
+                        </div>
+                      </DropdownMenuRadioItem>
+                    );
+                  })}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )}
 
         <div className="mt-4 flex flex-col gap-2">
           <Small>Comment:</Small>
