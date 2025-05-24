@@ -19,8 +19,16 @@ import { useActiveUserInfo } from './hooks';
 export function ActiveUserInfo() {
   const [isUserSettingsOpen, setIsUserSettingsOpen] = useState(false);
 
-  const { activeGroupId, activeUser, isCollapsed, openLoginModal, profile, isMobile, logout } =
-    useActiveUserInfo();
+  const {
+    activeGroupId,
+    activeUser,
+    isCollapsed,
+    openLoginModal,
+    profile,
+    isMobile,
+    logout,
+    navigate,
+  } = useActiveUserInfo();
 
   return (
     <>
@@ -49,6 +57,11 @@ export function ActiveUserInfo() {
               <EllipsisVerticalIcon size={20} className="cursor-pointer w-8" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="p-0 [&_*]:p-0">
+              <DropdownMenuItem>
+                <Button variant="ghost" className="w-full" onClick={() => navigate('/wallets')}>
+                  Wallets
+                </Button>
+              </DropdownMenuItem>
               <DropdownMenuItem>
                 <Button
                   variant="ghost"
