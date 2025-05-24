@@ -6,3 +6,4 @@ export * from './user-login-modal';
 export * from './user-name';
 export * from './user-profile-modal';
 export * from './user-settings';
+export * from './user-wallets';
