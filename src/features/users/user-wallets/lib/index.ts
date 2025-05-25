@@ -1,7 +1,7 @@
 import NDK, { NDKEvent, NDKPrivateKeySigner, NDKSubscription } from '@nostr-dev-kit/ndk';
-import { getPublicKey, nip04 } from 'nostr-tools';
+import { nip04 } from 'nostr-tools';
 
-import { hexToUint8Array } from '@/shared/utils';
+//import { hexToUint8Array } from '@/shared/utils';
 
 export type NWCRequest = {
   method: string;
@@ -20,7 +20,7 @@ export class NWCClient {
   private ndk: NDK;
   private servicePublicKey: string;
   private clientSecretKey: string;
-  private clientPublicKey: string;
+  //private clientPublicKey: string;
   private connected = false;
 
   constructor(connectionUri: string) {
@@ -30,7 +30,7 @@ export class NWCClient {
     const { pubkey, relays, secret } = parsed;
     this.servicePublicKey = pubkey;
     this.clientSecretKey = secret;
-    this.clientPublicKey = getPublicKey(hexToUint8Array(secret));
+    //this.clientPublicKey = getPublicKey(hexToUint8Array(secret));
 
     this.ndk = new NDK({
       explicitRelayUrls: relays,
