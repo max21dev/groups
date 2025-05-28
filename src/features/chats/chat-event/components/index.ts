@@ -1,5 +1,7 @@
 export * from './add-event-reaction';
 export * from './app-recommendation';
+export * from './badge-definition';
+export * from './calendar-event';
 export * from './chat-event-menu';
 export * from './chat-event-object';
 export * from './chat-event-reactions';
@@ -15,3 +17,5 @@ export * from './long-form-content';
 export * from './note';
 export * from './picture';
 export * from './video';
+export * from './wiki';
+export * from './zap-goal';

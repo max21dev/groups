@@ -15,6 +15,8 @@ import { cn, ellipsis, formatTimestampToDate } from '@/shared/utils';
 import {
   AddEventReaction,
   AppRecommendation,
+  BadgeDefinition,
+  CalendarEvent,
   ChatEventMenu,
   ChatEventObject,
   ChatEventReactions,
@@ -30,6 +32,8 @@ import {
   Note,
   Picture,
   Video,
+  Wiki,
+  ZapGoal,
 } from './components';
 import { useChatEvent } from './hook';
 import { isExcludedCategory } from './utils';
@@ -164,6 +168,10 @@ export const ChatEvent = memo(
           {category === 'community' && <Community event={eventData} />}
           {category === 'git-repo' && <GitRepo event={eventData} />}
           {category === 'app-recommendation' && <AppRecommendation event={eventData} />}
+          {category === 'zap-goal' && <ZapGoal event={eventData} />}
+          {category === 'badge-definition' && <BadgeDefinition event={eventData} />}
+          {category === 'calendar-event' && <CalendarEvent event={eventData} />}
+          {category === 'wiki' && <Wiki event={eventData} />}
           {category === null && <ChatEventObject event={eventData} />}
 
           <div className="flex justify-between items-center mt-2">
