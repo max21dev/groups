@@ -1,5 +1,7 @@
 import { nip44 } from 'nostr-tools';
 
+import { hexToUint8Array } from '@/shared/utils';
+
 export function serializeSettings(settings: any) {
   return {
     ...settings,
@@ -45,8 +47,4 @@ export function decryptUserSettings(encryptedData: string, pubkey: string) {
     console.error('Decryption failed, resetting settings.');
     return null;
   }
-}
-
-function hexToUint8Array(hex: string): Uint8Array {
-  return new Uint8Array(hex.match(/.{1,2}/g)!.map((byte) => parseInt(byte, 16)));
 }

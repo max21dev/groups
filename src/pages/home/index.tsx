@@ -14,7 +14,7 @@ import {
   GroupsSearch,
 } from '@/features/groups';
 import { RelayList, RelaySelectDropdown } from '@/features/relays/';
-import { ActiveUserInfo, UserLoginModal } from '@/features/users';
+import { ActiveUserInfo, UserLoginModal, UserWallets } from '@/features/users';
 
 import { ModeToggle } from '@/shared/components/mode-toggle';
 import { Sidebar } from '@/shared/components/sidebar';
@@ -34,12 +34,18 @@ export function HomePage() {
     isThreadsVisible,
     isPollsVisible,
     activeRelay,
+    isWalletsVisible,
   } = useHomePage();
 
   return (
     <>
       <div className="flex w-full h-full overflow-hidden">
-        <Sidebar className={cn('sm:block max-w-full w-full', activeGroupId && 'max-sm:hidden')}>
+        <Sidebar
+          className={cn(
+            'sm:block max-w-full w-full',
+            (activeGroupId || event || isWalletsVisible) && 'max-sm:hidden',
+          )}
+        >
           <div className="flex flex-col w-full h-full">
             <div className="p-2">
               <div
@@ -80,9 +86,19 @@ export function HomePage() {
           </div>
         </Sidebar>
 
-        <div className={cn('w-full', 'sm:block', !activeGroupId && 'max-sm:hidden')}>
+        <div
+          className={cn(
+            'w-full',
+            'sm:block',
+            !(activeGroupId || event || isWalletsVisible) && 'max-sm:hidden',
+          )}
+        >
           <div className="flex flex-col w-full h-full">
-            {event ? (
+            {isWalletsVisible ? (
+              <div className="flex flex-col items-center h-full overflow-y-auto">
+                <UserWallets />
+              </div>
+            ) : event ? (
               <div className="flex flex-col items-center px-2 py-8 h-full overflow-y-auto">
                 <ChatEvent event={event} />
               </div>

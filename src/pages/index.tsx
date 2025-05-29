@@ -64,6 +64,18 @@ export const router = createBrowserRouter([
           return { Component: (await HomePage()).HomePage };
         },
       },
+      {
+        path: '/wallets',
+        async lazy() {
+          return { Component: (await HomePage()).HomePage };
+        },
+      },
+      {
+        path: '/wallets/:code',
+        async lazy() {
+          return { Component: (await HomePage()).HomePage };
+        },
+      },
     ],
   },
 ]);
