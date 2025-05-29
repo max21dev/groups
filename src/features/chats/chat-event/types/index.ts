@@ -14,4 +14,8 @@ export type EventCategory =
   | 'highlight'
   | 'git-repo'
   | 'community'
-  | 'app-recommendation';
+  | 'app-recommendation'
+  | 'zap-goal'
+  | 'badge-definition'
+  | 'calendar-event'
+  | 'wiki';
