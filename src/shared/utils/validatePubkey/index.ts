@@ -1,5 +1,7 @@
 import { publicKeyVerify } from 'secp256k1';
 
+import { hexToUint8Array } from '@/shared/utils';
+
 export function validatePubKey(pubkey: string): boolean {
   const compressedKey = addPrefixToPubkey(pubkey);
   if (!compressedKey) {
@@ -26,8 +28,4 @@ function addPrefixToPubkey(pubkey: string): Uint8Array | null {
   compressedKey[0] = 0x02;
   compressedKey.set(keyBytes, 1);
   return compressedKey;
-}
-
-function hexToUint8Array(hex: string): Uint8Array {
-  return new Uint8Array(hex.match(/.{1,2}/g)!.map((byte) => parseInt(byte, 16)));
 }
