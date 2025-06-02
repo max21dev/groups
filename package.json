@@ -1,7 +1,7 @@
 {
   "name": "groups",
   "private": true,
-  "version": "1.34.0",
+  "version": "1.36.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
