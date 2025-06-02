@@ -21,20 +21,22 @@ This client enables users to participate in groups managed by relays, where acce
   - 🚧 Offline support.
   - 🚧 PWA support.
   - 🚧 Rich text formatting.
+
 - **Messaging**:
   - ✅ View and join existing groups.
   - ✅ Send and delete messages.
   - ✅ React to messages with emojis.
   - ✅ Reply to messages.
-  - ✅ Zap to messages sender.
+  - ✅ Zap to messages sender (with wallet selection).
   - ✅ Reaction to messages.
   - ✅ Upload images.
-  - ✅ Create and manage polls.
+  - ✅ Create and manage polls (single/multiple choice, vote tracking).
   - 🚧 Mention users in messages.
   - 🚧 Pin important messages.
   - 🚧 Receive notifications for new messages.
   - 🚧 Attach files.
   - 🚧 Create and manage threads.
+
 - **Group Moderation**:
   - ✅ Create new groups with custom settings.
     - ✅ Create group (kind 9007).
@@ -69,12 +71,15 @@ You can access the live demo of **"Groups"** at the following URL:
   - 9000 put-user ✅
   - 9001 remove-user ✅
   - 9002 edit-metadata ✅
+  - 9003 add-admin 🚧
+  - 9004 remove-admin 🚧
   - 9005 delete-event ✅
   - 9006 edit-group-status ✅
 - ### Chat:
   - 7 send-reaction ✅
   - 9 send-message ✅
   - 1018 create-poll ✅
+  - 9735 zap (Lightning payment) ✅
 - ### Group:
   - 9007 create-group ✅
   - 9008 delete-group ✅
