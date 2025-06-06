@@ -14,8 +14,6 @@ export const useHomePage = () => {
   const { activeGroupId } = useActiveGroup();
 
   const { activeUser } = useActiveUser();
-  const isThreadsVisible = !!useMatch('/threads');
-  const isPollsVisible = !!useMatch('/polls');
   const isWalletsVisible = !!useMatch('/wallets/*');
 
   const [searchParams] = useSearchParams();
@@ -28,8 +26,6 @@ export const useHomePage = () => {
     activeUser,
     isMobile,
     event,
-    isThreadsVisible,
-    isPollsVisible,
     isWalletsVisible,
   };
 };
