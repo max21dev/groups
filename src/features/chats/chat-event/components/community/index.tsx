@@ -13,7 +13,7 @@ export const Community = ({ event }: { event: NostrEvent }) => {
     <div className="w-full set-max-h overflow-auto flex flex-col gap-2 p-2">
       <div className="mt-2 space-y-3 text-sm">
         {relayTags.length > 0 && (
-          <div>
+          <div className="flex flex-col gap-1">
             <p className="font-semibold">Relays:</p>
             {relayTags.map((tag) => (
               <span key={tag} className="underline">
@@ -23,7 +23,7 @@ export const Community = ({ event }: { event: NostrEvent }) => {
           </div>
         )}
         {blossomTags.length > 0 && (
-          <div>
+          <div className="flex flex-col gap-1">
             <p className="font-semibold">Media Servers:</p>
             {blossomTags.map((tag) => (
               <span key={tag} className="underline">
@@ -33,7 +33,7 @@ export const Community = ({ event }: { event: NostrEvent }) => {
           </div>
         )}
         {mintTags.length > 0 && (
-          <div>
+          <div className="flex flex-col gap-1">
             <p className="font-semibold">Mint:</p>
             {mintTags.map((tag) => (
               <span key={tag} className="underline">
