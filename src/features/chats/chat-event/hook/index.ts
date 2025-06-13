@@ -1,6 +1,7 @@
 import { NDKEvent, NostrEvent } from '@nostr-dev-kit/ndk';
 import { useNdk, useProfile } from 'nostr-hooks';
 import { useEffect, useState } from 'react';
+import { useMatch } from 'react-router-dom';
 
 import { useHomePage } from '@/pages/home/hooks';
 import { useLazyLoad } from '@/shared/hooks';
@@ -19,7 +20,9 @@ export const useChatEvent = (eventId: string) => {
 
   const { ndk } = useNdk();
 
-  const { isThreadsVisible, isPollsVisible, event } = useHomePage();
+  const { event } = useHomePage();
+  const isThreadsVisible = !!useMatch('/threads');
+  const isPollsVisible = !!useMatch('/polls');
 
   const isChatsPage = !(isThreadsVisible || isPollsVisible || !!event);
 
