@@ -1,4 +1,5 @@
-import { ChatEvent, ChatSections } from '@/features/chats';
+import { ChatSections } from '@/features/chats';
+import { EventDetails } from '@/features/chats/chat-event/components';
 import {
   GroupsFilterDropdown,
   GroupsList,
@@ -83,9 +84,7 @@ export function HomePage() {
                 <UserWallets />
               </div>
             ) : event ? (
-              <div className="flex flex-col items-center px-2 py-8 h-full overflow-y-auto">
-                <ChatEvent event={event} />
-              </div>
+              <EventDetails event={event} />
             ) : !activeGroupId ? (
               <div className="flex flex-col justify-center items-center h-full">
                 {!activeRelay ? <RelayList /> : <GroupsListWidget />}
