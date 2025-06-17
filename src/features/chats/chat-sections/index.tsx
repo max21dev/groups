@@ -1,6 +1,6 @@
 import { NDKUser } from '@nostr-dev-kit/ndk';
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ChatBottomBar, ChatList, ChatPolls, ChatThreads, ChatTopBar } from '@/features/chats';
 import { getCommunityTags } from '@/features/chats/chat-event/components/community/utils';
@@ -11,6 +11,12 @@ import { CommunitySection, TabButton } from './components';
 
 type GroupTabName = 'chats' | 'threads' | 'polls';
 
+const getActiveTabFromUrl = (pathname: string): GroupTabName => {
+  if (pathname.includes('/threads')) return 'threads';
+  if (pathname.includes('/polls')) return 'polls';
+  return 'chats';
+};
+
 export const ChatSections = ({
   activeRelay,
   activeGroupId,
@@ -20,20 +26,26 @@ export const ChatSections = ({
   activeGroupId: string | undefined;
   activeUser: NDKUser | null | undefined;
 }) => {
-  const [activeTab, setActiveTab] = useState<string>('chats');
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [activeTab, setActiveTab] = useState<string>(() => getActiveTabFromUrl(location.pathname));
 
   const { isCommunity, communityEvent } = useCommunity(activeGroupId);
 
   useEffect(() => {
-    setActiveTab('chats');
-  }, [activeRelay, activeGroupId]);
+    const tabFromUrl = getActiveTabFromUrl(location.pathname);
+    if (isCommunity) {
+      setActiveTab('chats');
+    } else {
+      setActiveTab(tabFromUrl);
+    }
+  }, [location.pathname, isCommunity, activeRelay, activeGroupId]);
 
   const { contentSections } = useMemo(
     () => getCommunityTags(communityEvent?.rawEvent() ?? null),
     [communityEvent],
   );
-
-  const navigate = useNavigate();
 
   const handleGroupTabChange = (groupTabName: GroupTabName) => {
     setActiveTab(groupTabName);
