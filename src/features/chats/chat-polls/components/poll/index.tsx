@@ -2,9 +2,9 @@ import { SendIcon } from 'lucide-react';
 
 import { NostrEvent } from '@nostr-dev-kit/ndk';
 
-import { ChatContent } from '@/features/chats/chat-list/components/chat-list-item/components';
 import { Vote } from '@/features/chats/chat-polls/components/vote';
 
+import { RichText } from '@/shared/components/rich-text';
 import { Button } from '@/shared/components/ui/button';
 import { formatTimestampToDate } from '@/shared/utils';
 
@@ -12,7 +12,6 @@ import { usePoll } from './hooks';
 
 export const Poll = ({ poll }: { poll: NostrEvent }) => {
   const {
-    categorizedChatContent,
     options,
     pollType,
     endsAt,
@@ -24,8 +23,8 @@ export const Poll = ({ poll }: { poll: NostrEvent }) => {
   } = usePoll(poll);
 
   return (
-    <div className="flex flex-col gap-2 p-2 w-full">
-      <ChatContent categorizedChatContent={categorizedChatContent} />
+    <div className="w-full set-max-h flex flex-col gap-2 p-2 overflow-y-auto">
+      <RichText content={poll.content} />
 
       <ul className="m-0 space-y-2">
         {options.map((option) => (
