@@ -12,10 +12,3 @@ export type ChatListItemProps = {
   scrollToChat: (chatId: string) => void;
   setDeletedChats: React.Dispatch<React.SetStateAction<string[]>>;
 };
-
-export type ChatContentCategory = 'text' | 'image' | 'video' | 'url' | 'mention' | 'event';
-
-export type CategorizedChatContent = {
-  category: ChatContentCategory;
-  content: string;
-};
