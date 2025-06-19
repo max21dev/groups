@@ -24,7 +24,6 @@ import {
 import { useStore } from '@/shared/store';
 
 import { ChatListItemProps } from '../types';
-import { categorizeChatContent } from '../utils';
 
 export const useChatListItem = ({
   chat,
@@ -74,11 +73,6 @@ export const useChatListItem = ({
   const sameAuthorAsNextChat = chats && chat && nextChat && chat.pubkey === nextChat.pubkey;
 
   const topChatAuthor = topChat?.pubkey;
-
-  const categorizedChatContent = useMemo(
-    () => categorizeChatContent(chat?.content || ''),
-    [chat?.content],
-  );
 
   const { toast } = useToast();
 
@@ -171,7 +165,6 @@ export const useChatListItem = ({
     deleteChat,
     sameAsCurrentUser,
     setReplyTo,
-    categorizedChatContent,
     setZapTarget,
     openZapModal,
     activeUser,
