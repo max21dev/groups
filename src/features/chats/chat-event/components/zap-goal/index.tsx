@@ -1,21 +1,21 @@
 import { NostrEvent } from '@nostr-dev-kit/ndk';
 
-import { ChatContent } from '@/features/chats/chat-list/components/chat-list-item/components';
 import { UserAvatar, UserName } from '@/features/users';
 
+import { RichText } from '@/shared/components/rich-text';
 import { Progress } from '@/shared/components/ui/progress';
 import { formatTimestampToDate } from '@/shared/utils';
 
 import { useZapGoal } from './hooks';
 
 export const ZapGoal = ({ event }: { event: NostrEvent }) => {
-  const { categorizedChatContent, closedAt, contributors, isEventPage, percentage, targetMsats } =
+  const { content, closedAt, contributors, isEventPage, percentage, targetMsats } =
     useZapGoal(event);
 
   return (
     <div className="w-full set-max-h overflow-auto flex flex-col gap-2 p-2">
       <div className="[&_*]:text-base">
-        <ChatContent categorizedChatContent={categorizedChatContent} />
+        <RichText content={content} />
       </div>
       <p className="text-sm mt-2">Target: {(targetMsats / 1000).toLocaleString()} sats</p>
 
