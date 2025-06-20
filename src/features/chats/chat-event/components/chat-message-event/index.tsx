@@ -1,21 +1,13 @@
 import { NostrEvent } from '@nostr-dev-kit/ndk';
-import { useMemo } from 'react';
 
-import {
-  ChatContent,
-  ChatReply,
-} from '@/features/chats/chat-list/components/chat-list-item/components';
-import { categorizeChatContent } from '@/features/chats/chat-list/components/chat-list-item/utils';
+import { ChatReply } from '@/features/chats/chat-list/components/chat-list-item/components';
 import { UserAvatar } from '@/features/users';
+
+import { RichText } from '@/shared/components/rich-text';
 
 export const ChatMessageEvent = ({ event }: { event: NostrEvent }) => {
   const parentIdTag = event.tags.find(([t]) => t === 'q');
   const parentId = parentIdTag ? parentIdTag[1] : '';
-
-  const categorizedChatContent = useMemo(
-    () => categorizeChatContent(event.content || ''),
-    [event.content],
-  );
 
   return (
     <div className="flex gap-2 items-end p-1 outline outline-1 outline-primary/30 rounded-lg">
@@ -25,7 +17,7 @@ export const ChatMessageEvent = ({ event }: { event: NostrEvent }) => {
       <div className="bg-primary/10 p-2 rounded-lg">
         {parentId && <ChatReply replyId={parentId} />}
         <div className="flex items-center gap-1">
-          <ChatContent categorizedChatContent={categorizedChatContent} />
+          <RichText content={event.content} />
         </div>
       </div>
     </div>
