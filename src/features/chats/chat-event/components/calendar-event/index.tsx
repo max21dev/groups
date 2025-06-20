@@ -9,8 +9,7 @@ import {
 
 import { NostrEvent } from '@nostr-dev-kit/ndk';
 
-import { ChatContent } from '@/features/chats/chat-list/components/chat-list-item/components';
-
+import { RichText } from '@/shared/components/rich-text';
 import { Button } from '@/shared/components/ui/button';
 import { cn, formatTimestampToDate } from '@/shared/utils';
 
@@ -32,7 +31,6 @@ export const CalendarEvent = ({ event }: { event: NostrEvent }) => {
     userAttendanceStatus,
     isSubmitting,
     submitAttendanceResponse,
-    categorizedChatContent,
   } = useCalendarEvent(event);
 
   return (
@@ -83,7 +81,7 @@ export const CalendarEvent = ({ event }: { event: NostrEvent }) => {
 
         {description && (
           <div className="[&_*]:text-sm border-l-2 border-primary/20 pl-3">
-            <ChatContent categorizedChatContent={categorizedChatContent} />
+            <RichText content={description} />
           </div>
         )}
 
