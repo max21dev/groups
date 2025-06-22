@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import ReactPlayer from 'react-player';
 
 import { ChatEvent } from '@/features/chats';
@@ -6,14 +6,26 @@ import { ChatEvent } from '@/features/chats';
 import { Markdown } from '@/shared/components/markdown';
 import { loader } from '@/shared/utils';
 
-import { CategorizedChatContent } from '../../types';
+import { categorizeContent } from './utils';
 
-export const ChatContent = ({
-  categorizedChatContent,
+export const RichText = ({
+  content,
+  eventPreview = false,
 }: {
-  categorizedChatContent: CategorizedChatContent[];
+  content: string | null | undefined;
+  eventPreview?: boolean;
 }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const categorizedContent = useMemo(() => {
+    if (!content?.trim()) return [];
+    return categorizeContent(content);
+  }, [content]);
+
+  if (!content?.trim()) {
+    return null;
+  }
+
   const elements: React.ReactNode[] = [];
   let textBuffer = '';
 
@@ -24,7 +36,7 @@ export const ChatContent = ({
     }
   };
 
-  categorizedChatContent.forEach((part, i) => {
+  categorizedContent.forEach((part, i) => {
     if (part.category === 'text') {
       textBuffer += part.content;
     } else {
@@ -64,13 +76,13 @@ export const ChatContent = ({
           );
           break;
         case 'event':
-          elements.push(<ChatEvent key={i} event={part.content} />);
+          elements.push(<ChatEvent key={i} event={part.content} eventPreview={eventPreview} />);
           break;
       }
     }
   });
 
-  flushText(categorizedChatContent.length);
+  flushText(categorizedContent.length);
 
   return <>{elements}</>;
 };

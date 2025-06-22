@@ -15,7 +15,7 @@ export const ChatThreadComments = ({ parentId }: { parentId: string }) => {
   } = useChatThreadComments(parentId);
 
   return (
-    <div>
+    <div className="w-full max-w-2xl flex flex-col">
       <div className="flex justify-between items-center py-1 mt-2 border-b border-b-slate-400">
         <h4>Comments</h4>
       </div>
@@ -29,7 +29,7 @@ export const ChatThreadComments = ({ parentId }: { parentId: string }) => {
         <div className="w-full p-2 text-center">No Comments found.</div>
       )}
 
-      <div className="flex flex-col-reverse gap-1 [&_>*]:rounded-none [&_>*]:bg-transparent divide-y divide-y-reverse divide-gray-400">
+      <div className="flex flex-col-reverse gap-1">
         {threadComments?.map((threadComment) => (
           <ChatEvent
             key={threadComment.id}
@@ -41,7 +41,7 @@ export const ChatThreadComments = ({ parentId }: { parentId: string }) => {
 
       {hasMoreThreadComments && threadComments && threadComments.length > 1 && (
         <div
-          className="w-full text-center pt-2 text-blue-400 text-sm hover:underline cursor-pointer border-t border-t-slate-400"
+          className="w-full text-center pt-2 text-blue-400 text-sm hover:underline cursor-pointer"
           onClick={() => loadMoreThreadComments()}
         >
           Show more comments

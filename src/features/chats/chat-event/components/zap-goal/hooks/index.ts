@@ -1,9 +1,7 @@
 import { NostrEvent } from '@nostr-dev-kit/ndk';
 import { useNdk } from 'nostr-hooks';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-
-import { categorizeChatContent } from '@/features/chats/chat-list/components/chat-list-item/utils';
 
 type Contributor = {
   pubkey: string;
@@ -29,7 +27,6 @@ export const useZapGoal = (event: NostrEvent) => {
   const closedAt = closedAtTag ? parseInt(closedAtTag, 10) : undefined;
 
   const content = (summary ? `**${summary}**\n\n` : '') + (event.content || '');
-  const categorizedChatContent = useMemo(() => categorizeChatContent(content), [content]);
 
   useEffect(() => {
     if (!ndk || targetMsats <= 0 || !event.id) return;
@@ -95,7 +92,7 @@ export const useZapGoal = (event: NostrEvent) => {
   };
 
   return {
-    categorizedChatContent,
+    content,
     targetMsats,
     percentage,
     closedAt,

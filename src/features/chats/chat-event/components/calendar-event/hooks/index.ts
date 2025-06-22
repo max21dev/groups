@@ -2,8 +2,6 @@ import { NDKEvent, NDKKind, NostrEvent } from '@nostr-dev-kit/ndk';
 import { useActiveUser, useNdk } from 'nostr-hooks';
 import { useEffect, useMemo, useState } from 'react';
 
-import { categorizeChatContent } from '@/features/chats/chat-list/components/chat-list-item/utils';
-
 import { useToast } from '@/shared/components/ui/use-toast';
 import { useLoginModalState } from '@/shared/hooks';
 
@@ -170,11 +168,6 @@ export const useCalendarEvent = (event: NostrEvent) => {
     }
   };
 
-  const categorizedChatContent = useMemo(
-    () => categorizeChatContent(description || ''),
-    [description],
-  );
-
   return {
     title,
     description,
@@ -191,6 +184,5 @@ export const useCalendarEvent = (event: NostrEvent) => {
     attending,
     maybeAttending,
     notAttending,
-    categorizedChatContent,
   };
 };

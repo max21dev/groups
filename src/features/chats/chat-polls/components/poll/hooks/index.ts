@@ -3,7 +3,6 @@ import { useActiveUser, useNdk } from 'nostr-hooks';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useChatBottomBar } from '@/features/chats/chat-bottom-bar/hooks';
-import { categorizeChatContent } from '@/features/chats/chat-list/components/chat-list-item/utils';
 import { usePollsStore } from '@/features/chats/chat-polls/store';
 
 import { useToast } from '@/shared/components/ui/use-toast';
@@ -28,9 +27,6 @@ export const usePoll = (poll: NostrEvent) => {
   const { activeUser } = useActiveUser();
   const { isMember, isAdmin } = useChatBottomBar();
   const { toast } = useToast();
-
-  const content = poll.content || '';
-  const categorizedChatContent = useMemo(() => categorizeChatContent(content), [content]);
 
   useEffect(() => {
     fetchChatPollVotes();
@@ -166,7 +162,6 @@ export const usePoll = (poll: NostrEvent) => {
   }, [activeUser, isMember, isAdmin, endsAt, voters]);
 
   return {
-    categorizedChatContent,
     options,
     pollType,
     endsAt,

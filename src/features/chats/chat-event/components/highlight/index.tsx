@@ -1,16 +1,10 @@
 import { NostrEvent } from '@nostr-dev-kit/ndk';
-import { useMemo } from 'react';
 
 import { ChatEvent } from '@/features/chats';
-import { ChatContent } from '@/features/chats/chat-list/components/chat-list-item/components';
-import { categorizeChatContent } from '@/features/chats/chat-list/components/chat-list-item/utils';
+
+import { RichText } from '@/shared/components/rich-text';
 
 export const Highlight = ({ event }: { event: NostrEvent }) => {
-  const categorizedChatContent = useMemo(
-    () => categorizeChatContent(event.content || ''),
-    [event.content],
-  );
-
   const contextTag = event.tags.find(([t]) => t === 'context');
   const contextText = contextTag ? contextTag[1] : null;
 
@@ -22,7 +16,7 @@ export const Highlight = ({ event }: { event: NostrEvent }) => {
   return (
     <div className="w-full set-max-h overflow-auto flex flex-col gap-2 p-2">
       <blockquote className="border-l-4 [&_*]:text-base border-blue-800 pl-4 italic my-2">
-        <ChatContent categorizedChatContent={categorizedChatContent} />
+        <RichText content={event.content} />
       </blockquote>
 
       {contextText && (

@@ -9,6 +9,7 @@ export * from './chat-message-event';
 export * from './code-snippet';
 export * from './community';
 export * from './emoji-set';
+export * from './event-details';
 export * from './follow-set';
 export * from './git-repo';
 export * from './highlight';

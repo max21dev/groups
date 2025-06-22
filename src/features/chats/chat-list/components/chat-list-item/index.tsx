@@ -5,6 +5,7 @@ import { memo, useState } from 'react';
 import { UserAvatar, UserProfileModal } from '@/features/users';
 import { useUserProfileModal } from '@/features/users/user-profile-modal/hooks';
 
+import { RichText } from '@/shared/components/rich-text';
 import {
   ContextMenu,
   ContextMenuContent,
@@ -13,7 +14,7 @@ import {
 } from '@/shared/components/ui/context-menu';
 import { cn } from '@/shared/utils';
 
-import { ChatContent, ChatListItemReactions, ChatReply } from './components';
+import { ChatListItemReactions, ChatReply } from './components';
 import { useChatListItem } from './hooks';
 import { ChatListItemProps } from './types';
 
@@ -35,7 +36,6 @@ export const ChatListItem = memo(
       sameAuthorAsNextChat,
       sameAsCurrentUser,
       setReplyTo,
-      categorizedChatContent,
       setZapTarget,
       openZapModal,
       activeUser,
@@ -105,7 +105,7 @@ export const ChatListItem = memo(
                     )}
                   >
                     <div className="w-full [overflow-wrap:anywhere] self-start">
-                      <ChatContent categorizedChatContent={categorizedChatContent} />
+                      <RichText content={chat?.content} eventPreview />
                     </div>
 
                     <div

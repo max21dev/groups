@@ -1,5 +1,6 @@
 import { parse } from 'nostr-tools/nip21';
-import { CategorizedChatContent } from '../types';
+
+import { CategorizedContent } from '../types';
 
 // Regular expressions for various content types
 const urlRegex = /https?:\/\/[^\s<>"')\],]+(?=[\s<>"')\],]|$)/gi;
@@ -13,7 +14,7 @@ const noteRegex = /^note1[0-9a-z]+$/i;
 const addressRegex = /^naddr1[0-9a-z]+$/i;
 const eventRegex = /^nevent1[0-9a-z]+$/i;
 
-const categorizePart = (part: string): CategorizedChatContent => {
+const categorizePart = (part: string): CategorizedContent => {
   if (nostrRegex.test(part)) {
     const cleanPart = part.trim().replace(/:$/, '');
     try {
@@ -55,7 +56,7 @@ const categorizePart = (part: string): CategorizedChatContent => {
   return { category: 'text', content: part };
 };
 
-export const categorizeChatContent = (content: string): CategorizedChatContent[] => {
+export const categorizeContent = (content: string): CategorizedContent[] => {
   const regex = new RegExp(`(${urlRegex.source})|(${nostrRegex.source})`, 'gi');
   const tokens: string[] = [];
   let lastIndex = 0;

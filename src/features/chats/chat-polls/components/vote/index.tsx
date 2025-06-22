@@ -1,5 +1,4 @@
-import { ChatContent } from '@/features/chats/chat-list/components/chat-list-item/components';
-
+import { RichText } from '@/shared/components/rich-text';
 import { Input } from '@/shared/components/ui/input';
 import { Progress } from '@/shared/components/ui/progress';
 import { cn } from '@/shared/utils';
@@ -27,10 +26,9 @@ export const Vote = ({
   selectedOptions: string[];
   setSelectedOptions: React.Dispatch<React.SetStateAction<string[]>>;
 }) => {
-  const { categorizedChatContent, isChecked, handleChange } = useVote({
+  const { isChecked, handleChange } = useVote({
     pollType,
     optionId,
-    label,
     selectedOptions,
     setSelectedOptions,
   });
@@ -61,13 +59,13 @@ export const Vote = ({
             onChange={(e) => handleChange(e.target.checked)}
           />
           <div className="flex flex-col gap-2 w-full">
-            <ChatContent categorizedChatContent={categorizedChatContent} />
+            <RichText content={label} />
           </div>
         </label>
       ) : (
         <div className="flex items-center">
           <div className="flex flex-col gap-2 w-full">
-            <ChatContent categorizedChatContent={categorizedChatContent} />
+            <RichText content={label} />
           </div>
         </div>
       )}
