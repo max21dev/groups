@@ -48,7 +48,7 @@ export const CommunityDetails = memo(
           </div>
           <div className="mt-2 space-y-2 text-primary/80 text-sm">
             {relayTags.length > 0 && (
-              <div>
+              <div className="flex flex-col gap-1">
                 <p className="font-semibold">Relays:</p>
                 {relayTags.map((tag) => (
                   <span key={tag} className="underline">
@@ -58,7 +58,7 @@ export const CommunityDetails = memo(
               </div>
             )}
             {blossomTags.length > 0 && (
-              <div>
+              <div className="flex flex-col gap-1">
                 <p className="font-semibold">Media Servers:</p>{' '}
                 {blossomTags.map((tag) => (
                   <span key={tag} className="underline">
@@ -68,7 +68,7 @@ export const CommunityDetails = memo(
               </div>
             )}
             {mintTags.length > 0 && (
-              <div>
+              <div className="flex flex-col gap-1">
                 <p className="font-semibold">Mint:</p>{' '}
                 {mintTags.map((tag) => (
                   <span key={tag} className="underline">
