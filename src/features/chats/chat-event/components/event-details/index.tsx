@@ -42,8 +42,12 @@ export const EventDetails = ({ event }: { event: string }) => {
     };
   }, [event]);
 
+  const hasValidGroup =
+    activeGroupId && activeGroupId !== 'undefined' && activeGroupId.trim() !== '';
+  const hasValidRelay = activeRelay && activeRelay !== 'undefined' && activeRelay.trim() !== '';
+
   const handleBackClick = () => {
-    if (isCommunity) {
+    if (isCommunity || !hasValidGroup || !hasValidRelay) {
       navigate(-1);
       return;
     }
@@ -58,11 +62,11 @@ export const EventDetails = ({ event }: { event: string }) => {
   };
 
   const backButtonText = useMemo(() => {
-    if (isCommunity) return 'Back';
+    if (isCommunity || !hasValidGroup || !hasValidRelay) return 'Back';
     if (kind === 'thread') return 'Back to threads';
     if (kind === 'poll') return 'Back to Polls';
     return 'Back';
-  }, [isCommunity, kind]);
+  }, [isCommunity, kind, hasValidGroup, hasValidRelay]);
 
   return (
     <div className="flex flex-col items-center px-2 py-8 h-full overflow-y-auto">
