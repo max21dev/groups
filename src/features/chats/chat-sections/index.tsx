@@ -4,12 +4,15 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ChatBottomBar, ChatList, ChatPolls, ChatThreads, ChatTopBar } from '@/features/chats';
 import { getCommunityTags } from '@/features/chats/chat-event/components/community/utils';
+import { GroupsListWidget } from '@/features/groups';
+import { RelayExplore, RelayInfo } from '@/features/relays';
 
 import { useCommunity } from '@/shared/hooks';
 
 import { CommunitySection, TabButton } from './components';
 
 type GroupTabName = 'chats' | 'threads' | 'polls';
+type ExploreTabName = 'explore' | 'groups' | 'info';
 
 const getActiveTabFromUrl = (pathname: string): GroupTabName => {
   if (pathname.includes('/threads')) return 'threads';
@@ -21,26 +24,34 @@ export const ChatSections = ({
   activeRelay,
   activeGroupId,
   activeUser,
+  isExploreMode,
 }: {
   activeRelay: string | undefined;
   activeGroupId: string | undefined;
   activeUser: NDKUser | null | undefined;
+  isExploreMode?: boolean;
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState<string>(() => getActiveTabFromUrl(location.pathname));
+  const [activeTab, setActiveTab] = useState<string>(() =>
+    isExploreMode ? 'explore' : getActiveTabFromUrl(location.pathname),
+  );
 
   const { isCommunity, communityEvent } = useCommunity(activeGroupId);
 
   useEffect(() => {
-    const tabFromUrl = getActiveTabFromUrl(location.pathname);
-    if (isCommunity) {
-      setActiveTab('chats');
+    if (isExploreMode) {
+      setActiveTab('explore');
     } else {
-      setActiveTab(tabFromUrl);
+      const tabFromUrl = getActiveTabFromUrl(location.pathname);
+      if (isCommunity) {
+        setActiveTab('chats');
+      } else {
+        setActiveTab(tabFromUrl);
+      }
     }
-  }, [location.pathname, isCommunity, activeRelay, activeGroupId]);
+  }, [location.pathname, isCommunity, activeRelay, activeGroupId, isExploreMode]);
 
   const { contentSections } = useMemo(
     () => getCommunityTags(communityEvent?.rawEvent() ?? null),
@@ -56,6 +67,58 @@ export const ChatSections = ({
     };
     navigate(routes[groupTabName]);
   };
+
+  const handleExploreTabChange = (exploreTabName: ExploreTabName) => {
+    setActiveTab(exploreTabName);
+  };
+
+  if (isExploreMode) {
+    return (
+      <>
+        <div className="w-full">
+          <ChatTopBar />
+          <div className="flex items-stretch divide-x overflow-x-auto pt-0.5">
+            <TabButton
+              isActive={activeTab === 'explore'}
+              onClick={() => handleExploreTabChange('explore')}
+            >
+              Explore
+            </TabButton>
+
+            <TabButton
+              isActive={activeTab === 'groups'}
+              onClick={() => handleExploreTabChange('groups')}
+            >
+              Groups
+            </TabButton>
+
+            <TabButton
+              isActive={activeTab === 'info'}
+              onClick={() => handleExploreTabChange('info')}
+            >
+              Info
+            </TabButton>
+
+            <div className="flex-grow border-y"></div>
+          </div>
+        </div>
+
+        {activeTab === 'explore' && <RelayExplore activeRelay={activeRelay} />}
+
+        {activeTab === 'groups' && (
+          <div className="flex flex-col justify-center items-center h-full overflow-y-auto">
+            <GroupsListWidget />
+          </div>
+        )}
+
+        {activeTab === 'info' && (
+          <div className="flex flex-col items-center h-full overflow-y-auto">
+            <RelayInfo activeRelay={activeRelay} />
+          </div>
+        )}
+      </>
+    );
+  }
 
   if (isCommunity) {
     return (
