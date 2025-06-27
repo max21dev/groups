@@ -15,6 +15,7 @@ export const useHomePage = () => {
 
   const { activeUser } = useActiveUser();
   const isWalletsVisible = !!useMatch('/wallets/*');
+  const isExploreMode = !!useMatch('/explore');
 
   const [searchParams] = useSearchParams();
   const event = searchParams.get('eventId');
@@ -27,5 +28,6 @@ export const useHomePage = () => {
     isMobile,
     event,
     isWalletsVisible,
+    isExploreMode,
   };
 };
