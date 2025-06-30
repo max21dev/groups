@@ -5,9 +5,8 @@ import {
   GroupsList,
   GroupsListPinned,
   GroupsListWidget,
-  GroupsSearch,
 } from '@/features/groups';
-import { RelayList, RelaySelectDropdown } from '@/features/relays/';
+import { RelayDiscoverDropdown, RelayList, RelaySelectDropdown } from '@/features/relays/';
 import { ActiveUserInfo, UserLoginModal, UserWallets } from '@/features/users';
 
 import { ModeToggle } from '@/shared/components/mode-toggle';
@@ -19,8 +18,16 @@ import { cn } from '@/shared/utils';
 import { useHomePage } from './hooks';
 
 export function HomePage() {
-  const { isCollapsed, activeGroupId, activeUser, isMobile, event, activeRelay, isWalletsVisible } =
-    useHomePage();
+  const {
+    isCollapsed,
+    activeGroupId,
+    activeUser,
+    isMobile,
+    event,
+    activeRelay,
+    isWalletsVisible,
+    isExploreMode,
+  } = useHomePage();
 
   return (
     <>
@@ -28,7 +35,7 @@ export function HomePage() {
         <Sidebar
           className={cn(
             'sm:block max-w-full w-full',
-            (activeGroupId || event || isWalletsVisible) && 'max-sm:hidden',
+            (activeGroupId || event || isWalletsVisible || isExploreMode) && 'max-sm:hidden',
           )}
         >
           <div className="flex flex-col w-full h-full">
@@ -46,7 +53,7 @@ export function HomePage() {
 
                 <RelaySelectDropdown />
 
-                {activeRelay && <GroupsSearch />}
+                {activeRelay && <RelayDiscoverDropdown />}
               </div>
             </div>
 
@@ -75,7 +82,7 @@ export function HomePage() {
           className={cn(
             'w-full',
             'sm:block',
-            !(activeGroupId || event || isWalletsVisible) && 'max-sm:hidden',
+            !(activeGroupId || event || isWalletsVisible || isExploreMode) && 'max-sm:hidden',
           )}
         >
           <div className="flex flex-col w-full h-full">
@@ -85,6 +92,13 @@ export function HomePage() {
               </div>
             ) : event ? (
               <EventDetails event={event} />
+            ) : isExploreMode ? (
+              <ChatSections
+                activeRelay={activeRelay}
+                activeGroupId={undefined}
+                activeUser={activeUser}
+                isExploreMode={true}
+              />
             ) : !activeGroupId ? (
               <div className="flex flex-col justify-center items-center h-full">
                 {!activeRelay ? <RelayList /> : <GroupsListWidget />}
