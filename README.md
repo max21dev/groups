@@ -22,6 +22,12 @@ This client enables users to participate in groups managed by relays, where acce
   - 🚧 PWA support.
   - 🚧 Rich text formatting.
 
+- **Relay Exploration**:
+  - ✅ Explore and search public Nostr relays.
+  - ✅ View relay details and status.
+  - ✅ Add relays to your client for group discovery.
+  - 🚧 Advanced relay filtering and analytics.
+  
 - **Messaging**:
   - ✅ View and join existing groups.
   - ✅ Send and delete messages.
