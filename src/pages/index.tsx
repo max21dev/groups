@@ -47,6 +47,12 @@ export const router = createBrowserRouter([
         },
       },
       {
+        path: '/explore',
+        async lazy() {
+          return { Component: (await HomePage()).HomePage };
+        },
+      },
+      {
         path: '/user/:user',
         async lazy() {
           return { Component: (await UserPage()).UserPage };

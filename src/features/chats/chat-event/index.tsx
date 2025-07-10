@@ -140,7 +140,9 @@ export const ChatEvent = memo(
         </div>
         {category === 'follow-set' && <FollowSet tags={eventData.tags} address={event} />}
         {category === 'emoji-set' && <EmojiSet event={eventData} />}
-        {(category === 'note' || category === 'thread') && <Note content={eventData.content} />}
+        {(category === 'note' || category === 'thread' || category === 'comment') && (
+          <Note content={eventData.content} />
+        )}
         {category === 'poll' && <Poll poll={eventData} />}
         {category === 'code-snippet' && <CodeSnippet event={eventData} />}
         {category === 'long-form-content' && <LongFormContent content={eventData.content} />}

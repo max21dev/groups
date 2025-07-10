@@ -5,6 +5,7 @@ export type EventCategory =
   | 'chat-message'
   | 'note'
   | 'thread'
+  | 'comment'
   | 'long-form-content'
   | 'poll'
   | 'code-snippet'
