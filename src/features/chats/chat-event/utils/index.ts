@@ -18,12 +18,16 @@ export const EVENT_CATEGORY_MAP: Record<number, EventCategory> = {
   30009: 'badge-definition',
   30023: 'long-form-content',
   30030: 'emoji-set',
+  30040: 'publication-index',
+  30041: 'publication-content',
   30311: 'live-stream',
   30617: 'git-repo',
   30818: 'wiki',
   31923: 'calendar-event',
+  31924: 'calendar',
   31989: 'app-recommendation',
   31990: 'app-recommendation',
+  34550: 'moderated-community',
   39000: 'group',
 };
 
