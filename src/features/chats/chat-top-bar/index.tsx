@@ -32,18 +32,27 @@ export const ChatTopBar = () => {
     copyToClipboard,
     hasCopied,
     isExploreMode,
-    navigate,
+    isUserProfile,
+    userPubkey,
+    handleBackNavigation,
   } = useChatTopBar();
 
   return (
     <div className="flex justify-between items-center px-4 py-2">
       <div className="flex items-center gap-2">
-        <ArrowLeft
-          className="sm:hidden hover:cursor-pointer"
-          onClick={() => navigate(`/?relay=${activeRelay}`)}
-        />
+        <ArrowLeft className="sm:hidden hover:cursor-pointer" onClick={handleBackNavigation} />
 
-        {isExploreMode ? (
+        {isUserProfile ? (
+          <>
+            <UserAvatar pubkey={userPubkey || ''} />
+            <div className="flex flex-col">
+              <span className="font-bold mt-0 mb-0">
+                <UserName pubkey={userPubkey} length={20} />
+              </span>
+              <span className="text-xs font-light text-muted-foreground">User Profile</span>
+            </div>
+          </>
+        ) : isExploreMode ? (
           <>
             <Radio size={24} className="text-blue-500" />
             <div className="flex flex-col">
@@ -66,15 +75,15 @@ export const ChatTopBar = () => {
                 {isCommunity
                   ? 'Community'
                   : `${metadata?.isPublic ? 'Public' : 'Private'} and ${
-                    metadata?.isOpen ? 'Open' : 'Closed'
-                  }`}
+                      metadata?.isOpen ? 'Open' : 'Closed'
+                    }`}
               </span>
             </div>
           </>
         )}
       </div>
       <div className="flex items-center gap-2">
-        {!isExploreMode && (
+        {!isExploreMode && !isUserProfile && (
           <>
             <GroupBookmark groupId={activeGroupId} groupName={metadata?.name} />
             <TooltipProvider>
