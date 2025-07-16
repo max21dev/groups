@@ -8,13 +8,13 @@ export const UserName = ({
   length,
   className,
 }: {
-  pubkey: string | undefined;
+  pubkey: string | null | undefined;
   length?: number;
   className?: string;
 }) => {
-  const { profile } = useProfile({ pubkey });
-
   if (!pubkey) return null;
+
+  const { profile } = useProfile({ pubkey });
 
   const npub = nip19.npubEncode(pubkey);
 
