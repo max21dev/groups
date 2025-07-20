@@ -27,6 +27,7 @@ export function HomePage() {
     activeRelay,
     isWalletsVisible,
     isExploreMode,
+    isUserProfile,
   } = useHomePage();
 
   return (
@@ -35,7 +36,8 @@ export function HomePage() {
         <Sidebar
           className={cn(
             'sm:block max-w-full w-full',
-            (activeGroupId || event || isWalletsVisible || isExploreMode) && 'max-sm:hidden',
+            (activeGroupId || event || isWalletsVisible || isExploreMode || isUserProfile) &&
+              'max-sm:hidden',
           )}
         >
           <div className="flex flex-col w-full h-full">
@@ -82,7 +84,8 @@ export function HomePage() {
           className={cn(
             'w-full',
             'sm:block',
-            !(activeGroupId || event || isWalletsVisible || isExploreMode) && 'max-sm:hidden',
+            !(activeGroupId || event || isWalletsVisible || isExploreMode || isUserProfile) &&
+              'max-sm:hidden',
           )}
         >
           <div className="flex flex-col w-full h-full">
@@ -92,6 +95,12 @@ export function HomePage() {
               </div>
             ) : event ? (
               <EventDetails event={event} />
+            ) : isUserProfile ? (
+              <ChatSections
+                activeRelay={undefined}
+                activeGroupId={undefined}
+                activeUser={activeUser}
+              />
             ) : isExploreMode ? (
               <ChatSections
                 activeRelay={activeRelay}
