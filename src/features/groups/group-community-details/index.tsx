@@ -1,6 +1,7 @@
 import { CheckIcon, Copy } from 'lucide-react';
 import { useProfile } from 'nostr-hooks';
 import { memo, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 
 import { getCommunityTags } from '@/features/chats/chat-event/components/community/utils';
 import { GroupLinkButton, GroupNotification } from '@/features/groups';
@@ -51,9 +52,9 @@ export const CommunityDetails = memo(
               <div className="flex flex-col gap-1">
                 <p className="font-semibold">Relays:</p>
                 {relayTags.map((tag) => (
-                  <span key={tag} className="underline">
+                  <Link key={tag} to={`/explore?relay=${tag}`} className="underline text-pink-400">
                     {tag}
-                  </span>
+                  </Link>
                 ))}
               </div>
             )}

@@ -16,9 +16,9 @@ export const Community = ({ event }: { event: NostrEvent }) => {
           <div className="flex flex-col gap-1">
             <p className="font-semibold">Relays:</p>
             {relayTags.map((tag) => (
-              <span key={tag} className="underline">
+              <Link key={tag} to={`/explore?relay=${tag}`} className="underline text-pink-400">
                 {tag}
-              </span>
+              </Link>
             ))}
           </div>
         )}

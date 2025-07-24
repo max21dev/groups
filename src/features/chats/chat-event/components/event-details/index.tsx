@@ -76,7 +76,7 @@ export const EventDetails = ({ event }: { event: string }) => {
         </Button>
       </div>
 
-      <ChatEvent event={event} />
+      <ChatEvent key={event} event={event} />
       {kind === 'thread' && <ChatThreadComments parentId={eventId || ''} />}
     </div>
   );

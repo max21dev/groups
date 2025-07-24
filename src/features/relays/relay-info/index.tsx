@@ -7,6 +7,7 @@ import { Badge } from '@/shared/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 
 import { useRelayInfo } from './hooks';
+import { formatExternalHref } from './utils';
 
 export const RelayInfo = ({ activeRelay }: { activeRelay: string | undefined }) => {
   const { relayInfo, isLoading, error } = useRelayInfo(activeRelay);
@@ -85,10 +86,10 @@ export const RelayInfo = ({ activeRelay }: { activeRelay: string | undefined }) 
             <div>
               <span className="font-medium">Software: </span>
               <a
-                href={relayInfo.software}
+                href={formatExternalHref(relayInfo.software)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-500 hover:underline inline-flex items-center gap-1"
+                className="text-pink-400 underline inline-flex items-center gap-1"
               >
                 {relayInfo.software}
                 <ExternalLink className="w-3 h-3" />
@@ -116,7 +117,12 @@ export const RelayInfo = ({ activeRelay }: { activeRelay: string | undefined }) 
           {relayInfo.contact && (
             <div>
               <span className="font-medium">Alternative Contact: </span>
-              <a href={relayInfo.contact} className="text-blue-500 hover:underline">
+              <a
+                href={formatExternalHref(relayInfo.contact)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-pink-400 underline"
+              >
                 {relayInfo.contact}
               </a>
             </div>
@@ -256,40 +262,40 @@ export const RelayInfo = ({ activeRelay }: { activeRelay: string | undefined }) 
           <CardContent className="space-y-2">
             {relayInfo.posting_policy && (
               <a
-                href={relayInfo.posting_policy}
+                href={formatExternalHref(relayInfo.posting_policy)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-blue-500 hover:underline"
+                className="flex items-center gap-2 text-pink-400 underline"
               >
                 Posting Policy <ExternalLink className="w-3 h-3" />
               </a>
             )}
             {relayInfo.privacy_policy && (
               <a
-                href={relayInfo.privacy_policy}
+                href={formatExternalHref(relayInfo.privacy_policy)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-blue-500 hover:underline"
+                className="flex items-center gap-2 text-pink-400 underline"
               >
                 Privacy Policy <ExternalLink className="w-3 h-3" />
               </a>
             )}
             {relayInfo.terms_of_service && (
               <a
-                href={relayInfo.terms_of_service}
+                href={formatExternalHref(relayInfo.terms_of_service)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-blue-500 hover:underline"
+                className="flex items-center gap-2 text-pink-400 underline"
               >
                 Terms of Service <ExternalLink className="w-3 h-3" />
               </a>
             )}
             {relayInfo.payments_url && (
               <a
-                href={relayInfo.payments_url}
+                href={formatExternalHref(relayInfo.payments_url)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-blue-500 hover:underline"
+                className="flex items-center gap-2 text-pink-400 underline"
               >
                 Payments <ExternalLink className="w-3 h-3" />
               </a>

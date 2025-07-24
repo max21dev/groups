@@ -19,4 +19,8 @@ export type EventCategory =
   | 'zap-goal'
   | 'badge-definition'
   | 'calendar-event'
-  | 'wiki';
+  | 'calendar'
+  | 'wiki'
+  | 'moderated-community'
+  | 'publication-index'
+  | 'publication-content';

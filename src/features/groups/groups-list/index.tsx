@@ -1,6 +1,7 @@
 import { RadioIcon } from 'lucide-react';
 import { useAllGroupsMetadataRecords } from 'nostr-hooks/nip29';
 import { memo, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -50,7 +51,12 @@ export const GroupsList = memo(() => {
         )}
       >
         {(!isCollapsed || isMobile) && (
-          <p className="text-sm font-semibold">Groups in {activeRelay?.replace('wss://', '')}</p>
+          <p className="text-sm font-semibold">
+            Groups in{' '}
+            <Link to={`/explore?relay=${activeRelay}`} className="underline hover:text-pink-400">
+              {activeRelay?.replace('wss://', '')}
+            </Link>
+          </p>
         )}
         <RadioIcon size={18} />
       </div>

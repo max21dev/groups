@@ -14,6 +14,7 @@ import {
   AddEventReaction,
   AppRecommendation,
   BadgeDefinition,
+  Calendar,
   CalendarEvent,
   ChatEventMenu,
   ChatEventObject,
@@ -27,8 +28,11 @@ import {
   Highlight,
   LiveStream,
   LongFormContent,
+  ModeratedCommunity,
   Note,
   Picture,
+  PublicationContent,
+  PublicationIndex,
   Video,
   Wiki,
   ZapGoal,
@@ -156,6 +160,10 @@ export const ChatEvent = memo(
         {category === 'zap-goal' && <ZapGoal event={eventData} />}
         {category === 'badge-definition' && <BadgeDefinition event={eventData} />}
         {category === 'calendar-event' && <CalendarEvent event={eventData} />}
+        {category === 'calendar' && <Calendar event={eventData} />}
+        {category === 'moderated-community' && <ModeratedCommunity event={eventData} />}
+        {category === 'publication-index' && <PublicationIndex event={eventData} />}
+        {category === 'publication-content' && <PublicationContent event={eventData} />}
         {category === 'wiki' && <Wiki event={eventData} />}
         {category === null && <ChatEventObject event={eventData} />}
 
