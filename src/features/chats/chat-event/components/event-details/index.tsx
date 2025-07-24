@@ -8,13 +8,14 @@ import { EVENT_CATEGORY_MAP } from '@/features/chats/chat-event/utils';
 import { ChatThreadComments } from '@/features/chats/chat-threads/components';
 
 import { Button } from '@/shared/components/ui/button';
-import { useActiveGroup, useActiveRelay } from '@/shared/hooks';
+import { useActiveGroup, useActiveRelay, useSmartNavigation } from '@/shared/hooks';
 
 export const EventDetails = ({ event }: { event: string }) => {
   const { activeGroupId, isCommunity } = useActiveGroup();
   const { activeRelay } = useActiveRelay();
 
   const navigate = useNavigate();
+  const { navigateBack } = useSmartNavigation();
 
   const { kind, eventId } = useMemo(() => {
     try {
@@ -48,7 +49,7 @@ export const EventDetails = ({ event }: { event: string }) => {
 
   const handleBackClick = () => {
     if (isCommunity || !hasValidGroup || !hasValidRelay) {
-      navigate(-1);
+      navigateBack();
       return;
     }
 
@@ -57,7 +58,7 @@ export const EventDetails = ({ event }: { event: string }) => {
     } else if (kind === 'poll') {
       navigate(`/polls?relay=${activeRelay}&groupId=${activeGroupId}`);
     } else {
-      navigate(-1);
+      navigateBack();
     }
   };
 

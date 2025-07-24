@@ -6,5 +6,7 @@ export { useCopyToClipboard } from './use-copy-to-clipboard';
 export { useLazyLoad } from './use-lazy-load';
 export { useLoginModalState } from './use-login-modal-state';
 export { useSendContent } from './use-send-content';
+export { useSmartNavigation } from './use-smart-navigation';
 export { useUploadMedia } from './use-upload-media';
+export { useUserRouting } from './use-user-routing';
 export { useZapModalState } from './use-zap-modal-state';

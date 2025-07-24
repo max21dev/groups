@@ -3,7 +3,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { useHomePage } from '@/pages/home/hooks';
 
-import { useActiveGroup, useActiveRelay, useCopyToClipboard } from '@/shared/hooks';
+import {
+  useActiveGroup,
+  useActiveRelay,
+  useCopyToClipboard,
+  useSmartNavigation,
+  useUserRouting,
+} from '@/shared/hooks';
 
 import { useStore } from '@/shared/store';
 
@@ -17,7 +23,17 @@ export const useChatTopBar = () => {
   const toggleGroupDetails = useStore((state) => state.toggleGroupDetails);
 
   const { isExploreMode } = useHomePage();
+  const { isUserProfile, pubkey: userPubkey } = useUserRouting();
   const navigate = useNavigate();
+  const { navigateBack } = useSmartNavigation();
+
+  const handleBackNavigation = () => {
+    if (isUserProfile) {
+      navigateBack();
+    } else {
+      navigate(`/?relay=${activeRelay}`);
+    }
+  };
 
   return {
     metadata,
@@ -29,6 +45,8 @@ export const useChatTopBar = () => {
     copyToClipboard,
     hasCopied,
     isExploreMode,
-    navigate,
+    isUserProfile,
+    userPubkey,
+    handleBackNavigation,
   };
 };

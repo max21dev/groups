@@ -1,11 +1,13 @@
-import { CheckIcon, Copy, ExternalLink } from 'lucide-react';
+import { CheckIcon, Copy, ExternalLink, User } from 'lucide-react';
 
 import { NDKUser } from '@nostr-dev-kit/ndk';
 import { useNdk, useProfile } from 'nostr-hooks';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { UserAvatar } from '@/features/users';
 
+import { Button } from '@/shared/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
 import { Input } from '@/shared/components/ui/input';
 import { useCopyToClipboard } from '@/shared/hooks';
@@ -18,6 +20,7 @@ type UserProfileModalProps = {
 
 export const UserProfileModal = ({ pubkey, isOpen, onClose }: UserProfileModalProps) => {
   const [user, setUser] = useState<NDKUser>();
+  const navigate = useNavigate();
 
   const { profile } = useProfile({ pubkey });
 
@@ -30,6 +33,18 @@ export const UserProfileModal = ({ pubkey, isOpen, onClose }: UserProfileModalPr
   }, [ndk, setUser]);
 
   const { hasCopied, copyToClipboard } = useCopyToClipboard();
+
+  const handleViewProfile = () => {
+    if (user?.npub) {
+      // بستن modal
+      onClose();
+      // navigate به صفحه پروفایل با state برای smart navigation
+      navigate(`/user/${user.npub}`, {
+        state: { from: window.location.pathname },
+      });
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
@@ -55,15 +70,23 @@ export const UserProfileModal = ({ pubkey, isOpen, onClose }: UserProfileModalPr
                   </button>
                   <Input value={user?.npub} readOnly />
                 </div>
-                <a
-                  href={`https://njump.me/${user?.npub}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline text-blue-400 inline-flex items-center gap-1"
-                >
-                  Check out the Njump profile
-                  <ExternalLink className="w-4 h-4" />
-                </a>
+
+                <div className="flex flex-col gap-2 w-full mt-2">
+                  <Button onClick={handleViewProfile} className="w-full" variant="default">
+                    <User className="w-4 h-4 mr-2" />
+                    View Full Profile
+                  </Button>
+
+                  <a
+                    href={`https://njump.me/${user?.npub}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-center underline text-blue-400 inline-flex items-center justify-center gap-1 py-2"
+                  >
+                    Check out the Njump profile
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                </div>
               </>
             )}
             <p className="text-gray-500 w-full [overflow-wrap:anywhere]">{profile?.about}</p>
