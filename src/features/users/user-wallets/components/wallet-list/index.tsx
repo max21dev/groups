@@ -1,6 +1,6 @@
 import { ArrowLeft } from 'lucide-react';
 
-import { WalletListItem } from '@/features/users/user-wallets/components';
+import { CashuWallet, WalletListItem } from '@/features/users/user-wallets/components';
 
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
@@ -16,6 +16,8 @@ export const WalletList = () => {
         <ArrowLeft className="sm:hidden hover:cursor-pointer" onClick={() => navigate('/')} />
         My Wallets
       </h3>
+
+      <CashuWallet />
       <div className="rounded-lg border p-4 mb-6">
         <h4 className="text-lg mb-2">Add a New Wallet</h4>
         <div className="flex flex-col md:flex-row gap-2">
