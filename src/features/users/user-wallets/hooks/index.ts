@@ -1,5 +1,5 @@
 import { useActiveUser } from 'nostr-hooks';
-import { useParams } from 'react-router-dom';
+import { useMatch, useParams } from 'react-router-dom';
 
 import { useLoginModalState } from '@/shared/hooks';
 
@@ -9,9 +9,11 @@ export const useUserWallets = () => {
 
   const { code } = useParams<{ code: string }>();
   const isWalletDetailVisible = !!code;
+  const isCashuWalletDetailVisible = !!useMatch('/wallets/cashu');
 
   return {
     isWalletDetailVisible,
+    isCashuWalletDetailVisible,
     activeUser,
     openLoginModal,
   };
