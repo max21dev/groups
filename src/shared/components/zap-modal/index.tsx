@@ -22,7 +22,6 @@ import {
 } from '@/shared/components/ui/dropdown-menu';
 import { Input } from '@/shared/components/ui/input';
 import { Small } from '@/shared/components/ui/typography/small';
-import { ellipsis } from '@/shared/utils';
 
 import { ZAP_AMOUNTS } from './config';
 import { useZapModal } from './hooks';
@@ -43,6 +42,9 @@ export const ZapModal = () => {
     selectedWallet,
     setSelectedWallet,
     safeParsePubkey,
+    cashuPubkey,
+    hasWallet,
+    walletDisplayName,
   } = useZapModal();
 
   return (
@@ -96,13 +98,13 @@ export const ZapModal = () => {
           </div>
         </div>
 
-        {walletCodes.length > 0 && (
+        {(walletCodes.length > 0 || hasWallet) && (
           <div className="mt-2">
             <Small>Select Wallet (optional):</Small>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="w-full text-xs">
-                  {selectedWallet ? ellipsis(selectedWallet, 40) : 'Browser Wallet (WebLN)'}
+                  {walletDisplayName}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-full">
@@ -113,6 +115,14 @@ export const ZapModal = () => {
                   onValueChange={(val) => setSelectedWallet(val)}
                 >
                   <DropdownMenuRadioItem value="">Browser (WebLN)</DropdownMenuRadioItem>
+                  {hasWallet && (
+                    <DropdownMenuRadioItem value="cashu">
+                      <div className="flex items-center gap-2 [&_span]:w-6 [&_span]:h-6 [&_span]:text-xs">
+                        <UserAvatar pubkey={cashuPubkey!} />
+                        <UserName pubkey={cashuPubkey} length={20} className="text-xs" />
+                      </div>
+                    </DropdownMenuRadioItem>
+                  )}
                   {walletCodes.map((code) => {
                     const pubkey = safeParsePubkey(code);
                     return (
