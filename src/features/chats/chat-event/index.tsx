@@ -34,6 +34,7 @@ import {
   PublicationContent,
   PublicationIndex,
   Video,
+  VoiceMessage,
   Wiki,
   ZapGoal,
 } from './components';
@@ -154,6 +155,7 @@ export const ChatEvent = memo(
         {category === 'live-stream' && <LiveStream event={eventData} />}
         {category === 'picture' && <Picture event={eventData} />}
         {category === 'video' && <Video event={eventData} />}
+        {category === 'voice-message' && <VoiceMessage event={eventData} />}
         {category === 'community' && <Community event={eventData} />}
         {category === 'git-repo' && <GitRepo event={eventData} />}
         {category === 'app-recommendation' && <AppRecommendation event={eventData} />}
