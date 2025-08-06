@@ -4,7 +4,7 @@ import { RefObject, useState } from 'react';
 
 import { useToast } from '@/shared/components/ui/use-toast';
 
-const DEFAULT_SERVER = 'https://blossom.primal.net/';
+const DEFAULT_SERVER = 'https://blossom.primal.net';
 
 export const useBlossomUpload = <T extends HTMLTextAreaElement | HTMLInputElement>(
   setMediaUrl: (url: string | ((prev: string) => string)) => void,
