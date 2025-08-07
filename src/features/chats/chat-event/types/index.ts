@@ -11,6 +11,7 @@ export type EventCategory =
   | 'code-snippet'
   | 'picture'
   | 'video'
+  | 'voice-message'
   | 'live-stream'
   | 'highlight'
   | 'git-repo'

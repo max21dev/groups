@@ -22,5 +22,6 @@ export * from './picture';
 export * from './publication-content';
 export * from './publication-index';
 export * from './video';
+export * from './voice-message';
 export * from './wiki';
 export * from './zap-goal';

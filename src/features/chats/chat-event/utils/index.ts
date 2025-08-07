@@ -10,6 +10,7 @@ export const EVENT_CATEGORY_MAP: Record<number, EventCategory> = {
   20: 'picture',
   21: 'video',
   1068: 'poll',
+  1222: 'voice-message',
   1337: 'code-snippet',
   9041: 'zap-goal',
   9802: 'highlight',
