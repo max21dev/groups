@@ -24,3 +24,16 @@ export type Transaction = {
   expires_at?: number;
   settled_at?: number;
 };
+
+export interface CashuTransaction {
+  id: string;
+  direction: 'in' | 'out';
+  amount: number;
+  createdAt: number;
+  createdTokens: string[];
+  destroyedTokens: string[];
+  unit?: string;
+  mint?: string;
+  description?: string;
+  fee?: number;
+}

@@ -1,10 +1,12 @@
 import { LoginButton } from '@/features/chats/chat-bottom-bar/components';
 
 import { WalletDetail, WalletList } from './components';
+import { CashuWalletDetail } from './components/cashu-wallet/components';
 import { useUserWallets } from './hooks';
 
 export const UserWallets = () => {
-  const { activeUser, openLoginModal, isWalletDetailVisible } = useUserWallets();
+  const { activeUser, openLoginModal, isWalletDetailVisible, isCashuWalletDetailVisible } =
+    useUserWallets();
 
   if (!activeUser) {
     return (
@@ -18,7 +20,13 @@ export const UserWallets = () => {
   }
   return (
     <div className="w-full max-w-2xl p-4 mx-auto [overflow-wrap:anywhere]">
-      {isWalletDetailVisible ? <WalletDetail /> : <WalletList />}
+      {isWalletDetailVisible ? (
+        <WalletDetail />
+      ) : isCashuWalletDetailVisible ? (
+        <CashuWalletDetail />
+      ) : (
+        <WalletList />
+      )}
     </div>
   );
 };

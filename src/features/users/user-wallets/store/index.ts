@@ -1,26 +1,58 @@
+import { NDKCashuWallet } from '@nostr-dev-kit/ndk-wallet';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import { NWCClient } from '../lib';
+import { CashuTransaction } from '../types';
 
 export type WalletState = {
+  // NWC wallets
   walletCodes: string[];
   walletInstances: Record<string, NWCClient | null>;
+
+  // Cashu wallet
+  cashuWallet: NDKCashuWallet | null;
+  cashuMintList: {
+    mints: string[];
+    relays: string[];
+    pubkey?: string;
+  } | null;
+  cashuLoading: boolean;
+  cashuError: string | null;
+  cashuTransactions: CashuTransaction[];
 };
 
 export type WalletActions = {
+  // NWC actions
   addWallet: (code: string) => void;
   removeWallet: (code: string) => void;
   getWalletInstance: (code: string) => Promise<NWCClient | null>;
   clearWallets: () => void;
+
+  // Cashu actions
+  setCashuWallet: (wallet: NDKCashuWallet | null) => void;
+  setCashuMintList: (mintList: WalletState['cashuMintList']) => void;
+  setCashuLoading: (loading: boolean) => void;
+  setCashuError: (error: string | null) => void;
+  setCashuTransactions: (transactions: CashuTransaction[]) => void;
+  clearCashuWallet: () => void;
 };
 
 export const useWalletStore = create<WalletState & WalletActions>()(
   persist(
     (set, get) => ({
+      // NWC state
       walletCodes: [],
       walletInstances: {},
 
+      // Cashu state
+      cashuWallet: null,
+      cashuMintList: null,
+      cashuLoading: false,
+      cashuError: null,
+      cashuTransactions: [],
+
+      // NWC actions
       addWallet: (code: string) => {
         const { walletCodes } = get();
         if (!walletCodes.includes(code)) {
@@ -68,6 +100,22 @@ export const useWalletStore = create<WalletState & WalletActions>()(
           walletInstances: {},
         });
       },
+
+      // Cashu actions
+      setCashuWallet: (wallet) => set({ cashuWallet: wallet }),
+      setCashuMintList: (mintList) => set({ cashuMintList: mintList }),
+      setCashuLoading: (loading) => set({ cashuLoading: loading }),
+      setCashuError: (error) => set({ cashuError: error }),
+      setCashuTransactions: (transactions) => set({ cashuTransactions: transactions }),
+
+      clearCashuWallet: () =>
+        set({
+          cashuWallet: null,
+          cashuMintList: null,
+          cashuLoading: false,
+          cashuError: null,
+          cashuTransactions: [],
+        }),
     }),
     {
       name: 'wallet-storage',

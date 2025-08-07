@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,7 +14,11 @@ export default defineConfig({
       output: {
         manualChunks: {
           'react-stuff': ['react', 'react-dom', 'react-router-dom'],
-          'nostr-dev-kit': ['@nostr-dev-kit/ndk', '@nostr-dev-kit/ndk-cache-dexie'],
+          'nostr-dev-kit': [
+            '@nostr-dev-kit/ndk',
+            '@nostr-dev-kit/ndk-cache-dexie',
+            '@nostr-dev-kit/ndk-wallet',
+          ],
           zustand: ['zustand'],
         },
       },
