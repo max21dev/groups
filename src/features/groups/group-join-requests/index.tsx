@@ -39,7 +39,7 @@ export const JoinRequests = ({
           <DialogHeader>
             <DialogTitle>Join Requests ({joinRequests.length})</DialogTitle>
           </DialogHeader>
-          <ScrollArea className="max-h-[300px]">
+          <ScrollArea viewportProps={{ className: 'max-h-[300px]' }}>
             {joinRequests.length === 0 ? (
               <p className="text-muted-foreground">No pending requests.</p>
             ) : (
