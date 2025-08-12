@@ -140,6 +140,7 @@ export const ChatEvent = memo(
               event={event}
               deleteThreadComment={deleteThreadComment}
               pubkey={eventData.pubkey}
+              eventKind={eventData.kind}
             />
           </div>
         </div>

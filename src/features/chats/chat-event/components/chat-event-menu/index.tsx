@@ -2,6 +2,8 @@ import { Copy, EllipsisIcon, MaximizeIcon, Trash2 } from 'lucide-react';
 import { useActiveUser } from 'nostr-hooks';
 import { Link, useSearchParams } from 'react-router-dom';
 
+import { CompatibleApps } from '@/features/chats/chat-event/components/';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,10 +17,12 @@ export const ChatEventMenu = ({
   event,
   pubkey,
   deleteThreadComment,
+  eventKind,
 }: {
   event: string;
   deleteThreadComment?: (commentId: string) => void;
   pubkey?: string;
+  eventKind?: number;
 }) => {
   const { activeRelay } = useActiveRelay();
   const { activeGroupId } = useActiveGroup();
@@ -46,6 +50,9 @@ export const ChatEventMenu = ({
             </Link>
           </DropdownMenuItem>
         )}
+
+        {eventKind && <CompatibleApps eventId={event} eventKind={eventKind} />}
+
         {deleteThreadComment && activeUser?.pubkey === pubkey && (
           <DropdownMenuItem
             className="flex items-center gap-2 cursor-pointer text-red-500 focus:text-red-600"
