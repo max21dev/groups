@@ -153,7 +153,9 @@ export const ChatSections = ({
           </div>
         </div>
 
-        {activeTab === 'explore' && <RelayExplore activeRelay={activeRelay} />}
+        {activeTab === 'explore' && (
+          <RelayExplore key={String(activeRelay)} activeRelay={activeRelay} />
+        )}
 
         {activeTab === 'groups' && (
           <div className="flex flex-col justify-center items-center h-full overflow-y-auto">

@@ -1,4 +1,4 @@
-import { NDKEvent, NDKSubscription } from '@nostr-dev-kit/ndk';
+import { NDKEvent, NDKRelaySet, NDKSubscription } from '@nostr-dev-kit/ndk';
 import { useNdk } from 'nostr-hooks';
 import { useEffect, useRef, useState } from 'react';
 
@@ -29,7 +29,9 @@ export const useRelayExplore = (activeRelay: string | undefined) => {
           limit: 50,
         };
 
-        const subscription = ndk.subscribe(filter);
+        const relay = ndk.pool.getRelay(activeRelay);
+        const relaySet = new NDKRelaySet(new Set([relay]), ndk);
+        const subscription = ndk.subscribe(filter, { closeOnEose: false, relaySet });
         subscriptionRef.current = subscription;
 
         subscription.on('event', (event: NDKEvent) => {
