@@ -1,3 +1,4 @@
+import { NDKTag } from '@nostr-dev-kit/ndk';
 import { useMemo, useState } from 'react';
 import ReactPlayer from 'react-player';
 
@@ -11,9 +12,11 @@ import { categorizeContent } from './utils';
 export const RichText = ({
   content,
   eventPreview = false,
+  emojiTags,
 }: {
   content: string | null | undefined;
   eventPreview?: boolean;
+  emojiTags?: NDKTag[];
 }) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
@@ -31,7 +34,14 @@ export const RichText = ({
 
   const flushText = (key: number) => {
     if (textBuffer) {
-      elements.push(<Markdown key={`md-${key}`} content={textBuffer} className="text-sm" />);
+      elements.push(
+        <Markdown
+          key={`md-${key}`}
+          content={textBuffer}
+          emojiTags={emojiTags}
+          className="text-sm"
+        />,
+      );
       textBuffer = '';
     }
   };

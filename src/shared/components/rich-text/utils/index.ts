@@ -13,6 +13,18 @@ const profileRegex = /^nprofile1[0-9a-z]+$/i;
 const noteRegex = /^note1[0-9a-z]+$/i;
 const addressRegex = /^naddr1[0-9a-z]+$/i;
 const eventRegex = /^nevent1[0-9a-z]+$/i;
+const emojiInlineRegex = /:([\w+-]+):/g;
+const emojiFullRegex = /^:([\w+-]+):$/;
+const singleEmojiMessageRegex = /^\s*:([\w+-]+):\s*$/;
+
+const toEmojiImageMarkdown = (raw: string, title?: string) => {
+  const m = raw.match(emojiFullRegex);
+  if (!m) return raw;
+  const shortcode = m[1];
+  const encoded = encodeURIComponent(shortcode);
+  const titlePart = title ? ` "${title}"` : '';
+  return `![${raw}](/emoji/${encoded}${titlePart})`;
+};
 
 const categorizePart = (part: string): CategorizedContent => {
   if (nostrRegex.test(part)) {
@@ -40,6 +52,9 @@ const categorizePart = (part: string): CategorizedContent => {
     }
   }
 
+  if (emojiFullRegex.test(part)) {
+    return { category: 'text', content: toEmojiImageMarkdown(part) };
+  }
   if (imageRegex.test(part)) {
     return { category: 'image', content: part };
   }
@@ -57,7 +72,16 @@ const categorizePart = (part: string): CategorizedContent => {
 };
 
 export const categorizeContent = (content: string): CategorizedContent[] => {
-  const regex = new RegExp(`(${urlRegex.source})|(${nostrRegex.source})`, 'gi');
+  if (singleEmojiMessageRegex.test(content)) {
+    const only = content.trim().match(emojiFullRegex)![0];
+    return [{ category: 'text', content: toEmojiImageMarkdown(only, 'big') }];
+  }
+
+  const regex = new RegExp(
+    `(${urlRegex.source})|(${nostrRegex.source})|(${emojiInlineRegex.source})`,
+    'gi',
+  );
+
   const tokens: string[] = [];
   let lastIndex = 0;
 
