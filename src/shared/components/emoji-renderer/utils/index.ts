@@ -53,3 +53,5 @@ export const convertEventToEmojiSet = (event: NDKEvent): EmojiSet | null => {
     return null;
   }
 };
+
+export const isEmojiShortcode = (s: string) => /^:([\w+-]+):$/.test(s);

@@ -1,3 +1,4 @@
+import { NDKEvent, NDKTag } from '@nostr-dev-kit/ndk';
 import { useActiveUser, useProfile } from 'nostr-hooks';
 import {
   deleteGroupEvent,
@@ -12,6 +13,7 @@ import { useCallback, useMemo } from 'react';
 import { useJoinRequestButton } from '@/features/chats/chat-bottom-bar/components/join-request-button/hooks';
 import { useChatBottomBar } from '@/features/chats/chat-bottom-bar/hooks';
 
+import { isEmojiShortcode } from '@/shared/components/emoji-renderer/utils';
 import { useToast } from '@/shared/components/ui/use-toast';
 
 import {
@@ -45,7 +47,7 @@ export const useChatListItem = ({
 
   const { activeUser } = useActiveUser();
 
-  const { reactions } = useGroupReactions(activeRelay, activeGroupId, {
+  const { reactions, reactionsEvents } = useGroupReactions(activeRelay, activeGroupId, {
     byTargetId: { targetId: chat?.id, waitForTargetId: true },
   });
 
@@ -65,6 +67,26 @@ export const useChatListItem = ({
       {} as Record<string, Nip29GroupReaction[]>,
     );
   }, [reactions]);
+
+  const reactionEmojiTagsByContent = useMemo(() => {
+    const map: Record<string, NDKTag[] | undefined> = {};
+    if (!reactions || !reactionsEvents) return map;
+
+    const evById = new Map<string, NDKEvent>(reactionsEvents.map((e) => [e.id, e]));
+
+    for (const r of reactions) {
+      const c = r.content;
+      if (!isEmojiShortcode(c)) continue;
+      if (map[c]) continue;
+
+      const ev = evById.get(r.id);
+      const hasEmojiTags = ev?.tags?.some((t) => t[0] === 'emoji');
+      if (hasEmojiTags) {
+        map[c] = ev!.tags as NDKTag[];
+      }
+    }
+    return map;
+  }, [reactions, reactionsEvents]);
 
   const sameAsCurrentUser = chat?.pubkey === activeUser?.pubkey;
 
@@ -179,5 +201,7 @@ export const useChatListItem = ({
     isAdmin,
     removeUser,
     ndkEvent,
+    reactionEmojiTagsByContent,
+    isEmojiShortcode,
   };
 };
