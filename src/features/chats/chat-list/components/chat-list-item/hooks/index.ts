@@ -157,6 +157,11 @@ export const useChatListItem = ({
     toast({ description: 'Chat link copied to clipboard' });
   };
 
+  const ndkEvent = useMemo(
+    () => chatsEvents?.find((e) => e.id === chat?.id),
+    [chatsEvents, chat?.id],
+  );
+
   return {
     isLastChat,
     sameAuthorAsNextChat,
@@ -173,5 +178,6 @@ export const useChatListItem = ({
     copyChatLink,
     isAdmin,
     removeUser,
+    ndkEvent,
   };
 };

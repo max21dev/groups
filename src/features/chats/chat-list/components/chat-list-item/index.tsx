@@ -45,6 +45,7 @@ export const ChatListItem = memo(
       copyChatLink,
       isAdmin,
       removeUser,
+      ndkEvent,
     } = useChatListItem({
       topChat,
       bottomChat,
@@ -105,7 +106,7 @@ export const ChatListItem = memo(
                     )}
                   >
                     <div className="w-full [overflow-wrap:anywhere] self-start">
-                      <RichText content={chat?.content} eventPreview />
+                      <RichText content={chat?.content} eventPreview emojiTags={ndkEvent?.tags} />
                     </div>
 
                     <div
