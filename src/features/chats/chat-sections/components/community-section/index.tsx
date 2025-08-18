@@ -34,17 +34,20 @@ export const CommunitySection = ({
     try {
       const filters = [
         { kinds: kinds, authors: [groupId], limit: 50 },
+        { kinds: [30222], '#k': kinds.map((k) => String(k)), '#h': [groupId], limit: 50 } as any,
         { kinds: kinds, '#h': [groupId], limit: 50 },
       ];
 
-      const allEvents = new Set<NDKEvent>();
+      const all = new Map<string, NDKEvent>();
 
       for (const filter of filters) {
-        const fetchedEvents = await ndk.fetchEvents(filter);
-        fetchedEvents.forEach((event) => allEvents.add(event));
+        const fetched = await ndk.fetchEvents(filter as any, { closeOnEose: true });
+        fetched.forEach((ev) => {
+          if (ev.id) all.set(ev.id, ev);
+        });
       }
 
-      const eventsArray = Array.from(allEvents).sort(
+      const eventsArray = Array.from(all.values()).sort(
         (a, b) => (b.created_at || 0) - (a.created_at || 0),
       );
 
@@ -73,13 +76,17 @@ export const CommunitySection = ({
   }
 
   return (
-    <div className="flex flex-col items-center gap-2 px-2 py-8 h-full overflow-y-auto [&_.max-w-80]:max-w-2xl">
-      {events.map((event) => (
-        <ChatEvent
-          key={event.id}
-          event={getNostrLink(event.id!, event.pubkey, event.kind) || event.id!}
-        />
-      ))}
+    <div className="flex flex-col items-center gap-2 px-2 py-8 h-full overflow-y-auto">
+      {events.map((event) => {
+        const eventLink =
+          event.kind === 30222 &&
+          typeof event.content === 'string' &&
+          event.content.trim().startsWith('n')
+            ? event.content.trim()
+            : getNostrLink(event.id!, event.pubkey, event.kind) || event.id!;
+
+        return <ChatEvent key={event.id} event={eventLink} />;
+      })}
     </div>
   );
 };
