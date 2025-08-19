@@ -21,6 +21,7 @@ export const EVENT_CATEGORY_MAP: Record<number, EventCategory> = {
   30030: 'emoji-set',
   30040: 'publication-index',
   30041: 'publication-content',
+  30222: 'targeted-publication',
   30311: 'live-stream',
   30617: 'git-repo',
   30818: 'wiki',

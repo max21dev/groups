@@ -33,6 +33,7 @@ import {
   Picture,
   PublicationContent,
   PublicationIndex,
+  TargetedPublication,
   Video,
   VoiceMessage,
   Wiki,
@@ -158,6 +159,7 @@ export const ChatEvent = memo(
         {category === 'video' && <Video event={eventData} />}
         {category === 'voice-message' && <VoiceMessage event={eventData} />}
         {category === 'community' && <Community event={eventData} />}
+        {category === 'targeted-publication' && <TargetedPublication event={eventData} />}
         {category === 'git-repo' && <GitRepo event={eventData} />}
         {category === 'app-recommendation' && <AppRecommendation event={eventData} />}
         {category === 'zap-goal' && <ZapGoal event={eventData} />}

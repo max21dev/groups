@@ -22,6 +22,7 @@ export * from './note';
 export * from './picture';
 export * from './publication-content';
 export * from './publication-index';
+export * from './targeted-publication';
 export * from './video';
 export * from './voice-message';
 export * from './wiki';
