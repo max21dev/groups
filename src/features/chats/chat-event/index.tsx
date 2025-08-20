@@ -12,6 +12,7 @@ import { cn, ellipsis, formatTimestampToDate } from '@/shared/utils';
 
 import {
   AddEventReaction,
+  AppHandler,
   AppRecommendation,
   BadgeDefinition,
   Calendar,
@@ -162,6 +163,7 @@ export const ChatEvent = memo(
         {category === 'targeted-publication' && <TargetedPublication event={eventData} />}
         {category === 'git-repo' && <GitRepo event={eventData} />}
         {category === 'app-recommendation' && <AppRecommendation event={eventData} />}
+        {category === 'app-handler' && <AppHandler event={eventData} />}
         {category === 'zap-goal' && <ZapGoal event={eventData} />}
         {category === 'badge-definition' && <BadgeDefinition event={eventData} />}
         {category === 'calendar-event' && <CalendarEvent event={eventData} />}

@@ -18,6 +18,7 @@ export type EventCategory =
   | 'community'
   | 'targeted-publication'
   | 'app-recommendation'
+  | 'app-handler'
   | 'zap-goal'
   | 'badge-definition'
   | 'calendar-event'

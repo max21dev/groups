@@ -28,7 +28,7 @@ export const EVENT_CATEGORY_MAP: Record<number, EventCategory> = {
   31923: 'calendar-event',
   31924: 'calendar',
   31989: 'app-recommendation',
-  31990: 'app-recommendation',
+  31990: 'app-handler',
   34550: 'moderated-community',
   39000: 'group',
 };

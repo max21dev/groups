@@ -1,4 +1,5 @@
 export * from './add-event-reaction';
+export * from './app-handler';
 export * from './app-recommendation';
 export * from './badge-definition';
 export * from './calendar';
