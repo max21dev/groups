@@ -1,4 +1,9 @@
-import { NDKEvent, NDKRelaySet, NDKSubscriptionCacheUsage } from '@nostr-dev-kit/ndk';
+import {
+  NDKEvent,
+  NDKRelaySet,
+  NDKSubscriptionCacheUsage,
+  tryNormalizeRelayUrl,
+} from '@nostr-dev-kit/ndk';
 import { useNdk } from 'nostr-hooks';
 import { useEffect, useRef, useState } from 'react';
 
@@ -62,12 +67,13 @@ export function useCompatibleApps(eventId: string, eventKind?: number) {
         );
 
         const hinted = new Set<string>();
-        uniqTargets.forEach((t) => {
-          if (t.relayHint) hinted.add(t.relayHint);
-        });
+        uniqTargets.forEach((t) => t.relayHint && hinted.add(t.relayHint));
         (discoveryRelays || []).forEach((r) => hinted.add(r));
-        const finalRelaySet =
-          hinted.size > 0 ? NDKRelaySet.fromRelayUrls([...hinted], ndk) : undefined;
+
+        const finalRelayUrls = [...hinted].map(tryNormalizeRelayUrl).filter(Boolean) as string[];
+        const finalRelaySet = finalRelayUrls.length
+          ? NDKRelaySet.fromRelayUrls(finalRelayUrls, ndk)
+          : undefined;
 
         const preciseHandlers = await ndk.fetchEvents(
           {

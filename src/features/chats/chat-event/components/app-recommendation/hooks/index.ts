@@ -1,4 +1,4 @@
-import { NDKRelaySet, NostrEvent } from '@nostr-dev-kit/ndk';
+import { NDKRelaySet, NostrEvent, tryNormalizeRelayUrl } from '@nostr-dev-kit/ndk';
 import { useNdk } from 'nostr-hooks';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -44,7 +44,8 @@ export const useAppRecommendation = (event: NostrEvent) => {
         }
 
         const jobs = aTags.map(async (tag) => {
-          const [_, aRef, relayHint, platform] = tag;
+          const [_, aRef, relayHintRaw, platform] = tag;
+          const relayHint = tryNormalizeRelayUrl(relayHintRaw);
           let handlerEvent: NostrEvent | null = null;
 
           if (typeof aRef !== 'string') {
@@ -59,9 +60,11 @@ export const useAppRecommendation = (event: NostrEvent) => {
           const filter = { kinds: [31990], authors: [appPubkey], '#d': [dId] } as any;
 
           try {
-            const relaySet = NDKRelaySet.fromRelayUrls([relayHint], ndk);
-            const ev = await ndk.fetchEvent(filter, relaySet ? { relaySet } : undefined);
-            if (ev) handlerEvent = ev.rawEvent();
+            if (relayHint) {
+              const relaySet = NDKRelaySet.fromRelayUrls([relayHint], ndk);
+              const ev = await ndk.fetchEvent(filter, relaySet ? { relaySet } : undefined);
+              if (ev) handlerEvent = ev.rawEvent();
+            }
           } catch {
             /* no-op */
           }
