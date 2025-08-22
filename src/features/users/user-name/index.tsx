@@ -1,5 +1,4 @@
 import { useProfile } from 'nostr-hooks';
-import { nip19 } from 'nostr-tools';
 
 import { cn, ellipsis } from '@/shared/utils';
 
@@ -16,11 +15,9 @@ export const UserName = ({
 
   const { profile } = useProfile({ pubkey });
 
-  const npub = nip19.npubEncode(pubkey);
-
   const userName = length
-    ? ellipsis(profile?.displayName || profile?.name || npub || pubkey, length)
-    : profile?.displayName || profile?.name || npub || pubkey;
+    ? ellipsis(profile?.displayName || profile?.name || pubkey, length)
+    : profile?.displayName || profile?.name || pubkey;
 
   return <p className={cn('truncate', className)}>{userName}</p>;
 };

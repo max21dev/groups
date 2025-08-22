@@ -35,7 +35,7 @@ export const CommunityDetails = memo(
         <div className="h-full overflow-y-auto mt-4 [overflow-wrap:anywhere]">
           <div className="flex flex-col items-center gap-2 min-h-3">
             <UserAvatar pubkey={pubkey || ''} />
-            <UserName pubkey={pubkey} className="text-lg font-medium" />
+            <UserName pubkey={pubkey} length={16} className="text-lg font-medium" />
             <div className="flex flex-row-reverse items-center gap-2 w-full">
               <button
                 onClick={() => copyToClipboard(communityNostrLink || '')}

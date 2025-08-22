@@ -94,7 +94,7 @@ export const ModeratedCommunity = ({ event }: { event: NostrEvent }) => {
                   <UserAvatar pubkey={moderator.pubkey} />
                 </span>
                 <div className="flex-1 min-w-0">
-                  <UserName pubkey={moderator.pubkey} />
+                  <UserName pubkey={moderator.pubkey} length={16} />
                   <div className="text-xs text-muted-foreground">Moderator</div>
                 </div>
                 <Badge variant="secondary">

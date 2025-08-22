@@ -109,7 +109,7 @@ export const RelayInfo = ({ activeRelay }: { activeRelay: string | undefined }) 
               <span className="font-medium">Admin Contact: </span>
               <div className="flex items-center gap-2 mt-1">
                 <UserAvatar pubkey={relayInfo.pubkey} />
-                <UserName pubkey={relayInfo.pubkey} />
+                <UserName pubkey={relayInfo.pubkey} length={20} />
               </div>
             </div>
           )}
