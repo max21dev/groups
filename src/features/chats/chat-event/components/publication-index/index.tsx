@@ -35,7 +35,7 @@ export const PublicationIndex = ({ event }: { event: NostrEvent }) => {
       `Section ${currentSectionIndex + 1}`;
 
     return (
-      <div className="w-full set-max-h overflow-auto flex flex-col gap-2 p-2">
+      <div className="w-full flex flex-col gap-2 p-2">
         <div className="flex flex-col w-full items-center justify-center gap-2 border-b pb-3">
           <Button size="sm" onClick={backToIndex}>
             <Book size={16} className="mr-2" />
@@ -85,7 +85,7 @@ export const PublicationIndex = ({ event }: { event: NostrEvent }) => {
   }
 
   return (
-    <div className="w-full set-max-h overflow-auto flex flex-col gap-2 p-2">
+    <div className="w-full flex flex-col gap-2 p-2">
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <Book size={20} className="text-primary" />

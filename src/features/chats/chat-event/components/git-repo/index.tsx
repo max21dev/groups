@@ -37,7 +37,7 @@ export const GitRepo = ({ event }: { event: NostrEvent }) => {
   const tags = event.tags.filter(([t]) => t === 't').map(([_, tag]) => tag);
 
   return (
-    <div className="w-full set-max-h flex flex-col gap-1 overflow-y-auto rounded-md p-2">
+    <div className="w-full flex flex-col gap-1 rounded-md p-2">
       <div className="flex flex-col w-full">
         <span className="flex items-center gap-2">
           <FolderGit size={20} />
@@ -94,9 +94,12 @@ export const GitRepo = ({ event }: { event: NostrEvent }) => {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-pink-400 text-sm flex items-center gap-1 hover:underline"
+                  className="text-pink-400 text-sm flex items-center gap-1 break-all hover:underline"
                 >
-                  {url} <ExternalLink className="h-3 w-3" />
+                  {url}{' '}
+                  <div className="h-3 w-3">
+                    <ExternalLink size={14} />
+                  </div>
                 </a>
               ))}
             </div>

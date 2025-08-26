@@ -10,7 +10,7 @@ export const Wiki = ({ event }: { event: NostrEvent }) => {
   const coverImage = event.tags.find((tag) => tag[0] === 'image')?.[1];
 
   return (
-    <div className="w-full set-max-h overflow-auto flex flex-col gap-2 p-2">
+    <div className="w-full flex flex-col gap-2 p-2">
       {coverImage && (
         <img
           src={coverImage}

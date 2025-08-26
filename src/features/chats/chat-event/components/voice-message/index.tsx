@@ -24,7 +24,7 @@ export const VoiceMessage = ({ event }: { event: NostrEvent }) => {
   const hashtags = event.tags.filter(([t]) => t === 't').map(([, tag]) => `#${tag}`);
 
   return (
-    <div className="w-full set-max-h overflow-auto flex flex-col gap-2 p-2">
+    <div className="w-full flex flex-col gap-2 p-2">
       {title && <h5 className="text-lg font-semibold">{title}</h5>}
 
       <div className="mt-4 space-y-4">

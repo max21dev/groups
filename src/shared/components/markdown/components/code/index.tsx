@@ -1,6 +1,7 @@
 import { CheckIcon, Copy } from 'lucide-react';
 
 import { Button } from '@/shared/components/ui/button';
+import { ScrollArea, ScrollBar } from '@/shared/components/ui/scroll-area';
 import {
   Tooltip,
   TooltipContent,
@@ -62,11 +63,14 @@ export const Code: React.FC<CustomCodeProps> = ({ inline, children, className, .
         </TooltipProvider>
       </div>
 
-      <pre className="max-w-[70vw] sm:max-w-[40vw] overflow-x-auto font-mono p-2">
-        <code className="bg-transparent leading-relaxed font-thin text-xs" {...props}>
-          {children}
-        </code>
-      </pre>
+      <ScrollArea viewportProps={{ className: 'max-w-[70vw] sm:max-w-[40vw]' }}>
+        <pre className="font-mono p-2">
+          <code className="bg-transparent leading-relaxed font-thin text-xs" {...props}>
+            {children}
+          </code>
+        </pre>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </div>
   );
 };

@@ -15,7 +15,7 @@ export const AppHandler = ({ event }: { event: NostrEvent }) => {
   const { metadata, supportedKinds, categories, sourceUrl } = data;
 
   return (
-    <div className="w-full set-max-h overflow-auto flex flex-col gap-2 p-2">
+    <div className="w-full flex flex-col gap-2 p-2">
       <div className="flex items-center gap-3">
         {metadata.picture ? (
           <img

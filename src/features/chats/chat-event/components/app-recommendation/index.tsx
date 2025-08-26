@@ -22,7 +22,7 @@ export const AppRecommendation = ({ event }: { event: NostrEvent }) => {
   const { supportedKind, handlers } = data;
 
   return (
-    <div className="w-full set-max-h overflow-auto flex flex-col gap-2 p-2">
+    <div className="w-full flex flex-col gap-2 p-2">
       <p className="text-sm">
         Recommends app(s) for kind:{' '}
         <span className="bg-primary/15 px-2 py-0.5 rounded-full text-xs">

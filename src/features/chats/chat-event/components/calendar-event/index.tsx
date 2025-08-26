@@ -34,7 +34,7 @@ export const CalendarEvent = ({ event }: { event: NostrEvent }) => {
   } = useCalendarEvent(event);
 
   return (
-    <div className="w-full set-max-h overflow-auto flex flex-col gap-2 p-2">
+    <div className="w-full flex flex-col gap-2 p-2">
       {image && (
         <img
           src={image}

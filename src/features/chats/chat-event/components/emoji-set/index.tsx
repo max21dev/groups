@@ -22,7 +22,7 @@ export const EmojiSet = ({ event }: { event: NostrEvent }) => {
   }, [event.tags]);
 
   return (
-    <div className="w-full set-max-h overflow-auto flex flex-col gap-2 p-2">
+    <div className="w-full flex flex-col gap-2 p-2">
       {title && <h5 className="text-lg font-semibold">{title}</h5>}
       {d && <p className="text-sm text-secondary-foreground">{d}</p>}
 

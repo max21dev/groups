@@ -23,7 +23,7 @@ export const Poll = ({ poll }: { poll: NostrEvent }) => {
   } = usePoll(poll);
 
   return (
-    <div className="w-full set-max-h flex flex-col gap-2 p-2 overflow-y-auto">
+    <div className="w-full flex flex-col gap-2 p-2">
       <RichText content={poll.content} />
 
       <ul className="m-0 space-y-2">
