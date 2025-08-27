@@ -8,6 +8,7 @@ import { EVENT_CATEGORY_MAP } from '@/features/chats/chat-event/utils';
 import { ChatThreadComments } from '@/features/chats/chat-threads/components';
 
 import { Button } from '@/shared/components/ui/button';
+import { ScrollArea } from '@/shared/components/ui/scroll-area';
 import { useActiveGroup, useActiveRelay, useSmartNavigation } from '@/shared/hooks';
 
 export const EventDetails = ({ event }: { event: string }) => {
@@ -70,15 +71,17 @@ export const EventDetails = ({ event }: { event: string }) => {
   }, [isCommunity, kind, hasValidGroup, hasValidRelay]);
 
   return (
-    <div className="flex flex-col items-center px-2 py-8 h-full overflow-y-auto">
-      <div className="w-full max-w-2xl">
-        <Button variant="outline" className="me-auto mb-2" onClick={handleBackClick}>
-          {backButtonText}
-        </Button>
-      </div>
+    <ScrollArea>
+      <div className="flex flex-col items-center px-2 py-8 h-full">
+        <div className="w-full max-w-2xl">
+          <Button variant="outline" className="me-auto mb-2" onClick={handleBackClick}>
+            {backButtonText}
+          </Button>
+        </div>
 
-      <ChatEvent key={event} event={event} />
-      {kind === 'thread' && <ChatThreadComments parentId={eventId || ''} />}
-    </div>
+        <ChatEvent key={event} event={event} />
+        {kind === 'thread' && <ChatThreadComments parentId={eventId || ''} />}
+      </div>
+    </ScrollArea>
   );
 };

@@ -5,6 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { GroupWidget } from '@/features/groups';
 import { Spinner } from '@/shared/components/spinner';
+import { ScrollArea } from '@/shared/components/ui/scroll-area';
 import { useActiveRelay } from '@/shared/hooks';
 
 export const GroupsListWidget = memo(() => {
@@ -24,7 +25,7 @@ export const GroupsListWidget = memo(() => {
   if (!groupIds.length) return null;
 
   return (
-    <div id="scrollableGroupsWidget" className="h-full w-full overflow-auto">
+    <ScrollArea viewportProps={{ id: 'scrollableGroupsWidget' }}>
       <InfiniteScroll
         dataLength={visibleCount}
         next={loadMore}
@@ -38,6 +39,6 @@ export const GroupsListWidget = memo(() => {
           <GroupWidget key={groupId} groupId={groupId} />
         ))}
       </InfiniteScroll>
-    </div>
+    </ScrollArea>
   );
 });

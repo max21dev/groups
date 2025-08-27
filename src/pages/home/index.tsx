@@ -11,6 +11,7 @@ import { ActiveUserInfo, UserLoginModal, UserWallets } from '@/features/users';
 
 import { ModeToggle } from '@/shared/components/mode-toggle';
 import { Sidebar } from '@/shared/components/sidebar';
+import { ScrollArea } from '@/shared/components/ui/scroll-area';
 import { ZapModal } from '@/shared/components/zap-modal';
 
 import { cn } from '@/shared/utils';
@@ -59,11 +60,11 @@ export function HomePage() {
               </div>
             </div>
 
-            <div
-              id="scrollableGroupsList"
-              className={cn(
-                'p-2 flex flex-col h-full gap-4 overflow-y-hidden hover:overflow-y-auto max-sm:overflow-y-auto',
-              )}
+            <ScrollArea
+              viewportProps={{
+                className: '[&>div]:!flex [&>div]:!flex-col [&>div]:!gap-4 p-2 h-full',
+                id: 'scrollableGroupsList',
+              }}
             >
               <GroupsListPinned />
 
@@ -72,7 +73,7 @@ export function HomePage() {
               {!activeRelay && (
                 <RelayList className="sm:hidden sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1" />
               )}
-            </div>
+            </ScrollArea>
 
             <div className="mt-auto w-full">
               <ActiveUserInfo />
@@ -90,9 +91,11 @@ export function HomePage() {
         >
           <div className="flex flex-col w-full h-full">
             {isWalletsVisible ? (
-              <div className="flex flex-col items-center h-full overflow-y-auto">
-                <UserWallets />
-              </div>
+              <ScrollArea>
+                <div className="flex flex-col items-center h-full">
+                  <UserWallets />
+                </div>
+              </ScrollArea>
             ) : event ? (
               <EventDetails event={event} />
             ) : isUserProfile ? (
@@ -109,7 +112,7 @@ export function HomePage() {
                 isExploreMode={true}
               />
             ) : !activeGroupId ? (
-              <div className="flex flex-col justify-center items-center h-full">
+              <div className="flex flex-col justify-center h-full">
                 {!activeRelay ? <RelayList /> : <GroupsListWidget />}
               </div>
             ) : (

@@ -10,6 +10,7 @@ import { UserActivity, UserInfo } from '@/features/users';
 
 import { useCommunity, useUserRouting } from '@/shared/hooks';
 
+import { ScrollArea, ScrollBar } from '@/shared/components/ui/scroll-area';
 import { CommunitySection, TabButton } from './components';
 
 type GroupTabName = 'chats' | 'threads' | 'polls';
@@ -157,17 +158,9 @@ export const ChatSections = ({
           <RelayExplore key={String(activeRelay)} activeRelay={activeRelay} />
         )}
 
-        {activeTab === 'groups' && (
-          <div className="flex flex-col justify-center items-center h-full overflow-y-auto">
-            <GroupsListWidget />
-          </div>
-        )}
+        {activeTab === 'groups' && <GroupsListWidget />}
 
-        {activeTab === 'info' && (
-          <div className="flex flex-col items-center h-full overflow-y-auto">
-            <RelayInfo activeRelay={activeRelay} />
-          </div>
-        )}
+        {activeTab === 'info' && <RelayInfo activeRelay={activeRelay} />}
       </>
     );
   }
@@ -177,22 +170,25 @@ export const ChatSections = ({
       <>
         <div className="w-full">
           <ChatTopBar />
-          <div className="flex items-stretch divide-x overflow-x-auto pt-0.5">
-            <TabButton isActive={activeTab === 'chats'} onClick={() => setActiveTab('chats')}>
-              Chats
-            </TabButton>
-
-            {contentSections.map((section) => (
-              <TabButton
-                key={section.name}
-                isActive={activeTab === section.name.toLowerCase()}
-                onClick={() => setActiveTab(section.name.toLowerCase())}
-              >
-                {section.name}
+          <ScrollArea>
+            <div className="flex items-stretch divide-x pt-0.5">
+              <TabButton isActive={activeTab === 'chats'} onClick={() => setActiveTab('chats')}>
+                Chats
               </TabButton>
-            ))}
-            <div className="flex-grow border-y"></div>
-          </div>
+
+              {contentSections.map((section) => (
+                <TabButton
+                  key={section.name}
+                  isActive={activeTab === section.name.toLowerCase()}
+                  onClick={() => setActiveTab(section.name.toLowerCase())}
+                >
+                  {section.name}
+                </TabButton>
+              ))}
+              <div className="flex-grow border-y"></div>
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
         </div>
 
         {activeTab === 'chats' && (
