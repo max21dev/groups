@@ -32,7 +32,7 @@ export const UserSettings = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="Profile" className="mt-4 overflow-y-auto max-h-[60vh]" tabIndex={-1}>
+          <TabsContent value="Profile" className="mt-4" tabIndex={-1}>
             <UserProfileForm />
           </TabsContent>
 
