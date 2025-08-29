@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { ChatEvent } from '@/features/chats';
 
 import { Spinner } from '@/shared/components/spinner';
+import { ScrollArea } from '@/shared/components/ui/scroll-area';
 import { getNostrLink } from '@/shared/utils';
 
 export const CommunitySection = ({
@@ -76,17 +77,19 @@ export const CommunitySection = ({
   }
 
   return (
-    <div className="flex flex-col items-center gap-2 px-2 py-8 h-full overflow-y-auto">
-      {events.map((event) => {
-        const eventLink =
-          event.kind === 30222 &&
-          typeof event.content === 'string' &&
-          event.content.trim().startsWith('n')
-            ? event.content.trim()
-            : getNostrLink(event.id!, event.pubkey, event.kind) || event.id!;
+    <ScrollArea>
+      <div className="flex flex-col items-center gap-2 px-2 py-8 h-full">
+        {events.map((event) => {
+          const eventLink =
+            event.kind === 30222 &&
+            typeof event.content === 'string' &&
+            event.content.trim().startsWith('n')
+              ? event.content.trim()
+              : getNostrLink(event.id!, event.pubkey, event.kind) || event.id!;
 
-        return <ChatEvent key={event.id} event={eventLink} />;
-      })}
-    </div>
+          return <ChatEvent key={event.id} event={eventLink} />;
+        })}
+      </div>
+    </ScrollArea>
   );
 };

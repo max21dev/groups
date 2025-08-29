@@ -1,6 +1,7 @@
 import { ChatEvent } from '@/features/chats/chat-event';
 
 import { Spinner } from '@/shared/components/spinner';
+import { ScrollArea } from '@/shared/components/ui/scroll-area';
 import { getNostrLink } from '@/shared/utils';
 
 import { SendChatPoll } from './components';
@@ -18,20 +19,22 @@ export const ChatPolls = ({
   const { polls, isLoadingPolls } = useChatPolls(relay, groupId);
 
   return (
-    <div className="overflow-y-auto flex flex-col items-center gap-2 p-2 [overflow-wrap:anywhere]">
-      <SendChatPoll relay={relay} groupId={groupId} pubkey={pubkey} />
+    <ScrollArea>
+      <div className="flex flex-col items-center gap-2 p-2 [overflow-wrap:anywhere]">
+        <SendChatPoll relay={relay} groupId={groupId} pubkey={pubkey} />
 
-      {isLoadingPolls && <Spinner />}
+        {isLoadingPolls && <Spinner />}
 
-      {!isLoadingPolls && !polls.length && (
-        <div className="w-full p-2 text-center">No polls found</div>
-      )}
+        {!isLoadingPolls && !polls.length && (
+          <div className="w-full p-2 text-center">No polls found</div>
+        )}
 
-      <div className="flex flex-col gap-2 items-center w-full sm:w-3/4">
-        {polls.map((poll) => (
-          <ChatEvent key={poll.id} event={getNostrLink(poll.id, poll.pubkey, poll.kind) || ''} />
-        ))}
+        <div className="flex flex-col gap-2 items-center w-full sm:w-3/4">
+          {polls.map((poll) => (
+            <ChatEvent key={poll.id} event={getNostrLink(poll.id, poll.pubkey, poll.kind) || ''} />
+          ))}
+        </div>
       </div>
-    </div>
+    </ScrollArea>
   );
 };
