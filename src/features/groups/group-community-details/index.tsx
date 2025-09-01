@@ -8,6 +8,7 @@ import { GroupLinkButton, GroupNotification } from '@/features/groups';
 import { UserAvatar, UserName } from '@/features/users';
 
 import { Input } from '@/shared/components/ui/input';
+import { ScrollArea } from '@/shared/components/ui/scroll-area';
 import { useCommunity, useCopyToClipboard } from '@/shared/hooks';
 import { getNostrLink } from '@/shared/utils';
 
@@ -26,7 +27,7 @@ export const CommunityDetails = memo(
     const { hasCopied, copyToClipboard } = useCopyToClipboard();
 
     return (
-      <div>
+      <ScrollArea>
         <div className="flex flex-wrap gap-2">
           <GroupLinkButton />
           <GroupNotification groupId={pubkey} />
@@ -80,7 +81,7 @@ export const CommunityDetails = memo(
             )}
           </div>
         </div>
-      </div>
+      </ScrollArea>
     );
   },
   (prevProps, nextProps) =>
