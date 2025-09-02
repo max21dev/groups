@@ -1,5 +1,5 @@
 import { NDKTag } from '@nostr-dev-kit/ndk';
-import { useMemo, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import ReactPlayer from 'react-player';
 
 import { ChatEvent } from '@/features/chats';
@@ -9,90 +9,96 @@ import { loader } from '@/shared/utils';
 
 import { categorizeContent } from './utils';
 
-export const RichText = ({
-  content,
-  eventPreview = false,
-  emojiTags,
-}: {
-  content: string | null | undefined;
-  eventPreview?: boolean;
-  emojiTags?: NDKTag[];
-}) => {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+export const RichText = memo(
+  ({
+    content,
+    eventPreview = false,
+    emojiTags,
+  }: {
+    content: string | null | undefined;
+    eventPreview?: boolean;
+    emojiTags?: NDKTag[];
+  }) => {
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const categorizedContent = useMemo(() => {
-    if (!content?.trim()) return [];
-    return categorizeContent(content);
-  }, [content]);
+    const categorizedContent = useMemo(() => {
+      if (!content?.trim()) return [];
+      return categorizeContent(content);
+    }, [content]);
 
-  if (!content?.trim()) {
-    return null;
-  }
-
-  const elements: React.ReactNode[] = [];
-  let textBuffer = '';
-
-  const flushText = (key: number) => {
-    if (textBuffer) {
-      elements.push(
-        <Markdown
-          key={`md-${key}`}
-          content={textBuffer}
-          emojiTags={emojiTags}
-          className="text-sm"
-        />,
-      );
-      textBuffer = '';
+    if (!content?.trim()) {
+      return null;
     }
-  };
 
-  categorizedContent.forEach((part, i) => {
-    if (part.category === 'text') {
-      textBuffer += part.content;
-    } else {
-      flushText(i);
+    const elements: React.ReactNode[] = [];
+    let textBuffer = '';
 
-      switch (part.category) {
-        case 'image':
-          elements.push(
-            <div key={i}>
-              <img
-                src={loader(part.content, { w: 200 })}
-                alt="chat"
-                className="max-w-full mx-auto h-40 object-contain rounded-lg mt-2 cursor-pointer"
-                onClick={() => setSelectedImage(part.content)}
-                loading="lazy"
-              />
-              {selectedImage && (
-                <div
-                  className="fixed max-w-full p-20 inset-0 z-50 flex items-center justify-center bg-black/80"
-                  onClick={() => setSelectedImage(null)}
-                >
-                  <img
-                    src={selectedImage}
-                    alt="Enlarged chat"
-                    className="h-auto max-h-svh rounded-lg"
-                  />
-                </div>
-              )}
-            </div>,
-          );
-          break;
-        case 'video':
-          elements.push(
-            <div key={i} className="react-player">
-              <ReactPlayer url={part.content} controls width="100%" />
-            </div>,
-          );
-          break;
-        case 'event':
-          elements.push(<ChatEvent key={i} event={part.content} eventPreview={eventPreview} />);
-          break;
+    const flushText = (key: number) => {
+      if (textBuffer) {
+        elements.push(
+          <Markdown
+            key={`md-${key}`}
+            content={textBuffer}
+            emojiTags={emojiTags}
+            className="text-sm"
+          />,
+        );
+        textBuffer = '';
       }
-    }
-  });
+    };
 
-  flushText(categorizedContent.length);
+    categorizedContent.forEach((part, i) => {
+      if (part.category === 'text') {
+        textBuffer += part.content;
+      } else {
+        flushText(i);
 
-  return <>{elements}</>;
-};
+        switch (part.category) {
+          case 'image':
+            elements.push(
+              <div key={i}>
+                <img
+                  src={loader(part.content, { w: 200 })}
+                  alt="chat"
+                  className="max-w-full mx-auto h-40 object-contain rounded-lg mt-2 cursor-pointer"
+                  onClick={() => setSelectedImage(part.content)}
+                  loading="lazy"
+                />
+                {selectedImage && (
+                  <div
+                    className="fixed max-w-full p-20 inset-0 z-50 flex items-center justify-center bg-black/80"
+                    onClick={() => setSelectedImage(null)}
+                  >
+                    <img
+                      src={selectedImage}
+                      alt="Enlarged chat"
+                      className="h-auto max-h-svh rounded-lg"
+                    />
+                  </div>
+                )}
+              </div>,
+            );
+            break;
+          case 'video':
+            elements.push(
+              <div key={i} className="react-player">
+                <ReactPlayer url={part.content} controls width="100%" />
+              </div>,
+            );
+            break;
+          case 'event':
+            elements.push(<ChatEvent key={i} event={part.content} eventPreview={eventPreview} />);
+            break;
+        }
+      }
+    });
+
+    flushText(categorizedContent.length);
+
+    return <>{elements}</>;
+  },
+  (prevProps, nextProps) =>
+    prevProps.content === nextProps.content &&
+    prevProps.emojiTags === nextProps.emojiTags &&
+    prevProps.eventPreview === nextProps.eventPreview,
+);
