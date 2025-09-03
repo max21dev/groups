@@ -10,6 +10,7 @@ import { UserAvatar } from '@/features/users';
 import { Button } from '@/shared/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
 import { Input } from '@/shared/components/ui/input';
+import { ScrollArea } from '@/shared/components/ui/scroll-area';
 import { useCopyToClipboard } from '@/shared/hooks';
 
 type UserProfileModalProps = {
@@ -51,47 +52,49 @@ export const UserProfileModal = ({ pubkey, isOpen, onClose }: UserProfileModalPr
         <DialogHeader>
           <DialogTitle>Profile</DialogTitle>
         </DialogHeader>
-        <div className="p-4">
-          <div className="flex flex-col items-center gap-2">
-            <div className="h-24 w-24 text-2xl [&_span]:w-full [&_span]:h-full">
-              <UserAvatar pubkey={user?.pubkey || ''} width={160} height={160} />
+        <ScrollArea viewportProps={{ className: 'max-h-[70vh]' }}>
+          <div className="p-4">
+            <div className="flex flex-col items-center gap-2">
+              <div className="h-24 w-24 text-2xl [&_span]:w-full [&_span]:h-full">
+                <UserAvatar pubkey={user?.pubkey || ''} width={160} height={160} />
+              </div>
+
+              <p className="mt-4 text-xl font-semibold">{profile?.displayName || profile?.name}</p>
+              <p className="text-gray-500 break-words max-w-80">{profile?.nip05}</p>
+              {user?.npub && (
+                <>
+                  <div className="flex flex-row-reverse items-center gap-2 w-full">
+                    <button
+                      onClick={() => copyToClipboard(user?.npub)}
+                      className="outline-none text-gray-500"
+                    >
+                      {hasCopied ? <CheckIcon className="text-green-600" /> : <Copy />}
+                    </button>
+                    <Input value={user?.npub} readOnly />
+                  </div>
+
+                  <div className="flex flex-col gap-2 w-full mt-2">
+                    <Button onClick={handleViewProfile} className="w-full" variant="default">
+                      <User className="w-4 h-4 mr-2" />
+                      View Full Profile
+                    </Button>
+
+                    <a
+                      href={`https://njump.me/${user?.npub}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-center underline text-blue-400 inline-flex items-center justify-center gap-1 py-2"
+                    >
+                      Check out the Njump profile
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+                </>
+              )}
+              <p className="text-gray-500 w-full [overflow-wrap:anywhere]">{profile?.about}</p>
             </div>
-
-            <p className="mt-4 text-xl font-semibold">{profile?.displayName || profile?.name}</p>
-            <p className="text-gray-500 break-words max-w-80">{profile?.nip05}</p>
-            {user?.npub && (
-              <>
-                <div className="flex flex-row-reverse items-center gap-2 w-full">
-                  <button
-                    onClick={() => copyToClipboard(user?.npub)}
-                    className="outline-none text-gray-500"
-                  >
-                    {hasCopied ? <CheckIcon className="text-green-600" /> : <Copy />}
-                  </button>
-                  <Input value={user?.npub} readOnly />
-                </div>
-
-                <div className="flex flex-col gap-2 w-full mt-2">
-                  <Button onClick={handleViewProfile} className="w-full" variant="default">
-                    <User className="w-4 h-4 mr-2" />
-                    View Full Profile
-                  </Button>
-
-                  <a
-                    href={`https://njump.me/${user?.npub}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-center underline text-blue-400 inline-flex items-center justify-center gap-1 py-2"
-                  >
-                    Check out the Njump profile
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
-                </div>
-              </>
-            )}
-            <p className="text-gray-500 w-full [overflow-wrap:anywhere]">{profile?.about}</p>
           </div>
-        </div>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
