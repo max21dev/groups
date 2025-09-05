@@ -71,7 +71,11 @@ export const EventDetails = ({ event }: { event: string }) => {
   }, [isCommunity, kind, hasValidGroup, hasValidRelay]);
 
   return (
-    <ScrollArea>
+    <ScrollArea
+      viewportProps={{
+        className: 'w-full [&>div]:!flex [&>div]:!flex-col h-full',
+      }}
+    >
       <div className="flex flex-col items-center px-2 py-8 h-full">
         <div className="w-full max-w-2xl">
           <Button variant="outline" className="me-auto mb-2" onClick={handleBackClick}>
@@ -80,7 +84,9 @@ export const EventDetails = ({ event }: { event: string }) => {
         </div>
 
         <ChatEvent key={event} event={event} />
-        {kind === 'thread' && <ChatThreadComments parentId={eventId || ''} />}
+        {hasValidGroup && !isCommunity && kind === 'thread' && (
+          <ChatThreadComments parentId={eventId || ''} />
+        )}
       </div>
     </ScrollArea>
   );
