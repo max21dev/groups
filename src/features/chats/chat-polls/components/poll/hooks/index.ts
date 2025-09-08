@@ -28,6 +28,10 @@ export const usePoll = (poll: NostrEvent) => {
   const { isMember, isAdmin } = useChatBottomBar();
   const { toast } = useToast();
 
+  const isGroupPoll = useMemo(() => {
+    return poll.tags.some((tag) => tag[0] === 'h');
+  }, [poll.tags]);
+
   useEffect(() => {
     fetchChatPollVotes();
   }, [ndk, activeRelay, activeGroupId, poll.id]);
@@ -50,7 +54,7 @@ export const usePoll = (poll: NostrEvent) => {
   };
 
   const fetchChatPollVotes = useCallback(async () => {
-    if (!ndk || !activeRelay || !activeGroupId || !poll.id) return;
+    if (!ndk || !activeRelay || !poll.id) return;
 
     setIsLoadingVotes(true);
 
@@ -82,7 +86,7 @@ export const usePoll = (poll: NostrEvent) => {
     } finally {
       setIsLoadingVotes(false);
     }
-  }, [ndk, activeRelay, activeGroupId, poll.id, setIsLoadingVotes, setVotes]);
+  }, [ndk, activeRelay, poll.id, setIsLoadingVotes, setVotes]);
 
   const options = useMemo(() => {
     return poll.tags
@@ -106,22 +110,22 @@ export const usePoll = (poll: NostrEvent) => {
 
   const sendVote = useCallback(
     async (selected: string[]) => {
-      if (
-        !ndk ||
-        !activeRelay ||
-        !activeGroupId ||
-        !poll.id ||
-        !selectedOptions.length ||
-        !activeUser?.pubkey
-      )
-        return;
+      if (!ndk || !activeRelay || !poll.id || !selected.length || !activeUser?.pubkey) return;
+
+      if (isGroupPoll && !activeGroupId) return;
 
       const responseTags = selected.map((optionId) => [RESPONSE_TAG, optionId]);
+
+      const tags = [['e', poll.id], ...responseTags];
+
+      if (isGroupPoll && activeGroupId) {
+        tags.unshift(['h', activeGroupId]);
+      }
 
       try {
         const voteEvent = new NDKEvent(ndk, {
           kind: POLL_KIND,
-          tags: [['h', activeGroupId], ['e', poll.id], ...responseTags],
+          tags: tags,
           created_at: Math.floor(Date.now() / 1000),
           content: '',
           pubkey: activeUser?.pubkey,
@@ -142,10 +146,10 @@ export const usePoll = (poll: NostrEvent) => {
       activeRelay,
       activeGroupId,
       poll.id,
-      selectedOptions.length,
       activeUser?.pubkey,
       toast,
       fetchChatPollVotes,
+      isGroupPoll,
     ],
   );
 
@@ -156,10 +160,10 @@ export const usePoll = (poll: NostrEvent) => {
   const canVote = useMemo(() => {
     if (!activeUser) return false;
     if (voters.has(activeUser.pubkey)) return false;
-    if (!isCommunity && !isMember && !isAdmin) return false;
+    if (isGroupPoll && !isCommunity && !isMember && !isAdmin) return false;
     if (endsAt && endsAt * 1000 <= Date.now()) return false;
     return true;
-  }, [activeUser, isMember, isAdmin, endsAt, voters]);
+  }, [activeUser, isMember, isAdmin, endsAt, voters, isGroupPoll, isCommunity]);
 
   return {
     options,
