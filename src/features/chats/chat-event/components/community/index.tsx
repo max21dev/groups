@@ -10,7 +10,7 @@ export const Community = ({ event }: { event: NostrEvent }) => {
   const { relayTags, blossomTags, mintTags } = useMemo(() => getCommunityTags(event), [event]);
 
   return (
-    <div className="w-full set-max-h overflow-auto flex flex-col gap-2 p-2">
+    <div className="w-full flex flex-col gap-2 p-2">
       <div className="mt-2 space-y-3 text-sm">
         {relayTags.length > 0 && (
           <div className="flex flex-col gap-1">

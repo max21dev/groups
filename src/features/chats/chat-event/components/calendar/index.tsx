@@ -12,7 +12,7 @@ export const Calendar = ({ event }: { event: NostrEvent }) => {
   const { title, description, calendarEvents, isLoading } = useCalendar(event);
 
   return (
-    <div className="w-full set-max-h overflow-auto flex flex-col gap-2 p-2">
+    <div className="w-full flex flex-col gap-2 p-2">
       <div className="flex items-center gap-2">
         <CalendarIcon size={20} className="text-primary" />
         <h4 className="text-lg font-bold leading-tight">{title}</h4>

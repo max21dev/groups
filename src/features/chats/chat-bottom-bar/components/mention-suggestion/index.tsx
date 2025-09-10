@@ -29,7 +29,7 @@ export const MentionSuggestion = ({
 
   return (
     <div className="absolute bottom-full left-0 w-full bg-background border border-border  shadow rounded-md z-10 mb-1">
-      <ScrollArea className="max-h-40 overflow-y-auto p-1">
+      <ScrollArea viewportProps={{ className: 'max-h-40 p-1' }}>
         {members.map((member) => (
           <MentionListItem
             key={member.pubkey}

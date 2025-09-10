@@ -3,6 +3,8 @@ import { useState } from 'react';
 
 import {
   InputMessage,
+  JoinRequestButton,
+  LoginButton,
   MentionSuggestion,
   SendButton,
   UploadImageButton,
@@ -22,7 +24,6 @@ export const SendChatThread = () => {
     handleSend,
     isAdmin,
     isMember,
-    isCommunity,
     textareaRef,
     activeUser,
     openUploadMediaDialog,
@@ -32,10 +33,34 @@ export const SendChatThread = () => {
     mentionQuery,
     handleContentChange,
     handleSelectMention,
+    openLoginModal,
   } = useSendChatThread(() => setIsSendThreadModalOpen(false));
 
-  if (!activeUser || (!isCommunity && !isMember && !isAdmin)) {
-    return null;
+  if (!activeUser) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <LoginButton
+          openLoginModal={openLoginModal}
+          variant="outline"
+          text="To send threads, please login first."
+          size="sm"
+        />
+      </div>
+    );
+  }
+
+  if (!isMember && !isAdmin) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <JoinRequestButton
+          groupId={activeGroupId}
+          relay={activeRelay}
+          variant="outline"
+          text="Join group to send threads."
+          size="sm"
+        />
+      </div>
+    );
   }
 
   return (

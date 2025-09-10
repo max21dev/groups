@@ -2,7 +2,7 @@ import { useProfile } from 'nostr-hooks';
 import { nip19 } from 'nostr-tools';
 import { Link } from 'react-router-dom';
 
-import { cn } from '@/shared/utils';
+import { cn, ellipsis } from '@/shared/utils';
 
 export const UserMention = ({ userIdentifier }: { userIdentifier: string }) => {
   let npub = userIdentifier;
@@ -19,7 +19,7 @@ export const UserMention = ({ userIdentifier }: { userIdentifier: string }) => {
       to={`/user/${npub}`}
       className={cn('cursor-pointer underline text-[#18c8f1]', !profile && 'break-all')}
     >
-      @{profile?.displayName || profile?.name || profile?.nip05 || npub}
+      @{ellipsis(profile?.displayName || profile?.name || profile?.nip05 || npub, 10)}
     </Link>
   );
 };

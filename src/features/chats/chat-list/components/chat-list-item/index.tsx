@@ -5,6 +5,7 @@ import { memo, useState } from 'react';
 import { UserAvatar, UserProfileModal } from '@/features/users';
 import { useUserProfileModal } from '@/features/users/user-profile-modal/hooks';
 
+import { EmojiRenderer } from '@/shared/components/emoji-renderer';
 import { RichText } from '@/shared/components/rich-text';
 import {
   ContextMenu,
@@ -45,6 +46,9 @@ export const ChatListItem = memo(
       copyChatLink,
       isAdmin,
       removeUser,
+      ndkEvent,
+      reactionEmojiTagsByContent,
+      isEmojiShortcode,
     } = useChatListItem({
       topChat,
       bottomChat,
@@ -105,7 +109,7 @@ export const ChatListItem = memo(
                     )}
                   >
                     <div className="w-full [overflow-wrap:anywhere] self-start">
-                      <RichText content={chat?.content} eventPreview />
+                      <RichText content={chat?.content} eventPreview emojiTags={ndkEvent?.tags} />
                     </div>
 
                     <div
@@ -140,7 +144,16 @@ export const ChatListItem = memo(
                               ) : (
                                 <span className="font-medium ml-1 -mr-1">{reactions.length}</span>
                               )}
-                              <span className="ml-2 max-w-24 overflow-hidden">{content}</span>
+                              <span className="ml-2 max-w-24 overflow-hidden">
+                                {isEmojiShortcode(content) ? (
+                                  <EmojiRenderer
+                                    shortcode={content}
+                                    tags={reactionEmojiTagsByContent?.[content] || ndkEvent?.tags}
+                                  />
+                                ) : (
+                                  <>{content}</>
+                                )}
+                              </span>
                             </div>
                           ))}
                         </div>

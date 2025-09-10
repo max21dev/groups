@@ -14,6 +14,7 @@ import {
 import { UserInfoRow } from '@/features/users';
 
 import { Button } from '@/shared/components/ui/button';
+import { ScrollArea } from '@/shared/components/ui/scroll-area';
 
 export const GroupDetails = memo(
   ({ relay, groupId }: { relay: string | undefined; groupId: string | undefined }) => {
@@ -24,9 +25,8 @@ export const GroupDetails = memo(
     const [editMode, setEditMode] = useState(false);
 
     return (
-      <div>
+      <ScrollArea>
         <div className="flex flex-wrap gap-2">
-
           <Button variant="outline" onClick={() => setEditMode(!editMode)}>
             {editMode ? <Undo2 className="mr-2 h-4 w-4" /> : <Edit className="mr-2 h-4 w-4" />}
             {editMode ? 'Back to view mode' : 'Edit'}
@@ -53,7 +53,6 @@ export const GroupDetails = memo(
               <div className="text-sm text-gray-600 mb-4">{metadata?.about}</div>
             </div>
             <div className="m-0">
-
               {admins && (
                 <div>
                   <h5 className="font-medium pb-2 m-4 border-b-2 border-b-blue-100">
@@ -78,7 +77,7 @@ export const GroupDetails = memo(
             </div>
           </div>
         )}
-      </div>
+      </ScrollArea>
     );
   },
   (prevProps, nextProps) =>

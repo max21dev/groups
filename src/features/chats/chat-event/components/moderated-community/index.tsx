@@ -33,7 +33,7 @@ export const ModeratedCommunity = ({ event }: { event: NostrEvent }) => {
     }));
 
   return (
-    <div className="w-full set-max-h overflow-auto flex flex-col gap-2 p-2">
+    <div className="w-full flex flex-col gap-2 p-2">
       <div className="flex flex-col gap-2">
         <div className="flex flex-col gap-2">
           {image && <img src={image} alt={name} className="w-full rounded-lg object-cover" />}
@@ -94,7 +94,7 @@ export const ModeratedCommunity = ({ event }: { event: NostrEvent }) => {
                   <UserAvatar pubkey={moderator.pubkey} />
                 </span>
                 <div className="flex-1 min-w-0">
-                  <UserName pubkey={moderator.pubkey} />
+                  <UserName pubkey={moderator.pubkey} length={16} />
                   <div className="text-xs text-muted-foreground">Moderator</div>
                 </div>
                 <Badge variant="secondary">

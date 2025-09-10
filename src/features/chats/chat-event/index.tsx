@@ -6,12 +6,14 @@ import { GroupWidget } from '@/features/groups';
 import { UserAvatar } from '@/features/users';
 
 import { Button } from '@/shared/components/ui/button';
+import { ScrollArea, ScrollBar } from '@/shared/components/ui/scroll-area';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 import { useCopyToClipboard } from '@/shared/hooks';
 import { cn, ellipsis, formatTimestampToDate } from '@/shared/utils';
 
 import {
   AddEventReaction,
+  AppHandler,
   AppRecommendation,
   BadgeDefinition,
   Calendar,
@@ -33,6 +35,7 @@ import {
   Picture,
   PublicationContent,
   PublicationIndex,
+  TargetedPublication,
   Video,
   VoiceMessage,
   Wiki,
@@ -117,9 +120,7 @@ export const ChatEvent = memo(
         ref={eventRef}
         className={cn(
           'w-full rounded-xl p-2 bg-primary/10',
-          eventPreview
-            ? 'max-w-80 [&_.set-max-h]:max-h-80'
-            : 'max-w-2xl [&_.set-max-h]:max-h-[75vh]',
+          eventPreview ? 'max-w-80' : 'max-w-2xl',
         )}
       >
         <div className="flex items-center gap-2 mb-2">
@@ -140,34 +141,44 @@ export const ChatEvent = memo(
               event={event}
               deleteThreadComment={deleteThreadComment}
               pubkey={eventData.pubkey}
+              eventKind={eventData.kind}
             />
           </div>
         </div>
-        {category === 'follow-set' && <FollowSet tags={eventData.tags} address={event} />}
-        {category === 'emoji-set' && <EmojiSet event={eventData} />}
-        {(category === 'note' || category === 'thread' || category === 'comment') && (
-          <Note content={eventData.content} />
-        )}
-        {category === 'poll' && <Poll poll={eventData} />}
-        {category === 'code-snippet' && <CodeSnippet event={eventData} />}
-        {category === 'long-form-content' && <LongFormContent content={eventData.content} />}
-        {category === 'highlight' && <Highlight event={eventData} />}
-        {category === 'live-stream' && <LiveStream event={eventData} />}
-        {category === 'picture' && <Picture event={eventData} />}
-        {category === 'video' && <Video event={eventData} />}
-        {category === 'voice-message' && <VoiceMessage event={eventData} />}
-        {category === 'community' && <Community event={eventData} />}
-        {category === 'git-repo' && <GitRepo event={eventData} />}
-        {category === 'app-recommendation' && <AppRecommendation event={eventData} />}
-        {category === 'zap-goal' && <ZapGoal event={eventData} />}
-        {category === 'badge-definition' && <BadgeDefinition event={eventData} />}
-        {category === 'calendar-event' && <CalendarEvent event={eventData} />}
-        {category === 'calendar' && <Calendar event={eventData} />}
-        {category === 'moderated-community' && <ModeratedCommunity event={eventData} />}
-        {category === 'publication-index' && <PublicationIndex event={eventData} />}
-        {category === 'publication-content' && <PublicationContent event={eventData} />}
-        {category === 'wiki' && <Wiki event={eventData} />}
-        {category === null && <ChatEventObject event={eventData} />}
+        <ScrollArea
+          viewportProps={{
+            className: cn('w-full [&>div]:!block', eventPreview ? 'max-h-80' : 'max-h-[75vh]'),
+          }}
+        >
+          {category === 'follow-set' && <FollowSet tags={eventData.tags} address={event} />}
+          {category === 'emoji-set' && <EmojiSet event={eventData} />}
+          {(category === 'note' || category === 'thread' || category === 'comment') && (
+            <Note content={eventData.content} />
+          )}
+          {category === 'poll' && <Poll poll={eventData} />}
+          {category === 'code-snippet' && <CodeSnippet event={eventData} />}
+          {category === 'long-form-content' && <LongFormContent content={eventData.content} />}
+          {category === 'highlight' && <Highlight event={eventData} />}
+          {category === 'live-stream' && <LiveStream event={eventData} />}
+          {category === 'picture' && <Picture event={eventData} />}
+          {category === 'video' && <Video event={eventData} />}
+          {category === 'voice-message' && <VoiceMessage event={eventData} />}
+          {category === 'community' && <Community event={eventData} />}
+          {category === 'targeted-publication' && <TargetedPublication event={eventData} />}
+          {category === 'git-repo' && <GitRepo event={eventData} />}
+          {category === 'app-recommendation' && <AppRecommendation event={eventData} />}
+          {category === 'app-handler' && <AppHandler event={eventData} />}
+          {category === 'zap-goal' && <ZapGoal event={eventData} />}
+          {category === 'badge-definition' && <BadgeDefinition event={eventData} />}
+          {category === 'calendar-event' && <CalendarEvent event={eventData} />}
+          {category === 'calendar' && <Calendar event={eventData} />}
+          {category === 'moderated-community' && <ModeratedCommunity event={eventData} />}
+          {category === 'publication-index' && <PublicationIndex event={eventData} />}
+          {category === 'publication-content' && <PublicationContent event={eventData} />}
+          {category === 'wiki' && <Wiki event={eventData} />}
+          {category === null && <ChatEventObject event={eventData} />}
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
 
         <div className="flex justify-between items-center mt-2">
           {reactions && reactions.length > 0 && (

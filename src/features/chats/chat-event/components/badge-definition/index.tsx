@@ -18,7 +18,7 @@ export const BadgeDefinition = ({ event }: { event: NostrEvent }) => {
   const imageUrl = imageTag || thumbTag;
 
   return (
-    <div className="w-full set-max-h overflow-auto flex flex-col items-center gap-2 p-2">
+    <div className="w-full flex flex-col items-center gap-2 p-2">
       {imageUrl && <img src={imageUrl} alt={nameTag} className="w-full max-w-48 rounded-md" />}
 
       <div className="flex items-center gap-1 mt-2">

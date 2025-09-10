@@ -31,7 +31,7 @@ export const CodeSnippet = ({ event }: { event: NostrEvent }) => {
   }, [codeContent, language]);
 
   return (
-    <div className="w-full set-max-h flex flex-col gap-1 overflow-y-auto">
+    <div className="w-full flex flex-col gap-1">
       {fileName && <h3 className="text-lg font-mono font-semibold">{fileName}</h3>}
 
       {description && <p className="text-sm mb-2">{description}</p>}

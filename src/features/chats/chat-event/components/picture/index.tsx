@@ -29,7 +29,7 @@ export const Picture = ({ event }: { event: NostrEvent }) => {
   const location = locationTag ? locationTag[1] : null;
 
   return (
-    <div className="w-full set-max-h overflow-auto flex flex-col gap-2 p-2">
+    <div className="w-full flex flex-col gap-2 p-2">
       <h5 className="text-lg font-semibold">{title}</h5>
       <div className="[&_*]:text-base">
         <RichText content={event.content} />

@@ -14,7 +14,7 @@ export const Highlight = ({ event }: { event: NostrEvent }) => {
   //const authors = event.tags.filter(([t]) => t === 'p').map(([, pubkey]) => pubkey);
 
   return (
-    <div className="w-full set-max-h overflow-auto flex flex-col gap-2 p-2">
+    <div className="w-full flex flex-col gap-2 p-2">
       <blockquote className="border-l-4 [&_*]:text-base border-blue-800 pl-4 italic my-2">
         <RichText content={event.content} />
       </blockquote>
