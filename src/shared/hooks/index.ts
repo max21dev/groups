@@ -3,6 +3,7 @@ export { useActiveRelay } from './use-active-relay';
 export { useBlossomUpload } from './use-blossom-upload';
 export { useCommunity } from './use-community';
 export { useCopyToClipboard } from './use-copy-to-clipboard';
+export { useGroupsMetadata } from './use-groups-metadata';
 export { useLazyLoad } from './use-lazy-load';
 export { useLoginModalState } from './use-login-modal-state';
 export { useSendContent } from './use-send-content';
