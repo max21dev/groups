@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 import { UserProfileForm } from '@/features/users';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
@@ -64,3 +66,8 @@ export const UserSettings = ({ isOpen, onClose }: { isOpen: boolean; onClose: ()
     </Dialog>
   );
 };
+
+export const UserSettingsLoader = memo(() => {
+  useUserSettings();
+  return null;
+});
