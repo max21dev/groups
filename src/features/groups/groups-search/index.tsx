@@ -1,4 +1,3 @@
-import { useAllGroupsMetadataRecords } from 'nostr-hooks/nip29';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -8,7 +7,8 @@ import { Search } from '@/shared/components/search';
 import { useSearch } from '@/shared/components/search/hooks';
 import { Spinner } from '@/shared/components/spinner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
-import { useActiveRelay } from '@/shared/hooks';
+import { ScrollArea } from '@/shared/components/ui/scroll-area';
+import { useActiveRelay, useGroupsMetadata } from '@/shared/hooks';
 import { ellipsis } from '@/shared/utils';
 
 export const GroupsSearch = ({
@@ -20,7 +20,7 @@ export const GroupsSearch = ({
 }) => {
   const { activeRelay } = useActiveRelay();
 
-  const { metadataRecords, isLoadingMetadata } = useAllGroupsMetadataRecords(activeRelay);
+  const { metadataRecords, isLoadingMetadata } = useGroupsMetadata(activeRelay);
 
   const groupsListData = useMemo(
     () =>
@@ -68,7 +68,11 @@ export const GroupsSearch = ({
             {isLoadingMetadata ? (
               <Spinner />
             ) : (
-              <div className="overflow-auto flex flex-col justify-start gap-1">
+              <ScrollArea
+                viewportProps={{
+                  className: 'w-full [&>div]:!flex [&>div]:!flex-col justify-start gap-1 h-full',
+                }}
+              >
                 {filteredData.map((group) => (
                   <Link
                     to={`/?relay=${activeRelay}&groupId=${group.id}`}
@@ -88,7 +92,7 @@ export const GroupsSearch = ({
                     </div>
                   </Link>
                 ))}
-              </div>
+              </ScrollArea>
             )}
           </>
         )}
