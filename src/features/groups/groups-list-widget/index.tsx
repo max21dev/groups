@@ -1,4 +1,3 @@
-import { useAllGroupsMetadataRecords } from 'nostr-hooks/nip29';
 import { memo, useState } from 'react';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -6,13 +5,13 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { GroupWidget } from '@/features/groups';
 import { Spinner } from '@/shared/components/spinner';
 import { ScrollArea } from '@/shared/components/ui/scroll-area';
-import { useActiveRelay } from '@/shared/hooks';
+import { useActiveRelay, useGroupsMetadata } from '@/shared/hooks';
 
 export const GroupsListWidget = memo(() => {
   const [visibleCount, setVisibleCount] = useState(20);
   const { activeRelay } = useActiveRelay();
 
-  const { metadataRecords, isLoadingMetadata } = useAllGroupsMetadataRecords(activeRelay);
+  const { metadataRecords, isLoadingMetadata } = useGroupsMetadata(activeRelay);
 
   const groupIds = Object.keys(metadataRecords || {});
 
