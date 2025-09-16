@@ -73,7 +73,7 @@ export const EventDetails = ({ event }: { event: string }) => {
   return (
     <ScrollArea
       viewportProps={{
-        className: 'w-full [&>div]:!flex [&>div]:!flex-col h-full',
+        className: 'w-full [&>div]:!block [&>div]:w-0 h-full',
       }}
     >
       <div className="flex flex-col items-center px-2 py-8 h-full">
