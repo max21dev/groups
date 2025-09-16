@@ -170,7 +170,7 @@ export const ChatSections = ({
       <>
         <div className="w-full">
           <ChatTopBar />
-          <ScrollArea>
+          <ScrollArea viewportProps={{ className: '[&>div]:!block [&>div]:w-0' }}>
             <div className="flex items-stretch divide-x pt-0.5">
               <TabButton isActive={activeTab === 'chats'} onClick={() => setActiveTab('chats')}>
                 Chats
