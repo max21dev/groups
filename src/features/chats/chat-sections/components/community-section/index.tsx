@@ -77,7 +77,7 @@ export const CommunitySection = ({
   }
 
   return (
-    <ScrollArea>
+    <ScrollArea viewportProps={{ className: 'w-full [&>div]:!block [&>div]:w-0 h-full' }}>
       <div className="flex flex-col items-center gap-2 px-2 py-8 h-full">
         {events.map((event) => {
           const eventLink =
