@@ -1,14 +1,24 @@
 import { NDKEvent, NDKKind } from '@nostr-dev-kit/ndk';
+import isEqual from 'fast-deep-equal';
 import { useActiveUser, useNdk } from 'nostr-hooks';
 import { useEffect } from 'react';
+import { useStoreWithEqualityFn } from 'zustand/traditional';
 
 import { useToast } from '@/shared/components/ui/use-toast';
 import { useActiveRelay } from '@/shared/hooks';
 import { useStore } from '@/shared/store';
 
+import { normalizeBookmarkList } from '../utils';
+
 export const useGroupBookmark = (groupId: string | undefined, groupName?: string) => {
-  const { bookmarkedGroups, addBookmarkedGroup, removeBookmarkedGroup, setBookmarkedGroups } =
-    useStore();
+  const bookmarkedGroups = useStoreWithEqualityFn(
+    useStore,
+    (s) => s.bookmarkedGroups,
+    (a, b) => isEqual(normalizeBookmarkList(a), normalizeBookmarkList(b)),
+  );
+  const addBookmarkedGroup = useStore((s) => s.addBookmarkedGroup);
+  const removeBookmarkedGroup = useStore((s) => s.removeBookmarkedGroup);
+  const setBookmarkedGroups = useStore((s) => s.setBookmarkedGroups);
   const groupsFilter = useStore((state) => state.groupsFilter);
   const setGroupsFilter = useStore((state) => state.setGroupsFilter);
 

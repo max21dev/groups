@@ -7,7 +7,7 @@ import {
   GroupsListWidget,
 } from '@/features/groups';
 import { RelayDiscoverDropdown, RelayList, RelaySelectDropdown } from '@/features/relays/';
-import { ActiveUserInfo, UserLoginModal, UserWallets } from '@/features/users';
+import { ActiveUserInfo, UserLoginModal, UserSettingsLoader, UserWallets } from '@/features/users';
 
 import { ModeToggle } from '@/shared/components/mode-toggle';
 import { Sidebar } from '@/shared/components/sidebar';
@@ -128,6 +128,7 @@ export function HomePage() {
 
       <UserLoginModal />
       <ZapModal />
+      <UserSettingsLoader />
     </>
   );
 }

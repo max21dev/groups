@@ -14,7 +14,8 @@ import {
 export const useUserSettings = () => {
   const eventIdRef = useRef<string | null>(null);
 
-  const { userSettings, setUserSettings } = useStore();
+  const userSettings = useStore((state) => state.userSettings);
+  const setUserSettings = useStore((state) => state.setUserSettings);
   const { activeUser } = useActiveUser();
   const { ndk } = useNdk();
 

@@ -1,5 +1,4 @@
 import { RadioIcon } from 'lucide-react';
-import { useAllGroupsMetadataRecords } from 'nostr-hooks/nip29';
 import { memo, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -9,7 +8,7 @@ import { GroupsListItem } from '@/features/groups';
 import { useHomePage } from '@/pages/home/hooks';
 
 import { Spinner } from '@/shared/components/spinner';
-import { useActiveRelay } from '@/shared/hooks';
+import { useActiveRelay, useGroupsMetadata } from '@/shared/hooks';
 import { cn } from '@/shared/utils';
 
 export const GroupsList = memo(() => {
@@ -20,7 +19,7 @@ export const GroupsList = memo(() => {
 
   const { activeRelay } = useActiveRelay();
 
-  const { metadataRecords, isLoadingMetadata } = useAllGroupsMetadataRecords(activeRelay);
+  const { metadataRecords, isLoadingMetadata } = useGroupsMetadata(activeRelay);
 
   const { isCollapsed, isMobile } = useHomePage();
 
